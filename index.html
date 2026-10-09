@@ -3592,7 +3592,12 @@ function alNameRom(c){
   return r.charAt(0).toUpperCase()+r.slice(1);
 }
 function alQCount(i){ const n=alLetters(i).length; return n<=7 ? n : Math.min(n,10); }
-function alSay(c){ return alName(c)+" "+c.w; }
+// For the voice only: obsolete/rare letters and letters that sound the same are spoken with the common twin
+// (so the engine never skips or misreads them), the word uses a phonetic spelling where needed,
+// and a comma gives a short pause between the letter name and the picture word.
+const AL_VOICE_LETTER = {"ฃ":"ข","ฅ":"ค","ฆ":"ค","ฌ":"ช","ฎ":"ด","ฏ":"ต","ฐ":"ถ","ฑ":"ท","ฒ":"ท","ณ":"น","ภ":"พ","ษ":"ส","ศ":"ส","ฬ":"ล","ญ":"ย"};
+const AL_VOICE_WORD = {"ฤๅษี":"รือสี","ชฎา":"ชะดา","ปฏัก":"ปะตัก","มณโฑ":"มนโท","ผู้เฒ่า":"ผู้เท่า","เฌอ":"เชอ","ฐาน":"ถาน","ฑ":"ท"};
+function alSay(c){ return (AL_VOICE_LETTER[c.l]||c.l)+"อ, "+(AL_VOICE_WORD[c.w]||c.w); }
 function alHear(c){ speak(alSay(c), undefined, true); }
 function alSlow(c){ speakSlow(alSay(c)); }
 function alTag(c){ const k=AL_CLASS[c.c]; return `<span class="al-tag" style="background:${k.c}">${k.n}</span>`; }
