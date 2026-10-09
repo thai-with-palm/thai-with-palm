@@ -626,7 +626,7 @@
   .al-tile{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:14px; height:58px; font-family:var(--loop); font-size:30px; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); }
   .al-tile.sel{ border-color:#E5567F; background:#FFE9F0; }
   .al-card{ background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:18px 16px 16px; text-align:center; }
-  .al-bigletter{ font-family:var(--loop); font-weight:700; font-size:104px; line-height:1.1; color:var(--kara); }
+  .al-bigletter{ margin-bottom:10px; font-family:var(--loop); font-weight:700; font-size:104px; line-height:1.1; color:var(--kara); }
   .al-emoji{ font-size:76px; line-height:1.15; }
   .al-en{ font-size:26px; font-weight:900; color:var(--ink); font-family:var(--sans); margin-top:2px; }
   .al-word{ font-family:var(--loop); font-size:28px; font-weight:700; color:var(--kara); margin-top:2px; }
@@ -3569,6 +3569,15 @@ const AL_DATA = [
   {l:"อ",w:"อ่าง",rom:"Àang",en:"basin",e:"🛁",c:"m",s:"— (vowel carrier)"},
   {l:"ฮ",w:"นกฮูก",rom:"Nók-hûuk",en:"owl",e:"🦉",c:"l",s:"h"}
 ];
+// Pictures with no matching emoji are drawn as small inline SVGs (cymbals, lid, footed tray, pedestal)
+const _alS = inner => `<svg viewBox="0 0 64 64" style="width:1.1em;height:1.1em;vertical-align:-.15em" aria-hidden="true">${inner}</svg>`;
+const AL_SVG = {
+  "ฉ": _alS('<path d="M22 36 Q32 4 42 31" fill="none" stroke="#8B5A2B" stroke-width="2.6" stroke-linecap="round"/><circle cx="21" cy="40" r="15" fill="#F2B84B" stroke="#C98A1B" stroke-width="2.4"/><circle cx="21" cy="40" r="9" fill="none" stroke="#E39B1D" stroke-width="1.6"/><circle cx="21" cy="40" r="4.5" fill="#E39B1D"/><circle cx="43" cy="36" r="15" fill="#F7C964" stroke="#C98A1B" stroke-width="2.4"/><circle cx="43" cy="36" r="9" fill="none" stroke="#E39B1D" stroke-width="1.6"/><circle cx="43" cy="36" r="4.5" fill="#E39B1D"/>'),
+  "ฝ": _alS('<circle cx="32" cy="13" r="5.5" fill="#7C8896"/><path d="M7 42 Q7 19 32 19 Q57 19 57 42 Z" fill="#C3CCD5" stroke="#7C8896" stroke-width="2.4"/><path d="M15 36 Q17 27 27 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/><rect x="3" y="42" width="58" height="7" rx="3.5" fill="#9AA6B2" stroke="#7C8896" stroke-width="2"/>'),
+  "พ": _alS('<path d="M6 24 H58 Q55 37 32 37 Q9 37 6 24 Z" fill="#F2B84B" stroke="#C98A1B" stroke-width="2.4" stroke-linejoin="round"/><rect x="27" y="37" width="10" height="11" fill="#E39B1D" stroke="#C98A1B" stroke-width="2"/><path d="M15 55 Q32 42 49 55 Z" fill="#E39B1D" stroke="#C98A1B" stroke-width="2.2" stroke-linejoin="round"/><circle cx="24" cy="21" r="4" fill="#FF6B5C"/><circle cx="33" cy="19" r="4" fill="#FFB23E"/><circle cx="42" cy="21" r="4" fill="#FF6B5C"/>'),
+  "ฐ": _alS('<rect x="19" y="11" width="26" height="11" rx="2" fill="#D8C8AE" stroke="#8C7A5E" stroke-width="2.2"/><rect x="11" y="22" width="42" height="13" rx="2" fill="#CDBA9C" stroke="#8C7A5E" stroke-width="2.2"/><rect x="3" y="35" width="58" height="15" rx="2" fill="#C2AE8E" stroke="#8C7A5E" stroke-width="2.2"/>')
+};
+AL_DATA.forEach(c=>{ if(AL_SVG[c.l]) c.e = AL_SVG[c.l]; });
 const AL_SIZES = [7,7,6,6,6,6,6];            // 6–7 letters per lesson
 const AL_CLASS = {m:{n:"Mid class",c:"#E0912A"}, h:{n:"High class",c:"#E7503F"}, l:{n:"Low class",c:"#0E877F"}};
 const AL_KEY = "twp_alpha_v1";
