@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --coral:#FF6B5C; --coral-d:#E7503F; --teal:#12A79E; --teal-d:#0E877F;
@@ -601,6 +602,68 @@
     color:#fff; font-weight:800; font-size:16px; padding:15px; border-radius:15px; box-shadow:var(--shadow-sm);
     font-family:var(--sans); }
   .sv-continuebtn:active{ transform:scale(.98); }
+  :root{ --loop:"Noto Sans Thai Looped","Mali","Itim","Mitr","Noto Sans Thai",sans-serif; }
+  /* ===== THAI ALPHABET ===== */
+  .al-hero{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; border-radius:22px; padding:16px 18px 22px; margin:0 0 14px; box-shadow:var(--shadow-sm); position:relative; text-align:center; }
+  .al-hero .back{ position:absolute; left:14px; top:14px; }
+  .al-hero h1{ font-size:24px; margin:4px 0 2px; font-family:var(--sans); }
+  .al-hero p{ font-size:13.5px; font-weight:700; opacity:.95; margin:0; }
+  .al-menu{ display:flex; flex-direction:column; gap:10px; }
+  .al-lesson{ border:none; cursor:pointer; text-align:left; background:var(--white); border-radius:18px; padding:13px 15px; box-shadow:var(--shadow-sm);
+    display:flex; align-items:center; gap:13px; font-family:var(--sans); color:var(--ink); }
+  .al-lesson:active{ transform:scale(.98); }
+  .al-lesson .num{ flex:0 0 44px; height:44px; border-radius:14px; background:var(--peach); color:var(--coral-d); font-weight:900; font-size:19px; display:flex; align-items:center; justify-content:center; }
+  .al-lesson b{ display:block; font-size:16.5px; }
+  .al-lesson .letters{ font-family:var(--loop); font-weight:700; font-size:20px; letter-spacing:2px; color:#E5567F; display:block; margin-top:2px; }
+  .al-lesson .best{ margin-left:auto; font-weight:800; font-size:13px; color:var(--teal-d); white-space:nowrap; }
+  .al-lesson.all{ background:linear-gradient(135deg,#FFF4E2,#FFEDE6); }
+  .al-legend{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:12px 0 4px; font-size:12.5px; font-weight:800; }
+  .al-tag{ display:inline-block; border-radius:99px; padding:3px 10px; color:#fff; font-size:12px; font-weight:800; }
+  .al-tabs{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:12px; }
+  .al-tab{ border:none; cursor:pointer; border-radius:14px; padding:11px 8px; font-weight:800; font-size:14px; background:var(--white); color:var(--ink); box-shadow:var(--shadow-sm); font-family:var(--sans); }
+  .al-tab.active{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; }
+  .al-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(56px,1fr)); gap:8px; margin-bottom:12px; }
+  .al-tile{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:14px; height:58px; font-family:var(--loop); font-size:30px; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); }
+  .al-tile.sel{ border-color:#E5567F; background:#FFE9F0; }
+  .al-card{ background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:18px 16px 16px; text-align:center; }
+  .al-bigletter{ font-family:var(--loop); font-weight:700; font-size:104px; line-height:1.1; color:var(--kara); }
+  .al-emoji{ font-size:76px; line-height:1.15; }
+  .al-en{ font-size:26px; font-weight:900; color:var(--ink); font-family:var(--sans); margin-top:2px; }
+  .al-word{ font-family:var(--loop); font-size:28px; font-weight:700; color:var(--kara); margin-top:2px; }
+  .al-rom{ font-size:16px; font-weight:800; color:var(--soft); font-family:var(--sans); }
+  .al-meta{ display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:8px; font-weight:800; font-size:13.5px; color:var(--soft); }
+  .al-note{ font-size:12.5px; font-weight:700; color:var(--coral-d); margin-top:6px; }
+  .al-row{ display:flex; gap:10px; margin-top:12px; }
+  .al-btn{ flex:1; border:none; cursor:pointer; border-radius:14px; padding:13px 8px; font-weight:800; font-size:15px; font-family:var(--sans); color:#fff; background:linear-gradient(135deg,var(--teal),var(--teal-d)); box-shadow:var(--shadow-sm); }
+  .al-btn.slow{ background:linear-gradient(135deg,var(--gold),var(--gold-d)); }
+  .al-btn.next{ background:linear-gradient(135deg,#E5567F,#ff88a8); }
+  .al-btn.ghost{ background:var(--white); color:var(--ink); }
+  .al-btn:active{ transform:scale(.97); }
+  .al-nav{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:10px; }
+  .al-nav .al-btn{ flex:0 0 64px; }
+  .al-count{ font-weight:800; color:var(--soft); font-size:14px; }
+  .al-progress{ height:9px; border-radius:9px; background:#F0E3DB; margin:2px 0 12px; overflow:hidden; }
+  .al-progress i{ display:block; height:100%; background:linear-gradient(90deg,#E5567F,#ff88a8); border-radius:9px; transition:width .25s; }
+  .al-prompt{ background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:16px; text-align:center; margin-bottom:12px; }
+  .al-prompt .hint{ font-weight:800; color:var(--soft); font-size:14px; margin-bottom:6px; font-family:var(--sans); }
+  .al-hearbig{ border:none; cursor:pointer; width:92px; height:92px; border-radius:50%; font-size:42px; background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; box-shadow:var(--shadow-sm); }
+  .al-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .al-opt{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:18px; padding:10px 6px; box-shadow:var(--shadow-sm); font-family:var(--loop); font-size:46px; font-weight:700; color:var(--kara); min-height:84px; }
+  .al-opt.pic{ font-family:var(--sans); color:var(--ink); font-size:15px; font-weight:800; }
+  .al-opt.pic span{ display:block; font-size:42px; line-height:1.2; }
+  .al-opt.right{ border-color:var(--teal); background:#E3F7F2; }
+  .al-opt.wrong{ border-color:var(--coral); background:#FFE6E2; }
+  .al-opt:disabled{ cursor:default; }
+  .al-fb{ margin-top:12px; }
+  .al-fb .al-card{ padding:12px; }
+  .al-fb .verdict{ font-weight:900; font-size:17px; margin-bottom:4px; }
+  .al-fb .verdict.ok{ color:var(--teal-d); } .al-fb .verdict.no{ color:var(--coral-d); }
+  .al-fb .line{ font-family:var(--loop); font-weight:700; font-size:30px; color:var(--kara); }
+  .al-score{ font-size:54px; font-weight:900; color:#E5567F; font-family:var(--sans); }
+  .al-sec{ font-weight:900; color:var(--coral-d); font-size:14px; margin:16px 2px 8px; font-family:var(--sans); }
+  .al-opts.cls{ grid-template-columns:1fr; }
+  .al-opt.clsopt{ font-family:var(--sans); font-size:20px; font-weight:900; min-height:62px; }
+  .al-opt.clsopt.right{ outline:4px solid var(--teal); } .al-opt.clsopt.wrong{ opacity:.45; }
 </style>
 </head>
 <body>
@@ -626,9 +689,23 @@
         <span class="emo">📝</span>
         <span><b>Sentences Practice</b><small>Real sentences, expressions &amp; the 7-Eleven Challenge</small></span>
       </button>
+      <button class="hubbtn hb4" id="hbAlphabet" data-go="alphabet">
+        <span class="emo">🔤</span>
+        <span><b>Thai Alphabet</b><small>44 consonants — see it, hear it, pick it</small></span>
+      </button>
     </div>
     <div class="foot">Practise a little every day 🌟<br>Thai with Palm 💬</div>
     <div class="teacher-link-wrap"><button class="teacher-link" data-go="teacherlogin">🔒 Teacher</button></div>
+  </section>
+
+  <!-- ================= THAI ALPHABET ================= -->
+  <section id="alphabet" class="hidden">
+    <div class="al-hero">
+      <button class="back" id="alBackBtn">←</button>
+      <h1>Thai Alphabet 🔤</h1>
+      <p id="alSub">44 consonants · see it, hear it, pick it</p>
+    </div>
+    <div id="alBody"></div>
   </section>
 
   <!-- ================= TEACHER · LOGIN ================= -->
@@ -1343,7 +1420,7 @@ function show(id){
   if(id!=="sevengame" && typeof svClearTimers==="function") svClearTimers();
   ["hub","home","quiz","practice","result","pghome","pgpractice","pgame","pgresult",
    "sevenintro","sevengame","sevenroundresult","sevencomplete",
-   "khonggame",
+   "khonggame","alphabet",
    "sentbuilder","sentbuilderresult",
    "teacherlogin","teachersection"].forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id));
   window.scrollTo(0,0);
@@ -1969,7 +2046,7 @@ const PG_META_VOCAB = [
   {key:"feel",        emo:"😋", title:"Feelings",                 sub:"ดี · สนุก · ร้อน · เย็น · อร่อย",       cls:"mai"},
   {key:"questwords",  emo:"❓", title:"Question Words",            sub:"อะไร · ที่ไหน · ใคร · เมื่อไหร่ · ทำไม",   cls:"kha"},
   {key:"thisthat",    emo:"👉", title:"This, That, These & Those", sub:"นี่ · นั่น · พวกนี้ · พวกนั้น",           cls:"kham"},
-  {key:"khong",       emo:"🔑", title:"Whose Is It? (ของ)",       sub:"ของ · ผม · ฉัน · คุณ · เขา",           cls:"paa"},
+  {key:"khong",       emo:"🔑", title:"Whose Is It? (ของ&nbsp;Khǒng)",       sub:"ของ · ผม · ฉัน · คุณ · เขา",           cls:"paa"},
   {key:"position",    emo:"📍", title:"Position Words",           sub:"ใน · บน · ใต้ · ข้าง · หน้า · หลัง",    cls:"kha"},
   {key:"colors",      emo:"🎨", title:"Colors",                    sub:"สีแดง · สีฟ้า · สีเขียว · สีเหลือง",    cls:"kham"},
   {key:"animals",      emo:"🐾", title:"Animals",                   sub:"เป็ด · แมว · หมา · นก",                cls:"mai"},
@@ -3443,6 +3520,247 @@ pgChoose = function(c,q){
   document.getElementById("teacherlogin").querySelector(".back").onclick = ()=> showScreen("hub");
   document.getElementById("hub").querySelector(".teacher-link").onclick = ()=> showScreen("teacherlogin");
 })();
+
+/* ===================== THAI ALPHABET (consonants) ===================== */
+// l = letter, w = traditional picture word, rom = word romanization, en = English, e = picture, c = class (m/h/l), s = initial sound
+const AL_DATA = [
+  {l:"ก",w:"ไก่",rom:"Gài",en:"chicken",e:"🐔",c:"m",s:"g"},
+  {l:"ข",w:"ไข่",rom:"Khài",en:"egg",e:"🥚",c:"h",s:"kh"},
+  {l:"ฃ",w:"ขวด",rom:"Khùat",en:"bottle",e:"🍾",c:"h",s:"kh",rare:1},
+  {l:"ค",w:"ควาย",rom:"Khwaai",en:"buffalo",e:"🐃",c:"l",s:"kh"},
+  {l:"ฅ",w:"คน",rom:"Khon",en:"person",e:"🧑",c:"l",s:"kh",rare:1},
+  {l:"ฆ",w:"ระฆัง",rom:"Rá-khang",en:"bell",e:"🔔",c:"l",s:"kh"},
+  {l:"ง",w:"งู",rom:"Nguu",en:"snake",e:"🐍",c:"l",s:"ng"},
+  {l:"จ",w:"จาน",rom:"Jaan",en:"plate",e:"🍽️",c:"m",s:"j"},
+  {l:"ฉ",w:"ฉิ่ง",rom:"Chìng",en:"cymbals",e:"🥁",c:"h",s:"ch"},
+  {l:"ช",w:"ช้าง",rom:"Cháang",en:"elephant",e:"🐘",c:"l",s:"ch"},
+  {l:"ซ",w:"โซ่",rom:"Sôo",en:"chain",e:"⛓️",c:"l",s:"s"},
+  {l:"ฌ",w:"เฌอ",rom:"Choe",en:"tree",e:"🌳",c:"l",s:"ch"},
+  {l:"ญ",w:"หญิง",rom:"Yǐng",en:"woman",e:"👩",c:"l",s:"y"},
+  {l:"ฎ",w:"ชฎา",rom:"Chá-daa",en:"headdress",e:"👑",c:"m",s:"d"},
+  {l:"ฏ",w:"ปฏัก",rom:"Bpà-dtàk",en:"spear",e:"🔱",c:"m",s:"dt"},
+  {l:"ฐ",w:"ฐาน",rom:"Thǎan",en:"pedestal",e:"🗿",c:"h",s:"th"},
+  {l:"ฑ",w:"มณโฑ",rom:"Mon-too",en:"Montho (a queen)",e:"👸",c:"l",s:"th"},
+  {l:"ฒ",w:"ผู้เฒ่า",rom:"Phûu-thâo",en:"elder",e:"👴",c:"l",s:"th"},
+  {l:"ณ",w:"เณร",rom:"Neen",en:"novice monk",e:"🧘",c:"l",s:"n"},
+  {l:"ด",w:"เด็ก",rom:"Dèk",en:"child",e:"👦",c:"m",s:"d"},
+  {l:"ต",w:"เต่า",rom:"Dtào",en:"turtle",e:"🐢",c:"m",s:"dt"},
+  {l:"ถ",w:"ถุง",rom:"Thǔng",en:"bag",e:"🛍️",c:"h",s:"th"},
+  {l:"ท",w:"ทหาร",rom:"Thá-hǎan",en:"soldier",e:"💂",c:"l",s:"th"},
+  {l:"ธ",w:"ธง",rom:"Thong",en:"flag",e:"🚩",c:"l",s:"th"},
+  {l:"น",w:"หนู",rom:"Nǔu",en:"mouse",e:"🐭",c:"l",s:"n"},
+  {l:"บ",w:"ใบไม้",rom:"Bai-máai",en:"leaf",e:"🍃",c:"m",s:"b"},
+  {l:"ป",w:"ปลา",rom:"Bplaa",en:"fish",e:"🐟",c:"m",s:"bp"},
+  {l:"ผ",w:"ผึ้ง",rom:"Phûeng",en:"bee",e:"🐝",c:"h",s:"ph"},
+  {l:"ฝ",w:"ฝา",rom:"Fǎa",en:"lid",e:"🥘",c:"h",s:"f"},
+  {l:"พ",w:"พาน",rom:"Phaan",en:"footed tray",e:"🏺",c:"l",s:"ph"},
+  {l:"ฟ",w:"ฟัน",rom:"Fan",en:"tooth",e:"🦷",c:"l",s:"f"},
+  {l:"ภ",w:"สำเภา",rom:"Sǎm-phao",en:"sailing ship",e:"⛵",c:"l",s:"ph"},
+  {l:"ม",w:"ม้า",rom:"Máa",en:"horse",e:"🐴",c:"l",s:"m"},
+  {l:"ย",w:"ยักษ์",rom:"Yák",en:"giant",e:"👹",c:"l",s:"y"},
+  {l:"ร",w:"เรือ",rom:"Ruea",en:"boat",e:"🚤",c:"l",s:"r"},
+  {l:"ล",w:"ลิง",rom:"Ling",en:"monkey",e:"🐒",c:"l",s:"l"},
+  {l:"ว",w:"แหวน",rom:"Wǎen",en:"ring",e:"💍",c:"l",s:"w"},
+  {l:"ศ",w:"ศาลา",rom:"Sǎa-laa",en:"pavilion",e:"🛖",c:"h",s:"s"},
+  {l:"ษ",w:"ฤๅษี",rom:"Rue-sǐi",en:"hermit",e:"🧙",c:"h",s:"s"},
+  {l:"ส",w:"เสือ",rom:"Sǔea",en:"tiger",e:"🐯",c:"h",s:"s"},
+  {l:"ห",w:"หีบ",rom:"Hìip",en:"treasure chest",e:"🧰",c:"h",s:"h"},
+  {l:"ฬ",w:"จุฬา",rom:"Jù-laa",en:"kite",e:"🪁",c:"l",s:"l"},
+  {l:"อ",w:"อ่าง",rom:"Àang",en:"basin",e:"🛁",c:"m",s:"— (vowel carrier)"},
+  {l:"ฮ",w:"นกฮูก",rom:"Nók-hûuk",en:"owl",e:"🦉",c:"l",s:"h"}
+];
+const AL_SIZES = [7,7,6,6,6,6,6];            // 6–7 letters per lesson
+const AL_CLASS = {m:{n:"Mid class",c:"#E0912A"}, h:{n:"High class",c:"#E7503F"}, l:{n:"Low class",c:"#0E877F"}};
+const AL_KEY = "twp_alpha_v1";
+let alProg = {};
+try{ alProg = JSON.parse(localStorage.getItem(AL_KEY)||"{}") || {}; }catch(e){ alProg = {}; }
+function alSave(){ try{ localStorage.setItem(AL_KEY, JSON.stringify(alProg)); }catch(e){} }
+let alView="menu", alLesson=0, alIdx=0, alQ=null;
+
+const AL_CLS_LESSON = {"-2":"m","-3":"h","-4":"l"};   // class lessons
+function alLetters(i){
+  if(AL_CLS_LESSON[i]) return AL_DATA.filter(c=>c.c===AL_CLS_LESSON[i]);
+  if(i<0) return AL_DATA;
+  const s = AL_SIZES.slice(0,i).reduce((a,b)=>a+b,0);
+  return AL_DATA.slice(s, s+AL_SIZES[i]);
+}
+// traditional letter name = letter + อ, then the picture word:  งอ งู  (Ngaw Nguu)
+function alName(c){ return c.l+"อ"; }
+function alNameRom(c){
+  const init = c.l==="อ" ? "" : c.s;
+  const r = init + (c.c==="h" ? "ǎw" : "aw");          // high class = rising tone, mid/low = mid tone (same "aw" spelling as ขอ Khǎw)
+  return r.charAt(0).toUpperCase()+r.slice(1);
+}
+function alQCount(i){ const n=alLetters(i).length; return n<=7 ? n : Math.min(n,10); }
+function alSay(c){ return alName(c)+" "+c.w; }
+function alHear(c){ speak(alSay(c), undefined, true); }
+function alSlow(c){ speakSlow(alSay(c)); }
+function alTag(c){ const k=AL_CLASS[c.c]; return `<span class="al-tag" style="background:${k.c}">${k.n}</span>`; }
+const $al = id => document.getElementById(id);
+
+function alOpen(){ alView="menu"; show("alphabet"); alRender(); }
+function alBack(){
+  if(alView==="menu"){ show("hub"); return; }
+  if(alView==="lesson"){ alView="menu"; } else if(alQ && alQ.kind==="class"){ alView="menu"; } else { alView="lesson"; }
+  alRender();
+}
+function alRender(){
+  if(alView==="menu") alRenderMenu();
+  else if(alView==="lesson") alRenderLesson();
+  else if(alView==="quiz") alRenderQ();
+  else if(alView==="result") alRenderResult();
+  window.scrollTo(0,0);
+}
+
+/* ---- menu: pick a lesson ---- */
+function alRenderMenu(){
+  $al("alSub").textContent = "44 consonants · see it, hear it, pick it";
+  let h = '<div class="al-menu">';
+  AL_SIZES.forEach((n,i)=>{
+    const L = alLetters(i), best = alProg["l"+i];
+    h += `<button class="al-lesson" data-l="${i}"><span class="num">${i+1}</span>
+      <span><b>Lesson ${i+1}</b><span class="letters">${L.map(c=>c.l).join(" ")}</span></span>
+      <span class="best">${best!=null ? "⭐ "+best+"/"+L.length : n+" letters"}</span></button>`;
+  });
+  h += '<div class="al-sec">🎨 Consonant classes — Mid · High · Low</div><div class="al-menu">';
+  [["-2","m","🟡"],["-3","h","🔴"],["-4","l","🔵"]].forEach(([id,k,emo])=>{
+    const L = alLetters(+id), best = alProg["l"+id], col = AL_CLASS[k].c;
+    h += `<button class="al-lesson" data-l="${id}"><span class="num" style="background:${col}22;color:${col}">${emo}</span>
+      <span><b>${AL_CLASS[k].n} · ${L.length} letters</b><span class="letters" style="font-size:17px;letter-spacing:1px;color:${col}">${L.map(c=>c.l).join(" ")}</span></span>
+      <span class="best">${best!=null ? "⭐ "+best+"/"+alQCount(+id) : ""}</span></button>`;
+  });
+  const bCls = alProg["cls"];
+  h += `<button class="al-lesson all" id="alClassGame"><span class="num">🎯</span>
+      <span><b>Which class? game</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">See a letter · pick Mid, High or Low</span></span>
+      <span class="best">${bCls!=null ? "⭐ "+bCls+"/10" : ""}</span></button></div>
+    <div class="al-sec">🎲 Review</div><div class="al-menu">`;
+  const bAll = alProg["all"];
+  h += `<button class="al-lesson all" data-l="-1"><span class="num">🎲</span>
+      <span><b>All 44 letters</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">Mix everything · random review</span></span>
+      <span class="best">${bAll!=null ? "⭐ "+bAll+"/10" : ""}</span></button></div>`;
+  h += `<div class="al-legend">${["m","h","l"].map(k=>`<span class="al-tag" style="background:${AL_CLASS[k].c}">${AL_CLASS[k].n}</span>`).join("")}</div>`;
+  $al("alBody").innerHTML = h;
+  $al("alClassGame").onclick=()=>{ alLesson=-1; alStartQuiz("class"); };
+  $al("alBody").querySelectorAll(".al-lesson[data-l]").forEach(b=> b.onclick=()=>{ alLesson=+b.dataset.l; alIdx=0; alView="lesson"; alMode="learn"; alRender(); alHear(alLetters(alLesson)[0]); });
+}
+
+/* ---- lesson: learn + 3 practice modes ---- */
+let alMode="learn";
+function alRenderLesson(){
+  const L = alLetters(alLesson);
+  $al("alSub").textContent = AL_CLS_LESSON[alLesson] ? AL_CLASS[AL_CLS_LESSON[alLesson]].n+" · "+L.length+" letters" : alLesson<0 ? "All 44 letters" : "Lesson "+(alLesson+1)+" · "+L.map(c=>c.l).join(" ");
+  if(alIdx>=L.length) alIdx=0;
+  const c = L[alIdx];
+  let h = `<div class="al-tabs">
+    <button class="al-tab ${alMode==="learn"?"active":""}" data-m="learn">📖 Learn</button>
+    <button class="al-tab" data-m="listen">👂 Listen &amp; pick</button>
+    <button class="al-tab" data-m="pic">🖼️ Picture → letter</button>
+    <button class="al-tab" data-m="letter">🔤 Letter → picture</button></div>`;
+  h += `<div class="al-grid">${L.map((x,i)=>`<button class="al-tile ${i===alIdx?"sel":""}" data-i="${i}">${x.l}</button>`).join("")}</div>`;
+  h += `<div class="al-card">
+      <div class="al-bigletter">${c.l}</div>
+      <div class="al-emoji">${c.e}</div>
+      <div class="al-en">${c.en}</div>
+      <div class="al-word">${alName(c)} ${c.w}</div>
+      <div class="al-rom">${alNameRom(c)} · ${c.rom}</div>
+      <div class="al-meta">${alTag(c)}<span>Sound: <b>${c.s}</b></span></div>
+      ${c.rare?'<div class="al-note">Rarely used today — still part of the 44.</div>':''}
+      <div class="al-row"><button class="al-btn" id="alHearBtn">🔊 Hear it</button><button class="al-btn slow" id="alSlowBtn">🐢 Slow</button></div>
+      <div class="al-nav"><button class="al-btn ghost" id="alPrev">←</button><span class="al-count">${alIdx+1} / ${L.length}</span><button class="al-btn ghost" id="alNext">→</button></div>
+    </div>`;
+  $al("alBody").innerHTML = h;
+  const body = $al("alBody");
+  body.querySelectorAll(".al-tab").forEach(b=> b.onclick=()=>{ if(b.dataset.m==="learn"){ alMode="learn"; alRender(); } else alStartQuiz(b.dataset.m); });
+  body.querySelectorAll(".al-tile").forEach(b=> b.onclick=()=>{ alIdx=+b.dataset.i; alRender(); alHear(alLetters(alLesson)[alIdx]); });
+  $al("alHearBtn").onclick=()=>alHear(c);
+  $al("alSlowBtn").onclick=()=>alSlow(c);
+  $al("alPrev").onclick=()=>{ alIdx=(alIdx-1+L.length)%L.length; alRender(); alHear(L[alIdx]); };
+  $al("alNext").onclick=()=>{ alIdx=(alIdx+1)%L.length; alRender(); alHear(L[alIdx]); };
+}
+
+/* ---- quizzes ---- */
+function alStartQuiz(kind){
+  const pool = alLetters(alLesson);
+  const n = kind==="class" ? 10 : alQCount(alLesson);
+  alQ = {kind, qs: shuffle(pool).slice(0,n), i:0, score:0, done:false, opts:[]};
+  alView="quiz"; alRender();
+}
+function alOptionsFor(q){
+  const pool = alLetters(alLesson);
+  let others = shuffle(pool.filter(x=>x.l!==q.l));
+  if(others.length<3) others = others.concat(shuffle(AL_DATA.filter(x=>x.l!==q.l && !others.includes(x)))).slice(0,3);
+  return shuffle([q].concat(others.slice(0,3)));
+}
+function alRenderQ(){
+  const Q = alQ, q = Q.qs[Q.i];
+  if(!Q.opts[Q.i]) Q.opts[Q.i] = Q.kind==="class" ? [{k:"m"},{k:"h"},{k:"l"}] : alOptionsFor(q);
+  const opts = Q.opts[Q.i];
+  $al("alSub").textContent = {listen:"Listen & pick the letter",pic:"Picture → pick the letter",letter:"Letter → pick the picture",class:"Which class is this letter?"}[Q.kind];
+  let h = `<div class="al-progress"><i style="width:${(Q.i/Q.qs.length)*100}%"></i></div>`;
+  h += `<div class="al-count" style="text-align:right;margin-bottom:6px">Question ${Q.i+1} / ${Q.qs.length}</div>`;
+  if(Q.kind==="listen"){
+    h += `<div class="al-prompt"><div class="hint">Which letter did you hear?</div><button class="al-hearbig" id="alQHear">🔊</button></div>`;
+  } else if(Q.kind==="pic"){
+    h += `<div class="al-prompt"><div class="hint">Which letter starts this word?</div><div class="al-emoji">${q.e}</div><div class="al-en">${q.en}</div></div>`;
+  } else if(Q.kind==="class"){
+    h += `<div class="al-prompt"><div class="hint">Is this letter Mid, High or Low class?</div><div class="al-bigletter">${q.l}</div></div>`;
+  } else {
+    h += `<div class="al-prompt"><div class="hint">Which picture belongs to this letter?</div><div class="al-bigletter">${q.l}</div></div>`;
+  }
+  h += `<div class="al-opts ${Q.kind==="class"?"cls":""}">${opts.map((o,i)=> Q.kind==="class"
+      ? `<button class="al-opt clsopt" data-i="${i}" style="background:${AL_CLASS[o.k].c};color:#fff">${AL_CLASS[o.k].n}</button>`
+      : Q.kind==="letter"
+      ? `<button class="al-opt pic" data-i="${i}"><span>${o.e}</span>${o.en}</button>`
+      : `<button class="al-opt" data-i="${i}">${o.l}</button>`).join("")}</div>`;
+  h += `<div class="al-fb" id="alFb"></div>`;
+  $al("alBody").innerHTML = h;
+  const body = $al("alBody");
+  if($al("alQHear")) $al("alQHear").onclick=()=>alHear(q);
+  body.querySelectorAll(".al-opt").forEach(b=> b.onclick=()=>alAnswer(+b.dataset.i));
+  if(Q.kind==="listen") setTimeout(()=>speak(alSay(q)), 250);   // plays once when the question appears
+}
+function alAnswer(i){
+  const Q=alQ; if(Q.done) return;
+  Q.done = true;
+  const q=Q.qs[Q.i], opts=Q.opts[Q.i], isCls = Q.kind==="class", same = o => isCls ? o.k===q.c : o.l===q.l, ok = same(opts[i]);
+  if(ok) Q.score++;
+  document.querySelectorAll("#alBody .al-opt").forEach((b,k)=>{
+    b.disabled = true;
+    if(same(opts[k])) b.classList.add("right"); else if(k===i) b.classList.add("wrong");
+  });
+  const last = Q.i===Q.qs.length-1;
+  $al("alFb").innerHTML = `<div class="al-card">
+      <div class="verdict ${ok?"ok":"no"}">${ok?"✅ Correct!":"❌ Not quite — it's:"}${isCls?" "+alTag(q):""}</div>
+      <div class="line">${alName(q)} ${q.w}</div>
+      <div class="al-rom">${alNameRom(q)} · ${q.rom} · ${q.en} ${q.e}</div>
+      <div class="al-row"><button class="al-btn" id="alFbHear">🔊 Hear it again</button><button class="al-btn slow" id="alFbSlow">🐢 Slow</button></div>
+      <div class="al-row"><button class="al-btn next" id="alFbNext">${last?"See score ▶":"Next ▶"}</button></div></div>`;
+  $al("alFbHear").onclick=()=>alHear(q);
+  $al("alFbSlow").onclick=()=>alSlow(q);
+  $al("alFbNext").onclick=()=>{ if(last){ alFinish(); } else { Q.i++; Q.done=false; alRenderQ(); } };
+  if(Q.kind!=="listen") speak(alSay(q));        // one automatic play after the answer (listen mode already played it)
+}
+function alFinish(){
+  const key = alQ.kind==="class" ? "cls" : alLesson===-1 ? "all" : "l"+alLesson;
+  if(alProg[key]==null || alQ.score>alProg[key]) alProg[key]=alQ.score;
+  alSave();
+  alView="result"; alRender();
+}
+function alRenderResult(){
+  const Q=alQ, n=Q.qs.length, great = Q.score===n;
+  $al("alSub").textContent = "Result";
+  $al("alBody").innerHTML = `<div class="al-card">
+      <div class="al-emoji">${great?"🎉":Q.score>=n/2?"👏":"💪"}</div>
+      <div class="al-score">${Q.score} / ${n}</div>
+      <div class="al-en" style="font-size:19px">${great?"Perfect! All letters correct":Q.score>=n/2?"Nice work — keep going":"Keep practising, you will get it"}</div>
+      <div class="al-row"><button class="al-btn next" id="alAgain">🔁 Try again</button></div>
+      <div class="al-row"><button class="al-btn ghost" id="alToLesson">${Q.kind==="class"?"Back to menu":"Back to letters"}</button><button class="al-btn ghost" id="alToMenu">All lessons</button></div></div>`;
+  $al("alAgain").onclick=()=>alStartQuiz(Q.kind);
+  $al("alToLesson").onclick=()=>{ if(Q.kind==="class"){ alView="menu"; } else { alView="lesson"; alMode="learn"; } alRender(); };
+  $al("alToMenu").onclick=()=>{ alView="menu"; alRender(); };
+}
+$al("alBackBtn").onclick = alBack;
+$al("hbAlphabet").onclick = alOpen;
 </script>
 </body>
 </html>
