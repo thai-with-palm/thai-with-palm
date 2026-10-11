@@ -247,6 +247,11 @@
     box-shadow:var(--shadow-sm); font-family:var(--sans); transition:transform .1s, filter .15s; width:100%; }
   .fb-send:active{ transform:scale(.98); }
   .fb-send:disabled{ opacity:.5; cursor:default; }
+  .sc-card{ background:linear-gradient(135deg,#E6F7F2,#F2FBF8); border:2px solid #BFE8DD; border-radius:18px; padding:14px 14px 12px; margin:12px 0; text-align:center; }
+  .sc-card .sc-title{ font-weight:900; font-size:16px; color:var(--teal-d); margin-bottom:2px; }
+  .sc-card .sc-sub{ font-weight:700; font-size:13px; color:var(--soft); margin-bottom:10px; }
+  .sc-card .fb-name{ margin-bottom:8px; background:#fff; }
+  .sc-card .sc-btn{ width:100%; font-size:17px; padding:13px; }
   .fb-done{ color:var(--teal-d); font-weight:800; font-size:15px; margin-top:8px; }
   .fb-err{ color:var(--coral-d); font-size:13px; margin-top:6px; }
 
@@ -800,6 +805,7 @@
         <div class="sv-stat"><span class="n" id="svrMissed">2</span><span class="l">Need Review</span></div>
       </div>
       <p id="svrMsg">Let's try those missed ones again — you've got this!</p>
+      <div class="sc-card" id="sc_svr"></div>
       <button class="sv-continuebtn" id="svrContinueBtn">Continue →</button>
     </div>
   </section>
@@ -810,6 +816,7 @@
       <div class="em">🎉</div>
       <h2>7-Eleven Challenge Complete!</h2>
       <p>You got every question right. Nice work — that's exactly the real-life Thai you'll use in the store!</p>
+      <div class="sc-card" id="sc_svc"></div>
       <button class="sv-continuebtn" id="svAgainBtn">Play again</button>
     </div>
   </section>
@@ -998,6 +1005,7 @@
         <div class="sv-stat"><span class="n" id="sbrRetry">3</span><span class="l">Needed a retry</span></div>
       </div>
       <p>Nicely done putting those sentences together!</p>
+      <div class="sc-card" id="sc_sb"></div>
       <button class="sv-continuebtn" data-go="pghome">Back to Sentences Practice</button>
     </div>
   </section>
@@ -1052,6 +1060,7 @@
         <button class="change" data-go="pghome">Change set</button>
       </div>
     </div>
+    <div class="sc-card" id="sc_pg"></div>
     <div class="fb-card" id="fbWordGame">
       <div class="fb-title">How was this game? 💬</div>
       <div class="fb-emoji-row" data-fb="pgrating">
@@ -1142,6 +1151,7 @@
         <button class="change" id="changeBtn">Change set</button>
       </div>
     </div>
+    <div class="sc-card" id="sc_tone"></div>
     <div class="fb-card" id="fbToneTest">
       <div class="fb-title">How was this test? 🔔</div>
       <div class="fb-emoji-row" data-fb="tonerating">
@@ -1437,6 +1447,7 @@ function finish(){
   document.getElementById("rTitle").textContent=title;
   document.getElementById("rMsg").innerHTML='<span class="th">'+th+'</span> · <span class="rm">'+rom+'</span><br>'+en;
   if(pct>=.8){ confetti(40,true); setTimeout(()=>confetti(30,true),300); }
+  scMount("sc_tone", ()=>({ game:"Tone Test · "+(SETLABEL[curSet]||curSet), score:score, total:queue.length }));
 }
 
 /* ---------------- practice + mode ---------------- */
@@ -2468,6 +2479,7 @@ function pgFinish(){
   document.getElementById("pgrTitle").textContent=title;
   document.getElementById("pgrMsg").innerHTML='<span class="th">'+th+'</span> · <span class="rm">'+rom+'</span><br>'+en;
   if(pct>=.8){ confetti(38,true); setTimeout(()=>confetti(28,true),300); }
+  scMount("sc_pg", ()=>({ game:"Word Game · "+(PG_LABEL[pgSetKey]||pgSetKey), score:pgScore, total:pgQueue.length }));
 }
 document.getElementById("pgrAgain").onclick=()=>startPgGame(pgSetKey, lastGame);
 
@@ -2644,6 +2656,49 @@ function resetToPracticeMode(){
   document.getElementById("pgHint").textContent = "Learn first — picture, pronunciation and meaning. No pressure.";
 }
 renderPgSets();
+
+
+/* ==========================================================
+   SEND MY SCORE — one-tap button on every result screen so a
+   student can send their finished game / test score to Teacher Palm
+   (uses the same Google Script as the feedback form)
+   ========================================================== */
+const SC_NAME_KEY = "twp_student_name";
+function scCardHTML(id){
+  return '<div class="sc-card" id="'+id+'"></div>';
+}
+function scFill(el){
+  el.innerHTML = '<div class="sc-title">🎓 Finished? Send your score to Teacher Palm</div>'+
+    '<div class="sc-sub">Type your name, then tap the button.</div>'+
+    '<input type="text" class="fb-name sc-name" placeholder="Your name">'+
+    '<button class="fb-send sc-btn">📨 Send my score</button><div class="sc-status"></div>';
+}
+function scMount(id, infoFn){
+  const el = document.getElementById(id); if(!el) return;
+  scFill(el);
+  const nm = el.querySelector(".sc-name"), btn = el.querySelector(".sc-btn"), st = el.querySelector(".sc-status");
+  try{ nm.value = localStorage.getItem(SC_NAME_KEY) || ""; }catch(e){}
+  btn.onclick = async ()=>{
+    const name = nm.value.trim();
+    if(!name){ st.innerHTML = '<div class="fb-err">Please type your name first 😊</div>'; nm.focus(); return; }
+    try{ localStorage.setItem(SC_NAME_KEY, name); }catch(e){}
+    if(!FEEDBACK_URL){ st.innerHTML = '<div class="fb-err">Not set up yet — tell Teacher Palm!</div>'; return; }
+    const info = infoFn();
+    btn.disabled = true; btn.textContent = "Sending…";
+    try{
+      await fetch(FEEDBACK_URL, {
+        method:"POST", mode:"no-cors", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ kind:"score", name:name, game:info.game, score:info.score, total:info.total,
+          detail:info.detail||"", time:new Date().toLocaleString("en-GB",{timeZone:"Asia/Bangkok"}) })
+      });
+      st.innerHTML = '<div class="fb-done">✅ Sent to Teacher Palm! Thank you 🙏</div>';
+      btn.style.display = "none"; nm.style.display = "none";
+    }catch(err){
+      st.innerHTML = '<div class="fb-err">Couldn\'t send — check your internet and try again</div>';
+      btn.disabled = false; btn.textContent = "📨 Try again";
+    }
+  };
+}
 
 /* ==========================================================
    FEEDBACK SYSTEM — sends directly to Teacher Palm's email
@@ -3347,6 +3402,7 @@ function svFinishCycle(){
 
   if(missedThisCycle === 0){
     show("sevencomplete");
+    scMount("sc_svc", ()=>({ game:"7-Eleven Challenge", score:"Completed", total:"", detail:"Finished with every question right (round "+svCycleNum+")" }));
     confetti(40, true);
     return;
   }
@@ -3357,6 +3413,7 @@ function svFinishCycle(){
       ? "1 question needs another try — let's get it!"
       : missedThisCycle+" questions need another try — let's get them!";
   show("sevenroundresult");
+  scMount("sc_svr", ()=>({ game:"7-Eleven Challenge · "+(svCycleNum===1 ? "Round 1" : "Review round "+(svCycleNum-1)), score:svQueue.length-missedThisCycle, total:svQueue.length }));
 }
 
 document.getElementById("svrContinueBtn").onclick = ()=>{
@@ -3477,6 +3534,8 @@ function sbNext(){
     if(window.sbKey==="classifiers"){ rb.textContent = "Back to Classifiers"; rb.dataset.go = "pghome"; }
     else { rb.textContent = "Back to Sentences Practice"; rb.dataset.go = "pghome"; }
     show("sentbuilderresult");
+    scMount("sc_sb", ()=>({ game:"Build the Sentence · "+(PG_LABEL[window.sbKey]||"Mixed Sentences"), score:sbGoodCount, total:sbQueue.length,
+      detail:sbGoodCount+" right first try, "+sbRetryCount+" needed a retry" }));
     confetti(35, true);
   }
 }
@@ -4019,7 +4078,8 @@ function alRenderResult(){
       <div class="al-score">${Q.score} / ${n}</div>
       <div class="al-en" style="font-size:19px">${great?"Perfect! All letters correct":Q.score>=n/2?"Nice work — keep going":"Keep practising, you will get it"}</div>
       <div class="al-row"><button class="al-btn next" id="alAgain">🔁 Try again</button></div>
-      <div class="al-row"><button class="al-btn ghost" id="alToLesson">${Q.kind==="class"?"Back to menu":"Back to letters"}</button><button class="al-btn ghost" id="alToMenu">All lessons</button></div></div>`;
+      <div class="al-row"><button class="al-btn ghost" id="alToLesson">${Q.kind==="class"?"Back to menu":"Back to letters"}</button><button class="al-btn ghost" id="alToMenu">All lessons</button></div></div>` + scCardHTML("sc_al");
+  scMount("sc_al", ()=>({ game:"Thai Alphabet · "+({listen:"Listen & pick",pic:"Picture → letter",letter:"Letter → picture",class:"Which class?"}[Q.kind]||Q.kind)+" · "+(alLesson===-1?"All 44 letters":AL_CLS_LESSON[alLesson]?AL_CLASS[AL_CLS_LESSON[alLesson]].n:"Lesson "+(alLesson+1)), score:Q.score, total:n }));
   $al("alAgain").onclick=()=>alStartQuiz(Q.kind);
   $al("alToLesson").onclick=()=>{ if(Q.kind==="class"){ alView="menu"; } else { alView="lesson"; alMode="learn"; } alRender(); };
   $al("alToMenu").onclick=()=>{ alView="menu"; alRender(); };
