@@ -652,6 +652,13 @@
   .al-prompt{ background:var(--white); border-radius:20px; box-shadow:var(--shadow); padding:10px 12px; text-align:center; margin-bottom:8px; }
   .al-prompt .al-bigletter{ font-size:64px; padding-bottom:8px; line-height:1.45; }
   .al-prompt .al-emoji{ font-size:54px; }
+  .al-listen{ padding:14px 12px 14px; }
+  .al-listen .hint{ font-size:16px; color:var(--ink); margin-bottom:10px; }
+  .al-listen .al-row{ margin-top:0; gap:10px; }
+  .al-listen .al-btn{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:14px 6px; font-size:17px; border-radius:18px; animation:alPulse 1.8s ease-in-out 3; }
+  .al-listen .al-btn.slow{ animation:none; }
+  .al-listen .al-btn .ic{ font-size:38px; line-height:1.1; }
+  @keyframes alPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.04); } }
   .al-qcount{ text-align:right; margin-bottom:3px; font-size:13px; }
   .al-prompt .hint{ font-weight:800; color:var(--soft); font-size:13.5px; margin-bottom:4px; font-family:var(--sans); }
   .al-hearbig{ border:none; cursor:pointer; width:92px; height:92px; border-radius:50%; font-size:42px; background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; box-shadow:var(--shadow-sm); }
@@ -3724,7 +3731,7 @@ function alRenderQ(){
   let h = `<div class="al-progress"><i style="width:${(Q.i/Q.qs.length)*100}%"></i></div>`;
   h += `<div class="al-count al-qcount">Question ${Q.i+1} / ${Q.qs.length}</div>`;
   if(Q.kind==="listen"){
-    h += `<div class="al-prompt"><div class="hint">Which letter did you hear?</div><div class="al-row"><button class="al-btn" id="alQHear">🔊 Hear it</button><button class="al-btn slow" id="alQSlow">🐢 Slow</button></div></div>`;
+    h += `<div class="al-prompt al-listen"><div class="hint">👂 Which letter did you hear?</div><div class="al-row"><button class="al-btn" id="alQHear"><span class="ic">🔊</span>Tap to hear</button><button class="al-btn slow" id="alQSlow"><span class="ic">🐢</span>Slow</button></div></div>`;
   } else if(Q.kind==="pic"){
     h += `<div class="al-prompt"><div class="hint">Which letter starts this word?</div><div class="al-emoji">${q.e}</div><div class="al-en">${q.en}</div></div>`;
   } else if(Q.kind==="class"){
@@ -3759,7 +3766,7 @@ function alAnswer(i){
       <div class="verdict ${ok?"ok":"no"}">${ok?"✅ Correct!":"❌ Not quite — it's:"}${isCls?" "+alTag(q):""}</div>
       <div class="line">${alName(q)} ${q.w}</div>
       <div class="al-rom">${alNameRom(q)} · ${q.rom} · ${q.en} ${q.e}</div>
-      <div class="al-row"><button class="al-btn" id="alFbHear">🔊</button><button class="al-btn slow" id="alFbSlow">🐢</button><button class="al-btn next" id="alFbNext" style="flex:2.2">${last?"See score ▶":"Next ▶"}</button></div></div>`;
+      <div class="al-row"><button class="al-btn" id="alFbHear">🔊 Again</button><button class="al-btn slow" id="alFbSlow">🐢 Slow</button><button class="al-btn next" id="alFbNext" style="flex:2.2">${last?"See score ▶":"Next ▶"}</button></div></div>`;
   $al("alFbHear").onclick=()=>alHear(q);
   $al("alFbSlow").onclick=()=>alSlow(q);
   $al("alFbNext").onclick=()=>{ if(last){ alFinish(); } else { Q.i++; Q.done=false; alRenderQ(); } };
