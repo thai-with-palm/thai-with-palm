@@ -603,6 +603,17 @@
     font-family:var(--sans); }
   .sv-continuebtn:active{ transform:scale(.98); }
   :root{ --loop:"Noto Sans Thai Looped","Mali","Itim","Mitr","Noto Sans Thai",sans-serif; }
+  /* ===== CLASSIFIER GAME ===== */
+  .cl-blank{ display:inline-block; width:72px; height:1em; border-bottom:4px solid #E5567F; margin:0 6px; vertical-align:-2px; }
+  .cl-fillth{ font-family:var(--thai); font-weight:600; font-size:30px; color:var(--ink); line-height:1.5; }
+  .cl-fillrom{ font-weight:800; color:var(--kara); font-size:25px; line-height:1.3; }
+  .cl-hl{ color:#2f9e59; border-bottom:3px solid #2f9e59; }
+  .cl-wrongth{ font-family:var(--thai); font-weight:600; font-size:30px; color:#e0556b; line-height:1.3; }
+  .cl-wrongrom{ font-weight:800; color:#e0556b; font-size:25px; line-height:1.3; }
+  .choice .crom.big{ font-size:25px; }
+  .rev-rom.big{ font-size:25px; font-weight:800; }
+  .cl-hint{ color:var(--soft); font-weight:700; font-size:14px; margin-top:4px; }
+  .cl-fixed{ font-family:var(--thai); font-weight:600; font-size:28px; color:var(--ink); line-height:1.3; margin-top:2px; }
   /* ===== THAI ALPHABET ===== */
   .al-hero{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; border-radius:18px; padding:8px 14px; margin:0 0 8px; box-shadow:var(--shadow-sm); position:relative; text-align:center; min-height:44px; display:flex; flex-direction:column; justify-content:center; }
   .al-hero .back{ position:absolute; left:8px; top:50%; transform:translateY(-50%); }
@@ -1566,6 +1577,14 @@ const PG_SETS = {
     {th:"ต้นไม้", rom:"Dtôn-máai", en:"tree", pic:"🌳"},
     {th:"บ้าน", rom:"Bâan", en:"house", pic:"🏠"},
     {th:"รถ", rom:"Rót", en:"car", pic:"🚗"},
+    {th:"น้ำ", rom:"Náam", en:"water", pic:"💧"},
+    {th:"ข้าวผัด", rom:"Khâao phàt", en:"fried rice", pic:"🍛"},
+    {th:"ผัดไทย", rom:"Phàt thai", en:"pad thai", pic:"🍝"},
+    {th:"หมูปิ้ง", rom:"Mǔu-bpîng", en:"grilled pork skewers", pic:"🍢"},
+    {th:"เค้ก", rom:"Khéek", en:"cake", pic:"🍰"},
+    {th:"บัตร", rom:"Bàt", en:"card", pic:"💳"},
+    {th:"ถุง", rom:"Thǔng", en:"bag (plastic / shopping)", pic:"🛍️"},
+    {th:"ลูกค้า", rom:"Lûuk-kháa", en:"customer", pic:"🧑‍💼"},
   ],
   feel: [
     {th:"ดี", rom:"dii", en:"good", pic:"👍"},
@@ -1862,6 +1881,30 @@ const PG_SETS = {
     {th:"ดีมาก", rom:"Dii mâak!", en:"Very good!", pic:"😍"},
     {th:"เหมือนกัน", rom:"Mǔean-gan", en:"Me too / Same.", pic:"😊"},
   ],
+  classifiers: [
+    {th:"คน", rom:"khon", en:"classifier: people (casual)", pic:"🧑"},
+    {th:"ท่าน", rom:"thâan", en:"classifier: people (polite)", pic:"🙏"},
+    {th:"อัน", rom:"an", en:"classifier: general objects", pic:"📦"},
+    {th:"ชิ้น", rom:"chín", en:"classifier: pieces / items", pic:"🍰"},
+    {th:"ขวด", rom:"khùat", en:"classifier: bottles", pic:"🍾"},
+    {th:"แก้ว", rom:"gâew", en:"classifier: cups / glasses", pic:"☕"},
+    {th:"ใบ", rom:"bai", en:"classifier: bags, cards & tickets", pic:"🛍️"},
+    {th:"ตัว", rom:"dtua", en:"classifier: animals", pic:"🐾"},
+    {th:"เล่ม", rom:"lêm", en:"classifier: books", pic:"📚"},
+    {th:"คัน", rom:"khan", en:"classifier: vehicles", pic:"🚗"},
+    {th:"ไม้", rom:"máai", en:"classifier: sticks / skewers", pic:"🍢"},
+    {th:"จาน", rom:"jaan", en:"classifier: plates / dishes", pic:"🍽️"},
+    {th:"กี่", rom:"gìi", en:"how many?", pic:"❓"},
+    {th:"น้ำสามขวด", rom:"Náam sǎam khùat", en:"three bottles of water", pic:"💧"},
+    {th:"กาแฟสองแก้ว", rom:"Gaa-fae sǎawng gâew", en:"two cups of coffee", pic:"☕"},
+    {th:"แมวหนึ่งตัว", rom:"Maew nùeng dtua", en:"one cat", pic:"🐱"},
+    {th:"รถสองคัน", rom:"Rót sǎawng khan", en:"two cars", pic:"🚗"},
+    {th:"หนังสือสามเล่ม", rom:"Nǎng-sǔue sǎam lêm", en:"three books", pic:"📖"},
+    {th:"เอาสามไม้", rom:"Ao sǎam máai", en:"I'll take three skewers", pic:"🍢"},
+    {th:"ข้าวผัดหนึ่งจาน", rom:"Khâao phàt nùeng jaan", en:"one plate of fried rice", pic:"🍛"},
+    {th:"มีกี่คน", rom:"Mii gìi khon?", en:"How many people are there?", pic:"👥"},
+    {th:"กี่ท่านคะ", rom:"Gìi thâan khá?", en:"How many people? (staff asks)", pic:"🧑‍🍳"},
+  ],
   seven11: [
     {th:"เวฟไหม", rom:"Wêep mái?", en:"Do you want it microwaved?", pic:"🍱"},
     {th:"เวฟ", rom:"Wêep.", en:"Yes, microwave it.", pic:"🍱"},
@@ -1887,12 +1930,13 @@ const PG_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.t
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers,
+                         PG_SETS.classifiers,
                          PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce);
 // vocabulary pool used only by "Word Games" Mixed Challenge (sentences/everyday/introduce live in their own section)
 const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
-                         PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers);
+                         PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers);
 // sentence pool used only by "Sentences Practice" Mixed option
 const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce, PG_SETS.yaak);
 
@@ -2044,7 +2088,38 @@ const BUILDER_YAAK = [
     chunks:[{th:"อยาก",rom:"Yàak"},{th:"ดื่ม",rom:"dùem"},{th:"อะไร",rom:"à-rai?"}] },
 ];
 
+const BUILDER_CLASSIFIERS = [
+  { en:"I'll take two cups of coffee.",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"กาแฟ",rom:"gaa-fae"},{th:"สอง",rom:"sǎawng"},{th:"แก้ว",rom:"gâew"}] },
+  { en:"I'll take three bottles of water.",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"น้ำ",rom:"náam"},{th:"สาม",rom:"sǎam"},{th:"ขวด",rom:"khùat"}] },
+  { en:"I have two cats.",
+    chunks:[{th:"ฉัน",rom:"Chǎn"},{th:"มี",rom:"mii"},{th:"แมว",rom:"maew"},{th:"สอง",rom:"sǎawng"},{th:"ตัว",rom:"dtua"}] },
+  { en:"He has two cars.",
+    chunks:[{th:"เขา",rom:"Khǎo"},{th:"มี",rom:"mii"},{th:"รถ",rom:"rót"},{th:"สอง",rom:"sǎawng"},{th:"คัน",rom:"khan"}] },
+  { en:"I have three books.",
+    chunks:[{th:"ฉัน",rom:"Chǎn"},{th:"มี",rom:"mii"},{th:"หนังสือ",rom:"nǎng-sǔue"},{th:"สาม",rom:"sǎam"},{th:"เล่ม",rom:"lêm"}] },
+  { en:"I'll take three skewers.",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"สาม",rom:"sǎam"},{th:"ไม้",rom:"máai"}] },
+  { en:"I'll take one plate of fried rice.",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"ข้าวผัด",rom:"khâao phàt"},{th:"หนึ่ง",rom:"nùeng"},{th:"จาน",rom:"jaan"}] },
+  { en:"I bought two bags.",
+    chunks:[{th:"ฉัน",rom:"Chǎn"},{th:"ซื้อ",rom:"súue"},{th:"ถุง",rom:"thǔng"},{th:"สอง",rom:"sǎawng"},{th:"ใบ",rom:"bai"}] },
+  { en:"How many people are there?",
+    chunks:[{th:"มี",rom:"Mii"},{th:"กี่",rom:"gìi"},{th:"คน",rom:"khon"}] },
+  { en:"How many cats are there?",
+    chunks:[{th:"มี",rom:"Mii"},{th:"แมว",rom:"maew"},{th:"กี่",rom:"gìi"},{th:"ตัว",rom:"dtua"}] },
+  { en:"How many cups do you want?",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"กี่",rom:"gìi"},{th:"แก้ว",rom:"gâew"}] },
+  { en:"How many skewers do you want?",
+    chunks:[{th:"เอา",rom:"Ao"},{th:"กี่",rom:"gìi"},{th:"ไม้",rom:"máai"}] },
+  { en:"How many people? (staff asks)",
+    chunks:[{th:"กี่",rom:"Gìi"},{th:"ท่าน",rom:"thâan"},{th:"คะ",rom:"khá"}] },
+  { en:"Two people. (polite)",
+    chunks:[{th:"สอง",rom:"Sǎawng"},{th:"ท่าน",rom:"thâan"}] },
+];
 const BUILDER_DATA_BY_KEY = {
+  classifiers: BUILDER_CLASSIFIERS,
   sentences: BUILDER_SENTENCES,
   everyday: BUILDER_EVERYDAY,
   introduce: BUILDER_INTRODUCE,
@@ -2067,6 +2142,7 @@ const PG_META_VOCAB = [
   {key:"position",    emo:"📍", title:"Position Words",           sub:"ใน · บน · ใต้ · ข้าง · หน้า · หลัง",    cls:"kha"},
   {key:"colors",      emo:"🎨", title:"Colors",                    sub:"สีแดง · สีฟ้า · สีเขียว · สีเหลือง",    cls:"kham"},
   {key:"animals",      emo:"🐾", title:"Animals",                   sub:"เป็ด · แมว · หมา · นก",                cls:"mai"},
+  {key:"classifiers", emo:"🧮", title:"Classifiers (ลักษณนาม)",  sub:"คน · ขวด · แก้ว · ตัว · เล่ม · คัน",     cls:"paa"},
   {key:"numbers",     emo:"🔢", title:"Numbers",                   sub:"หนึ่ง · สอง · สาม · สิบ · ร้อย",         cls:"mix"},
   {key:"sea",         emo:"🏖️", title:"Sea, Boats & Diving",      sub:"ทะเล · เรือ · ดำน้ำ · ปะการัง · ฉลาม",  cls:"paa"},
   {key:"destination", emo:"📍", title:"Thai Destinations",        sub:"ภูเก็ต · กระบี่ · เกาะพีพี",              cls:"mix"},
@@ -2077,6 +2153,7 @@ const PG_META_SENT = [
   {key:"sentences",   emo:"💬", title:"Sentences",                sub:"สบายดีไหม · กินข้าวหรือยัง",            cls:"kham"},
   {key:"everyday",    emo:"🌈", title:"Everyday Expressions",     sub:"ค่อยเป็นค่อยไป · ตามใจเลย · อย่าคิดมาก",  cls:"paa"},
   {key:"introduce",   emo:"🙋", title:"Introduce & Get to Know",  sub:"คุณชื่ออะไร · คุณมาจากไหน · แล้วคุณล่ะ",   cls:"mai"},
+  {key:"classifiers", emo:"🧮", title:"Classifiers (ลักษณนาม)",  sub:"น้ำสามขวด · แมวสองตัว · เอาสามไม้",       cls:"kha"},
   {key:"yaak",        emo:"💭", title:"Want To... (อยาก)",        sub:"อยากไปตลาด · อยากกินผัดไทย · อยากดื่มกาแฟ", cls:"paa"},
   {key:"seven11",     emo:"🏪", title:"7-Eleven Challenge",       sub:"Recognize, choose, and build real Thai", cls:"kha", special:true},
   {key:"allsent",     emo:"🎯", title:"Mixed Sentences",          sub:"All "+PG_SENT_ALL.length+" sentences",  cls:"mix"},
@@ -2104,7 +2181,7 @@ function savePgProgress(){
 // "Mixed" pool that spans several categories
 const WORD_CATEGORY_MAP = {};
 const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","questwords","thisthat",
-  "sea","destination","directions","sentences","everyday","introduce"];
+  "sea","destination","directions","sentences","everyday","introduce","classifiers"];
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
@@ -2127,17 +2204,17 @@ const PG_CARD_COLOR = {
   classroom:"#F0C05A", greet:"#FF6B8B", quest:"#FFD24B", action:"#FF7F6B", things:"#8DC63F",
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
   directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F", introduce:"#FFD24B",
-  seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C",
+  seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B",
 };
 
 // how to group each context's categories into labeled sections on the new home screen
 const PG_GROUPS_VOCAB = [
   {label:"Core Basics",         keys:["classroom","greet","quest","action","things","feel","animals","numbers"]},
-  {label:"Grammar & Reference", keys:["questwords","thisthat","khong","position","colors"]},
+  {label:"Grammar & Reference", keys:["questwords","thisthat","khong","position","colors","classifiers"]},
   {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
 ];
 const PG_GROUPS_SENT = [
-  {label:"Practice",   keys:["sentences","everyday","introduce","yaak"]},
+  {label:"Practice",   keys:["sentences","everyday","introduce","yaak","classifiers"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
@@ -2311,6 +2388,7 @@ function makeQ(w, pool, type){
 }
 
 function startPgGame(key, mode){
+  if(key==="classifiers") return clStartGame();
   pgSetKey=key;
   lastGame="pic";
   const pool = key==="all" ? PG_VOCAB_ALL : key==="allsent" ? PG_SENT_ALL : PG_SETS[key];
@@ -2320,6 +2398,11 @@ function startPgGame(key, mode){
 }
 
 function renderPG(){
+  const q0 = pgQueue[pgIdx];
+  if(q0 && q0.kind) return clRender();
+  renderPGWord();
+}
+function renderPGWord(){
   pgAnswered=false;
   const q=pgQueue[pgIdx];
   document.getElementById("pgKicker").textContent = "📖 Read the meaning — which Thai phrase is it?";
@@ -2388,6 +2471,151 @@ function pgFinish(){
 }
 document.getElementById("pgrAgain").onclick=()=>startPgGame(pgSetKey, lastGame);
 
+
+
+/* ==========================================================
+   CLASSIFIERS — one mixed game. Practice first, then play: each round
+   mixes normal word questions with Matching, Wrong-Classifier and
+   Fill-in-the-Blank questions, all with the same A/B/C choices.
+   Uses the Word Game play screen (#pgame) and result screen.
+   ========================================================== */
+const CL_EXTRA = {};
+const CL_TOOL = [
+  {k:"khon",  th:"คน",   rom:"khon",  en:"people"},
+  {k:"dtua",  th:"ตัว",  rom:"dtua",  en:"animals"},
+  {k:"khan",  th:"คัน",  rom:"khan",  en:"vehicles"},
+  {k:"lem",   th:"เล่ม", rom:"lêm",   en:"books"},
+  {k:"khuat", th:"ขวด",  rom:"khùat", en:"bottles"},
+  {k:"gaew",  th:"แก้ว", rom:"gâew",  en:"cups / glasses"},
+  {k:"maai",  th:"ไม้",  rom:"máai",  en:"skewers"},
+  {k:"bai",   th:"ใบ",   rom:"bai",   en:"bags / cards"},
+  {k:"jaan",  th:"จาน",  rom:"jaan",  en:"plates / dishes"},
+  {k:"thaan", th:"ท่าน", rom:"thâan", en:"people (polite)"},
+  {k:"an",    th:"อัน",  rom:"an",    en:"general objects"},
+  {k:"chin",  th:"ชิ้น", rom:"chín",  en:"pieces / items"},
+];
+const CL_BY_KEY = {}; CL_TOOL.forEach(c=>CL_BY_KEY[c.k]=c);
+
+// Matching: picture + noun -> pick the classifier
+const CL_MATCH = [
+  {pic:"👤", noun:"person",          k:"khon",  th:"สองคน",          rom:"Sǎawng khon",           en:"two people"},
+  {pic:"🐱", noun:"cat",             k:"dtua",  th:"แมวหนึ่งตัว",     rom:"Maew nùeng dtua",       en:"one cat"},
+  {pic:"🚗", noun:"car",             k:"khan",  th:"รถสองคัน",        rom:"Rót sǎawng khan",       en:"two cars"},
+  {pic:"📚", noun:"book",            k:"lem",   th:"หนังสือสามเล่ม",   rom:"Nǎng-sǔue sǎam lêm",    en:"three books"},
+  {pic:"💧", noun:"water",           k:"khuat", th:"น้ำสามขวด",       rom:"Náam sǎam khùat",       en:"three bottles of water"},
+  {pic:"☕", noun:"coffee",          k:"gaew",  th:"กาแฟสองแก้ว",     rom:"Gaa-fae sǎawng gâew",   en:"two cups of coffee"},
+  {pic:"🍢", noun:"grilled skewers", k:"maai",  th:"เอาสามไม้",       rom:"Ao sǎam máai",          en:"I'll take three skewers"},
+  {pic:"🛍️", noun:"shopping bag",    k:"bai",   th:"ถุงหนึ่งใบ",      rom:"Thǔng nùeng bai",       en:"one bag"},
+  {pic:"🍛", noun:"fried rice",      k:"jaan",  th:"ข้าวผัดหนึ่งจาน",  rom:"Khâao phàt nùeng jaan", en:"one plate of fried rice"},
+];
+// Wrong Classifier?!: phrase with the wrong classifier (wk) -> pick the one that fixes it (k)
+const CL_WRONG = [
+  {wk:"dtua",  pic:"🚗", wth:"รถสองตัว",       wrom:"Rót sǎawng dtua",       k:"khan",  th:"รถสองคัน",       rom:"Rót sǎawng khan",       en:"Two cars"},
+  {wk:"khuat", pic:"🐱", wth:"แมวสามขวด",      wrom:"Maew sǎam khùat",       k:"dtua",  th:"แมวสามตัว",      rom:"Maew sǎam dtua",        en:"Three cats"},
+  {wk:"gaew",  pic:"📚", wth:"หนังสือสองแก้ว",  wrom:"Nǎng-sǔue sǎawng gâew", k:"lem",   th:"หนังสือสองเล่ม",  rom:"Nǎng-sǔue sǎawng lêm",  en:"Two books"},
+  {wk:"bai",   pic:"☕", wth:"กาแฟสามใบ",      wrom:"Gaa-fae sǎam bai",      k:"gaew",  th:"กาแฟสามแก้ว",    rom:"Gaa-fae sǎam gâew",     en:"Three cups of coffee"},
+  {wk:"dtua",  pic:"💧", wth:"น้ำสองตัว",       wrom:"Náam sǎawng dtua",      k:"khuat", th:"น้ำสองขวด",      rom:"Náam sǎawng khùat",     en:"Two bottles of water"},
+  {wk:"khan",  pic:"💳", wth:"บัตรสามคัน",      wrom:"Bàt sǎam khan",         k:"bai",   th:"บัตรสามใบ",      rom:"Bàt sǎam bai",          en:"Three cards"},
+  {wk:"lem",   pic:"🐶", wth:"หมาสามเล่ม",      wrom:"Mǎa sǎam lêm",          k:"dtua",  th:"หมาสามตัว",      rom:"Mǎa sǎam dtua",         en:"Three dogs"},
+  {wk:"khuat", pic:"🍢", wth:"เอาสามขวด",       wrom:"Ao sǎam khùat",         k:"maai",  th:"เอาสามไม้",      rom:"Ao sǎam máai",          en:"I'll take three skewers"},
+  {wk:"bai",   pic:"🍛", wth:"ข้าวผัดสองใบ",    wrom:"Khâao phàt sǎawng bai", k:"jaan",  th:"ข้าวผัดสองจาน",  rom:"Khâao phàt sǎawng jaan", en:"Two plates of fried rice"},
+];
+// Fill in the Blank: whole sentence, classifier missing. pre/post = Thai around the blank (rpre/rpost = romanization). w = the 2 wrong choices.
+const CL_FILL = [
+  {pic:"☕", pre:"เอากาแฟสอง",     post:"",    rpre:"Ao gaa-fae sǎawng",         rpost:"",    k:"gaew",  w:["dtua","khan"],  en:"I'll take two cups of coffee."},
+  {pic:"💧", pre:"เอาน้ำสาม",       post:"",    rpre:"Ao náam sǎam",              rpost:"",    k:"khuat", w:["dtua","lem"],   en:"I'll take three bottles of water."},
+  {pic:"🐱", pre:"ที่บ้านมีแมวสอง", post:"",    rpre:"Thîi bâan mii maew sǎawng", rpost:"",    k:"dtua",  w:["khuat","lem"],  en:"There are two cats at home."},
+  {pic:"📚", pre:"ฉันมีหนังสือสาม", post:"",    rpre:"Chǎn mii nǎng-sǔue sǎam",   rpost:"",    k:"lem",   w:["dtua","khuat"], en:"I have three books."},
+  {pic:"🚗", pre:"เขามีรถสอง",      post:"",    rpre:"Khǎo mii rót sǎawng",       rpost:"",    k:"khan",  w:["bai","gaew"],   en:"He has two cars."},
+  {pic:"🍛", pre:"เอาข้าวผัดสอง",   post:"",    rpre:"Ao khâao phàt sǎawng",      rpost:"",    k:"jaan",  w:["gaew","lem"],   en:"I'll take two plates of fried rice."},
+  {pic:"🍢", pre:"เอาหมูปิ้งสิบ",   post:"",    rpre:"Ao mǔu-bpîng sìp",          rpost:"",    k:"maai",  w:["khuat","bai"],  en:"I'll take ten pork skewers."},
+  {pic:"🛍️", pre:"ฉันซื้อถุงสอง",   post:"",    rpre:"Chǎn súue thǔng sǎawng",    rpost:"",    k:"bai",   w:["khan","lem"],   en:"I bought two bags."},
+  {pic:"🙏", pre:"ลูกค้าสอง",       post:"ค่ะ", rpre:"Lûuk-kháa sǎawng",          rpost:"khâ", k:"thaan", w:["dtua","khuat"], en:"Two guests, please."},
+  {pic:"🧑‍🤝‍🧑", pre:"ที่นี่มีเพื่อนสาม", post:"", rpre:"Thîi nîi mii phûean sǎam", rpost:"",   k:"khon",  w:["dtua","khuat"], en:"Three friends are here."},
+  {pic:"🍰", pre:"เอาเค้กสาม",      post:"",    rpre:"Ao khéek sǎam",             rpost:"",    k:"chin",  w:["khuat","dtua"], en:"I'll take three pieces of cake."},
+  {pic:"📦", pre:"ผมอยากได้กล่องสอง", post:"", rpre:"Phǒm yàak dâai glàawng sǎawng", rpost:"", k:"an",    w:["lem","khan"],   en:"I want two boxes."},
+  {pic:"🐶", pre:"มีหมากี่",        post:"",    rpre:"Mii mǎa gìi",               rpost:"?",   k:"dtua",  w:["khon","lem"],   en:"How many dogs are there?"},
+  {pic:"👥", pre:"มีเพื่อนกี่",     post:"",    rpre:"Mii phûean gìi",            rpost:"?",   k:"khon",  w:["dtua","khuat"], en:"How many friends are there?"},
+];
+CL_FILL.forEach(f=>{
+  f.th = f.pre + CL_BY_KEY[f.k].th + f.post;
+  f.rom = f.rpre + " " + CL_BY_KEY[f.k].rom + (f.rpost==="?" ? "?" : f.rpost ? " "+f.rpost : "");
+});
+
+function clStartGame(){
+  // 10 questions: 2 word + 2 matching + 2 wrong-classifier + 4 fill-in-the-blank, shuffled together
+  const pool = PG_SETS.classifiers;
+  const words = shuffle(pool).slice(0,2).map(w=>makeQ(w, pool, "pic"));
+  const match = shuffle(CL_MATCH).slice(0,2).map(x=>({kind:"match", item:x}));
+  const wrong = shuffle(CL_WRONG).slice(0,2).map(x=>({kind:"wrong", item:x}));
+  const fill  = shuffle(CL_FILL).slice(0,4).map(x=>({kind:"fill",  item:x}));
+  lastGame = "cl"; pgSetKey = "classifiers";
+  pgQueue = shuffle([].concat(words, match, wrong, fill));
+  pgIdx = 0; pgScore = 0;
+  show("pgame"); renderPG();
+}
+function clChoices(q){
+  const it = q.item;
+  if(!q.choices){
+    const base = it.w ? it.w.map(k=>CL_BY_KEY[k])
+      : shuffle(CL_TOOL.filter(c=>c.k!==it.k && c.k!==it.wk && c.k!=="thaan" && c.k!=="an" && c.k!=="chin")).slice(0,2);
+    q.choices = shuffle([CL_BY_KEY[it.k]].concat(base));
+  }
+  return q.choices;
+}
+function clRender(){
+  pgAnswered = false;
+  const q = pgQueue[pgIdx], it = q.item;
+  document.getElementById("pgKicker").textContent =
+    q.kind==="match" ? "🎯 Which classifier goes with this?" :
+    q.kind==="fill"  ? "✏️ Fill in the blank — pick the missing classifier" :
+                       "🚨 Wrong classifier! Pick the one that fixes it";
+  const pic = document.getElementById("pgPic"), meaning = document.getElementById("pgMeaning");
+  pic.style.display = "block"; pic.textContent = it.pic;
+  meaning.style.display = "block";
+  meaning.innerHTML =
+    q.kind==="match" ? it.noun :
+    q.kind==="fill"  ? '<div class="cl-fillth">'+it.pre+'<span class="cl-blank"></span>'+it.post+'</div><div class="cl-fillrom">'+it.rpre+' ___'+(it.rpost? (it.rpost==="?"?"?":" "+it.rpost):"")+'</div><div class="cl-hint">'+it.en+'</div>' :
+    '<div class="cl-wrongth">'+it.wth+' ❌</div><div class="cl-wrongrom">'+it.wrom+'</div><div class="cl-hint">('+(/^I[' ]/.test(it.en)?it.en:it.en.charAt(0).toLowerCase()+it.en.slice(1))+')</div>';
+  document.getElementById("pgCount").textContent = (pgIdx+1)+" / "+pgQueue.length;
+  document.getElementById("pgProg").style.width = (pgIdx/pgQueue.length*100)+"%";
+  document.getElementById("pgReveal").innerHTML = "";
+  const opts = clChoices(q), host = document.getElementById("pgChoices"); host.innerHTML = "";
+  opts.forEach((c,i)=>{
+    const b = document.createElement("button"); b.className = "choice";
+    b.innerHTML = '<span class="ltr">'+LETTERS_PG[i]+'</span><span><span class="cth">'+c.th+'</span><br><span class="crom big">'+c.rom+'</span></span>';
+    b.onclick = ()=> clChoose(c, q, opts);
+    host.appendChild(b);
+  });
+}
+function clChoose(c, q, opts){
+  if(pgAnswered) return; pgAnswered = true;
+  const it = q.item, ok = c.k===it.k, right = CL_BY_KEY[it.k];
+  [...document.querySelectorAll("#pgChoices .choice")].forEach((el,i)=>{
+    if(opts[i].k===it.k) el.classList.add("correct");
+    else if(opts[i]===c) el.classList.add("wrong");
+    else el.classList.add("dim");
+    el.style.pointerEvents = "none";
+  });
+  if(ok){ pgScore++; confetti(18); }
+  document.getElementById("pgProg").style.width = ((pgIdx+1)/pgQueue.length*100)+"%";
+  const last = pgIdx+1>=pgQueue.length, slot = document.getElementById("pgReveal");
+  slot.innerHTML =
+    '<div class="reveal">'+
+      '<div class="verdict" style="color:'+(ok?"#2f9e59":"#e0556b")+'">'+(ok ? "✓ Correct!" : "✗ Not quite")+'</div>'+
+      '<div style="font-size:44px;line-height:1.2;margin-top:4px;">'+it.pic+'</div>'+
+      '<div class="cl-fixed">'+(q.kind==="fill" ? it.pre+'<span class="cl-hl">'+right.th+'</span>'+it.post : it.th)+'</div>'+
+      '<div class="rev-rom big">'+it.rom+'</div>'+
+      '<div class="rev-en">'+it.en+'</div>'+
+      '<div class="soundrow"><button class="soundbtn voice" id="clHear">🗣️ Hear it</button><button class="soundbtn slow" id="clSlow">🐢 Slow</button></div>'+
+      '<button class="nextbtn" id="clNext">'+(last?"See results":"Next →")+'</button>'+
+    '</div>';
+  document.getElementById("clHear").onclick = ()=> speak(it.th, undefined, true);
+  document.getElementById("clSlow").onclick = ()=> speakSlow(it.th);
+  document.getElementById("clNext").onclick = ()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
+  setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
+  setTimeout(()=>speak(it.th), 350);   // one automatic play of the full correct phrase
+}
 
 /* ---------- nav ---------- */
 document.querySelectorAll("[data-go]").forEach(b=> b.onclick=()=>show(b.dataset.go));
@@ -3151,6 +3379,8 @@ let sbPlaced=[], sbHasRetried=false, sbChipEls=[];
 
 function startSentenceBuilder(key){
   const data = BUILDER_DATA_BY_KEY[key] || BUILDER_MIXED;
+  window.sbKey = key;
+  document.querySelector("#sentbuilder .back").dataset.go = key==="classifiers" ? "pghome" : "pghome";
   sbQueue = svShuffle(data);
   sbIdx = 0; sbGoodCount = 0; sbRetryCount = 0;
   document.getElementById("sbTopicLabel").textContent = "🧩 " + (PG_LABEL[key] || "Mixed Sentences");
@@ -3243,6 +3473,9 @@ function sbNext(){
   else {
     document.getElementById("sbrGood").textContent = sbGoodCount;
     document.getElementById("sbrRetry").textContent = sbRetryCount;
+    const rb = document.querySelector("#sentbuilderresult .sv-continuebtn");
+    if(window.sbKey==="classifiers"){ rb.textContent = "Back to Classifiers"; rb.dataset.go = "pghome"; }
+    else { rb.textContent = "Back to Sentences Practice"; rb.dataset.go = "pghome"; }
     show("sentbuilderresult");
     confetti(35, true);
   }
