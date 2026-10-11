@@ -604,10 +604,10 @@
   .sv-continuebtn:active{ transform:scale(.98); }
   :root{ --loop:"Noto Sans Thai Looped","Mali","Itim","Mitr","Noto Sans Thai",sans-serif; }
   /* ===== THAI ALPHABET ===== */
-  .al-hero{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; border-radius:22px; padding:16px 18px 22px; margin:0 0 14px; box-shadow:var(--shadow-sm); position:relative; text-align:center; }
-  .al-hero .back{ position:absolute; left:14px; top:14px; }
-  .al-hero h1{ font-size:24px; margin:4px 0 2px; font-family:var(--sans); }
-  .al-hero p{ font-size:13.5px; font-weight:700; opacity:.95; margin:0; }
+  .al-hero{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; border-radius:18px; padding:8px 14px; margin:0 0 8px; box-shadow:var(--shadow-sm); position:relative; text-align:center; min-height:44px; display:flex; flex-direction:column; justify-content:center; }
+  .al-hero .back{ position:absolute; left:8px; top:50%; transform:translateY(-50%); }
+  .al-hero h1{ font-size:19px; margin:0; font-family:var(--sans); line-height:1.15; }
+  .al-hero p{ font-size:12px; font-weight:700; opacity:.95; margin:1px 0 0; line-height:1.2; }
   .al-menu{ display:flex; flex-direction:column; gap:10px; }
   .al-lesson{ border:none; cursor:pointer; text-align:left; background:var(--white); border-radius:18px; padding:13px 15px; box-shadow:var(--shadow-sm);
     display:flex; align-items:center; gap:13px; font-family:var(--sans); color:var(--ink); }
@@ -619,50 +619,60 @@
   .al-lesson.all{ background:linear-gradient(135deg,#FFF4E2,#FFEDE6); }
   .al-legend{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:12px 0 4px; font-size:12.5px; font-weight:800; }
   .al-tag{ display:inline-block; border-radius:99px; padding:3px 10px; color:#fff; font-size:12px; font-weight:800; }
-  .al-tabs{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:12px; }
-  .al-tab{ border:none; cursor:pointer; border-radius:14px; padding:11px 8px; font-weight:800; font-size:14px; background:var(--white); color:var(--ink); box-shadow:var(--shadow-sm); font-family:var(--sans); }
+  .al-tabs{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:8px; }
+  .al-tab{ border:none; cursor:pointer; border-radius:12px; padding:7px 2px; font-weight:800; font-size:12px; line-height:1.2; background:var(--white); color:var(--ink); box-shadow:var(--shadow-sm); font-family:var(--sans); }
+  .al-tab span{ display:block; font-size:17px; line-height:1.2; }
   .al-tab.active{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; }
-  .al-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(56px,1fr)); gap:8px; margin-bottom:12px; }
-  .al-tile{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:14px; height:58px; font-family:var(--loop); font-size:30px; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); }
+  .al-grid{ display:flex; gap:6px; margin-bottom:8px; overflow-x:auto; padding:2px 2px 4px; scrollbar-width:none; }
+  .al-grid::-webkit-scrollbar{ display:none; }
+  .al-tile{ flex:1 0 38px; border:2px solid transparent; cursor:pointer; background:var(--white); border-radius:11px; height:42px; font-family:var(--loop); font-size:22px; line-height:1; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); padding:0; }
   .al-tile.sel{ border-color:#E5567F; background:#FFE9F0; }
-  .al-card{ background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:18px 16px 16px; text-align:center; }
-  .al-bigletter{ line-height:1.6; padding-bottom:22px; font-family:var(--loop); font-weight:700; font-size:104px;  color:var(--kara); }
-  .al-emoji{ font-size:76px; line-height:1.15; }
-  .al-en{ font-size:26px; font-weight:900; color:var(--ink); font-family:var(--sans); margin-top:2px; }
-  .al-word{ font-family:var(--loop); font-size:28px; font-weight:700; color:var(--kara); margin-top:2px; }
-  .al-rom{ font-size:16px; font-weight:800; color:var(--soft); font-family:var(--sans); }
-  .al-meta{ display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:8px; font-weight:800; font-size:13.5px; color:var(--soft); }
-  .al-note{ font-size:12.5px; font-weight:700; color:var(--coral-d); margin-top:6px; }
-  .al-row{ display:flex; gap:10px; margin-top:12px; }
-  .al-btn{ flex:1; border:none; cursor:pointer; border-radius:14px; padding:13px 8px; font-weight:800; font-size:15px; font-family:var(--sans); color:#fff; background:linear-gradient(135deg,var(--teal),var(--teal-d)); box-shadow:var(--shadow-sm); }
+  .al-card{ background:var(--white); border-radius:20px; box-shadow:var(--shadow); padding:10px 12px 12px; text-align:center; }
+  .al-top{ display:flex; align-items:center; justify-content:center; gap:14px; }
+  .al-bigletter{ line-height:1.5; padding-bottom:14px; font-family:var(--loop); font-weight:700; font-size:92px; color:var(--kara); }
+  .al-emoji{ font-size:58px; line-height:1.15; }
+  .al-top .al-emoji{ font-size:72px; }
+  .al-en{ font-size:21px; font-weight:900; color:var(--ink); font-family:var(--sans); margin-top:0; line-height:1.2; }
+  .al-word{ font-family:var(--loop); font-size:23px; font-weight:700; color:var(--kara); margin-top:2px; line-height:1.4; }
+  .al-rom{ font-size:14.5px; font-weight:800; color:var(--soft); font-family:var(--sans); }
+  .al-meta{ display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:5px; font-weight:800; font-size:13px; color:var(--soft); }
+  .al-note{ font-size:12px; font-weight:700; color:var(--coral-d); margin-top:3px; }
+  .al-row{ display:flex; gap:8px; margin-top:8px; }
+  .al-btn{ flex:1; border:none; cursor:pointer; border-radius:13px; padding:10px 6px; font-weight:800; font-size:14.5px; font-family:var(--sans); color:#fff; background:linear-gradient(135deg,var(--teal),var(--teal-d)); box-shadow:var(--shadow-sm); }
   .al-btn.slow{ background:linear-gradient(135deg,var(--gold),var(--gold-d)); }
   .al-btn.next{ background:linear-gradient(135deg,#E5567F,#ff88a8); }
   .al-btn.ghost{ background:var(--white); color:var(--ink); }
   .al-btn:active{ transform:scale(.97); }
-  .al-nav{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:10px; }
-  .al-nav .al-btn{ flex:0 0 64px; }
+  .al-nav{ display:flex; align-items:center; margin-top:8px; gap:6px; }
+  .al-nav .al-btn{ flex:1 1 0; padding:10px 4px; }
+  .al-nav .al-btn.ghost{ flex:0 0 46px; }
   .al-count{ font-weight:800; color:var(--soft); font-size:14px; }
-  .al-progress{ height:9px; border-radius:9px; background:#F0E3DB; margin:2px 0 12px; overflow:hidden; }
+  .al-progress{ height:7px; border-radius:9px; background:#F0E3DB; margin:0 0 4px; overflow:hidden; }
   .al-progress i{ display:block; height:100%; background:linear-gradient(90deg,#E5567F,#ff88a8); border-radius:9px; transition:width .25s; }
-  .al-prompt{ background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:16px; text-align:center; margin-bottom:12px; }
-  .al-prompt .hint{ font-weight:800; color:var(--soft); font-size:14px; margin-bottom:6px; font-family:var(--sans); }
+  .al-prompt{ background:var(--white); border-radius:20px; box-shadow:var(--shadow); padding:10px 12px; text-align:center; margin-bottom:8px; }
+  .al-prompt .al-bigletter{ font-size:64px; padding-bottom:8px; line-height:1.45; }
+  .al-prompt .al-emoji{ font-size:54px; }
+  .al-qcount{ text-align:right; margin-bottom:3px; font-size:13px; }
+  .al-prompt .hint{ font-weight:800; color:var(--soft); font-size:13.5px; margin-bottom:4px; font-family:var(--sans); }
   .al-hearbig{ border:none; cursor:pointer; width:92px; height:92px; border-radius:50%; font-size:42px; background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; box-shadow:var(--shadow-sm); }
-  .al-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .al-opt{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:18px; padding:10px 6px; box-shadow:var(--shadow-sm); font-family:var(--loop); font-size:46px; font-weight:700; color:var(--kara); min-height:84px; }
-  .al-opt.pic{ font-family:var(--sans); color:var(--ink); font-size:15px; font-weight:800; }
-  .al-opt.pic span{ display:block; font-size:42px; line-height:1.2; }
+  .al-opts{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .al-opt{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:16px; padding:4px 6px; box-shadow:var(--shadow-sm); font-family:var(--loop); font-size:38px; line-height:1.3; font-weight:700; color:var(--kara); min-height:64px; }
+  .al-opt.pic{ font-family:var(--sans); color:var(--ink); font-size:13.5px; font-weight:800; line-height:1.15; }
+  .al-opt.pic span{ display:block; font-size:34px; line-height:1.15; }
   .al-opt.right{ border-color:var(--teal); background:#E3F7F2; }
   .al-opt.wrong{ border-color:var(--coral); background:#FFE6E2; }
   .al-opt:disabled{ cursor:default; }
-  .al-fb{ margin-top:12px; }
-  .al-fb .al-card{ padding:12px; }
-  .al-fb .verdict{ font-weight:900; font-size:17px; margin-bottom:4px; }
+  .al-fb{ margin-top:8px; }
+  .al-fb .al-card{ padding:8px 10px 10px; }
+  .al-fb .verdict{ font-weight:900; font-size:15px; margin-bottom:0; }
   .al-fb .verdict.ok{ color:var(--teal-d); } .al-fb .verdict.no{ color:var(--coral-d); }
-  .al-fb .line{ font-family:var(--loop); font-weight:700; font-size:30px; color:var(--kara); }
+  .al-fb .line{ font-family:var(--loop); font-weight:700; font-size:24px; line-height:1.4; color:var(--kara); }
+  .al-fb .al-row{ margin-top:6px; }
+  .al-fb .al-btn{ padding:9px 4px; font-size:13.5px; }
   .al-score{ font-size:54px; font-weight:900; color:#E5567F; font-family:var(--sans); }
   .al-sec{ font-weight:900; color:var(--coral-d); font-size:14px; margin:16px 2px 8px; font-family:var(--sans); }
-  .al-opts.cls{ grid-template-columns:1fr; }
-  .al-opt.clsopt{ font-family:var(--sans); font-size:20px; font-weight:900; min-height:62px; }
+  .al-opts.cls{ grid-template-columns:repeat(3,1fr); }
+  .al-opt.clsopt{ font-family:var(--sans); font-size:17px; font-weight:900; min-height:54px; }
   .al-opt.clsopt.right{ outline:4px solid var(--teal); } .al-opt.clsopt.wrong{ opacity:.45; }
 </style>
 </head>
@@ -3667,26 +3677,26 @@ function alRenderLesson(){
   if(alIdx>=L.length) alIdx=0;
   const c = L[alIdx];
   let h = `<div class="al-tabs">
-    <button class="al-tab ${alMode==="learn"?"active":""}" data-m="learn">📖 Learn</button>
-    <button class="al-tab" data-m="listen">👂 Listen &amp; pick</button>
-    <button class="al-tab" data-m="pic">🖼️ Picture → letter</button>
-    <button class="al-tab" data-m="letter">🔤 Letter → picture</button></div>`;
+    <button class="al-tab ${alMode==="learn"?"active":""}" data-m="learn"><span>📖</span>Learn</button>
+    <button class="al-tab" data-m="listen"><span>👂</span>Listen</button>
+    <button class="al-tab" data-m="pic"><span>🖼️</span>Pic → ก</button>
+    <button class="al-tab" data-m="letter"><span>🔤</span>ก → Pic</button></div>`;
   h += `<div class="al-grid">${L.map((x,i)=>`<button class="al-tile ${i===alIdx?"sel":""}" data-i="${i}">${x.l}</button>`).join("")}</div>`;
   h += `<div class="al-card">
-      <div class="al-bigletter">${c.l}</div>
-      <div class="al-emoji">${c.e}</div>
+      <div class="al-top"><div class="al-bigletter">${c.l}</div><div class="al-emoji">${c.e}</div></div>
       <div class="al-en">${c.en}</div>
       <div class="al-word">${alName(c)} ${c.w}</div>
       <div class="al-rom">${alNameRom(c)} · ${c.rom}</div>
-      <div class="al-meta">${alTag(c)}<span>Sound: <b>${c.s}</b></span></div>
+      <div class="al-meta">${alTag(c)}<span>Sound: <b>${c.s}</b></span><span>· ${alIdx+1} / ${L.length}</span></div>
       ${c.rare?'<div class="al-note">Rarely used today — still part of the 44.</div>':''}
-      <div class="al-row"><button class="al-btn" id="alHearBtn">🔊 Hear it</button><button class="al-btn slow" id="alSlowBtn">🐢 Slow</button></div>
-      <div class="al-nav"><button class="al-btn ghost" id="alPrev">←</button><span class="al-count">${alIdx+1} / ${L.length}</span><button class="al-btn ghost" id="alNext">→</button></div>
+      <div class="al-nav"><button class="al-btn ghost" id="alPrev">←</button><button class="al-btn" id="alHearBtn">🔊 Hear it</button><button class="al-btn slow" id="alSlowBtn">🐢 Slow</button><button class="al-btn ghost" id="alNext">→</button></div>
     </div>`;
   $al("alBody").innerHTML = h;
   const body = $al("alBody");
   body.querySelectorAll(".al-tab").forEach(b=> b.onclick=()=>{ if(b.dataset.m==="learn"){ alMode="learn"; alRender(); } else alStartQuiz(b.dataset.m); });
   body.querySelectorAll(".al-tile").forEach(b=> b.onclick=()=>{ alIdx=+b.dataset.i; alRender(); alHear(alLetters(alLesson)[alIdx]); });
+  const selT = body.querySelector(".al-tile.sel"), gridEl = body.querySelector(".al-grid");
+  if(selT && gridEl) gridEl.scrollLeft = selT.offsetLeft - gridEl.clientWidth/2 + selT.offsetWidth/2;
   $al("alHearBtn").onclick=()=>alHear(c);
   $al("alSlowBtn").onclick=()=>alSlow(c);
   $al("alPrev").onclick=()=>{ alIdx=(alIdx-1+L.length)%L.length; alRender(); alHear(L[alIdx]); };
@@ -3712,7 +3722,7 @@ function alRenderQ(){
   const opts = Q.opts[Q.i];
   $al("alSub").textContent = {listen:"Listen & pick the letter",pic:"Picture → pick the letter",letter:"Letter → pick the picture",class:"Which class is this letter?"}[Q.kind];
   let h = `<div class="al-progress"><i style="width:${(Q.i/Q.qs.length)*100}%"></i></div>`;
-  h += `<div class="al-count" style="text-align:right;margin-bottom:6px">Question ${Q.i+1} / ${Q.qs.length}</div>`;
+  h += `<div class="al-count al-qcount">Question ${Q.i+1} / ${Q.qs.length}</div>`;
   if(Q.kind==="listen"){
     h += `<div class="al-prompt"><div class="hint">Which letter did you hear?</div><div class="al-row"><button class="al-btn" id="alQHear">🔊 Hear it</button><button class="al-btn slow" id="alQSlow">🐢 Slow</button></div></div>`;
   } else if(Q.kind==="pic"){
@@ -3749,8 +3759,7 @@ function alAnswer(i){
       <div class="verdict ${ok?"ok":"no"}">${ok?"✅ Correct!":"❌ Not quite — it's:"}${isCls?" "+alTag(q):""}</div>
       <div class="line">${alName(q)} ${q.w}</div>
       <div class="al-rom">${alNameRom(q)} · ${q.rom} · ${q.en} ${q.e}</div>
-      <div class="al-row"><button class="al-btn" id="alFbHear">🔊 Hear it again</button><button class="al-btn slow" id="alFbSlow">🐢 Slow</button></div>
-      <div class="al-row"><button class="al-btn next" id="alFbNext">${last?"See score ▶":"Next ▶"}</button></div></div>`;
+      <div class="al-row"><button class="al-btn" id="alFbHear">🔊</button><button class="al-btn slow" id="alFbSlow">🐢</button><button class="al-btn next" id="alFbNext" style="flex:2.2">${last?"See score ▶":"Next ▶"}</button></div></div>`;
   $al("alFbHear").onclick=()=>alHear(q);
   $al("alFbSlow").onclick=()=>alSlow(q);
   $al("alFbNext").onclick=()=>{ if(last){ alFinish(); } else { Q.i++; Q.done=false; alRenderQ(); } };
