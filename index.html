@@ -3714,7 +3714,7 @@ function alRenderQ(){
   let h = `<div class="al-progress"><i style="width:${(Q.i/Q.qs.length)*100}%"></i></div>`;
   h += `<div class="al-count" style="text-align:right;margin-bottom:6px">Question ${Q.i+1} / ${Q.qs.length}</div>`;
   if(Q.kind==="listen"){
-    h += `<div class="al-prompt"><div class="hint">Which letter did you hear?</div><button class="al-hearbig" id="alQHear">🔊</button></div>`;
+    h += `<div class="al-prompt"><div class="hint">Which letter did you hear?</div><div class="al-row"><button class="al-btn" id="alQHear">🔊 Hear it</button><button class="al-btn slow" id="alQSlow">🐢 Slow</button></div></div>`;
   } else if(Q.kind==="pic"){
     h += `<div class="al-prompt"><div class="hint">Which letter starts this word?</div><div class="al-emoji">${q.e}</div><div class="al-en">${q.en}</div></div>`;
   } else if(Q.kind==="class"){
@@ -3731,6 +3731,7 @@ function alRenderQ(){
   $al("alBody").innerHTML = h;
   const body = $al("alBody");
   if($al("alQHear")) $al("alQHear").onclick=()=>alHear(q);
+  if($al("alQSlow")) $al("alQSlow").onclick=()=>alSlow(q);
   body.querySelectorAll(".al-opt").forEach(b=> b.onclick=()=>alAnswer(+b.dataset.i));
   if(Q.kind==="listen") setTimeout(()=>speak(alSay(q)), 250);   // plays once when the question appears
 }
