@@ -1214,19 +1214,49 @@ const ORDER = ["mid","low","falling","high","rising"];
 
 /* ---------------- questions ---------------- */
 const SETS = {
+  // Sets 1–5 follow the Thai Tones lesson deck — always in tone order: Mid · Low · Falling · High · Rising
+  maa: [
+    {thai:"มา",   rom:"maa", tone:"mid",     mean:"come"},
+    {thai:"หม่า", rom:"màa", tone:"low",     mean:"practice sound (not a real word)"},
+    {thai:"ม่า",  rom:"mâa", tone:"falling", mean:"grandma (Chinese)"},
+    {thai:"ม้า",  rom:"máa", tone:"high",    mean:"horse"},
+    {thai:"หมา",  rom:"mǎa", tone:"rising",  mean:"dog"},
+  ],
+  khaa: [
+    {thai:"คา",       rom:"khaa", tone:"mid",     mean:"stuck / owed"},
+    {thai:"ข่า",      rom:"khàa", tone:"low",     mean:"galangal"},
+    {thai:"ค่า / ฆ่า", rom:"khâa", tone:"falling", mean:"value, fee / to kill", say:"ค่า"},
+    {thai:"ค้า",      rom:"kháa", tone:"high",    mean:"to trade"},
+    {thai:"ขา",       rom:"khǎa", tone:"rising",  mean:"leg"},
+  ],
+  gaa: [
+    {thai:"กา",  rom:"gaa", tone:"mid",     mean:"crow"},
+    {thai:"ก่า", rom:"gàa", tone:"low",     mean:"practice sound (not a real word)"},
+    {thai:"ก้า", rom:"gâa", tone:"falling", mean:"practice sound (not a real word)"},
+    {thai:"ก๊า", rom:"gáa", tone:"high",    mean:"practice sound (not a real word)"},
+    {thai:"ก๋า", rom:"gǎa", tone:"rising",  mean:"practice sound (not a real word)"},
+  ],
+  bplaa: [
+    {thai:"ปลา",  rom:"bplaa", tone:"mid",     mean:"fish"},
+    {thai:"ปล่า", rom:"bplàa", tone:"low",     mean:"practice sound (not a real word)"},
+    {thai:"ปล้า", rom:"bplâa", tone:"falling", mean:"practice sound (not a real word)"},
+    {thai:"ปล๊า", rom:"bpláa", tone:"high",    mean:"practice sound (not a real word)"},
+    {thai:"ปล๋า", rom:"bplǎa", tone:"rising",  mean:"practice sound (not a real word)"},
+  ],
+  bai: [
+    {thai:"ใบ",  rom:"bai", tone:"mid",     mean:"leaf", example:{thai:"ใบไม้", rom:"bai máai", mean:"leaf (of a tree)"}},
+    {thai:"ไบ่", rom:"bài", tone:"low",     mean:"practice sound (not a real word)"},
+    {thai:"ใบ้", rom:"bâi", tone:"falling", mean:"mute"},
+    {thai:"ไบ๊", rom:"bái", tone:"high",    mean:"practice sound (not a real word)"},
+    {thai:"ไบ๋", rom:"bǎi", tone:"rising",  mean:"practice sound (not a real word)"},
+  ],
+  // Bonus sets
   mai: [
     {thai:"ไม",   rom:"mai", tone:"mid",     mean:"why (as in ทำไม)", example:{thai:"ทำไม", rom:"tham-mai", mean:"why"}},
     {thai:"ใหม่", rom:"mài", tone:"low",     mean:"new"},
     {thai:"ไม่",  rom:"mâi", tone:"falling", mean:"no / not"},
     {thai:"ไม้",  rom:"mái", tone:"high",    mean:"wood"},
     {thai:"ไหม",  rom:"mǎi", tone:"rising",  mean:"question particle / silk"},
-  ],
-  kha: [
-    {thai:"คา",  rom:"khaa", tone:"mid",     mean:"to remain stuck"},
-    {thai:"ขา",  rom:"khǎa", tone:"rising",  mean:"leg"},
-    {thai:"ค่า", rom:"khâa", tone:"falling", mean:"value / fee"},
-    {thai:"คะ",  rom:"khá",  tone:"high",    mean:"women's polite particle (questions)"},
-    {thai:"ค่ะ", rom:"khâ",  tone:"falling", mean:"women's polite particle (statements)"},
   ],
   kham: [
     {thai:"คำ",   rom:"kham", tone:"mid",     mean:"word"},
@@ -1243,14 +1273,19 @@ const SETS = {
     {thai:"ป๋า", rom:"pǎa", tone:"rising",  mean:"dad / boss / wealthy older man"},
   ],
 };
-const ALLWORDS = [].concat(SETS.mai, SETS.kha, SETS.kham, SETS.paa);
-const SETLABEL = { mai:"SET 1 · MAI", kha:"SET 2 · KHA", kham:"SET 3 · KHAM", paa:"SET 4 · PAA", mix:"MIXED CHALLENGE" };
+const ALLWORDS = [].concat(SETS.maa, SETS.khaa, SETS.gaa, SETS.bplaa, SETS.bai, SETS.mai, SETS.kham, SETS.paa);
+const SETLABEL = { maa:"SET 1 · MAA", khaa:"SET 2 · KHAA", gaa:"SET 3 · GAA", bplaa:"SET 4 · BPLAA", bai:"SET 5 · BAI",
+                   mai:"SET 6 · MAI", kham:"SET 7 · KHAM", paa:"SET 8 · PAA", mix:"MIXED CHALLENGE" };
 const SETMETA = [
-  {key:"mai",  emo:"🌊", title:"Set 1 · “Mai”",  words:"ไม · ใหม่ · ไม่ · ไม้ · ไหม", cls:"mai"},
-  {key:"kha",  emo:"🦵", title:"Set 2 · “Kha”",  words:"คา · ขา · ค่า · คะ · ค่ะ",   cls:"kha"},
-  {key:"kham", emo:"🌆", title:"Set 3 · “Kham”", words:"คำ · ค่ำ · ข้าม · ค้ำ · ขำ", cls:"kham"},
-  {key:"paa",  emo:"👨‍👧", title:"Set 4 · “Paa”",  words:"ปา · ป่า · ป้า · ป๊า · ป๋า", cls:"paa"},
-  {key:"mix",  emo:"🎯", title:"Mixed Challenge", words:"All sets · 10 random words", cls:"mix"},
+  {key:"maa",   emo:"🐎", title:"Set 1 · “Maa”",   words:"มา · หม่า · ม่า · ม้า · หมา",   cls:"mai"},
+  {key:"khaa",  emo:"🦵", title:"Set 2 · “Khaa”",  words:"คา · ข่า · ค่า · ค้า · ขา",      cls:"kha"},
+  {key:"gaa",   emo:"🐦", title:"Set 3 · “Gaa”",   words:"กา · ก่า · ก้า · ก๊า · ก๋า",    cls:"kham"},
+  {key:"bplaa", emo:"🐟", title:"Set 4 · “Bplaa”", words:"ปลา · ปล่า · ปล้า · ปล๊า · ปล๋า", cls:"paa"},
+  {key:"bai",   emo:"🍃", title:"Set 5 · “Bai”",   words:"ใบ · ไบ่ · ใบ้ · ไบ๊ · ไบ๋",     cls:"mix"},
+  {key:"mai",   emo:"🌊", title:"Set 6 · “Mai”",   words:"ไม · ใหม่ · ไม่ · ไม้ · ไหม",   cls:"mai"},
+  {key:"kham",  emo:"🌆", title:"Set 7 · “Kham”",  words:"คำ · ค่ำ · ข้าม · ค้ำ · ขำ",    cls:"kham"},
+  {key:"paa",   emo:"👨‍👧", title:"Set 8 · “Paa”",   words:"ปา · ป่า · ป้า · ป๊า · ป๋า",    cls:"paa"},
+  {key:"mix",   emo:"🎯", title:"Mixed Challenge", words:"All sets · 10 random words", cls:"mix"},
 ];
 
 /* ---------------- svg helpers ---------------- */
@@ -1327,7 +1362,7 @@ function confetti(n=26, big=false){
 }
 
 /* ---------------- quiz state ---------------- */
-let queue=[], idx=0, score=0, curSet="mai", answered=false;
+let queue=[], idx=0, score=0, curSet="maa", answered=false;
 
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
@@ -1418,9 +1453,9 @@ function showReveal(correct, q){
   // voice — plays on the reveal only (after the student has already
   // answered), same safe pattern as Word Games: hearing the tone before
   // picking would give the answer away
-  speak(q.thai);
-  document.getElementById("tqSayBtn").onclick=()=> speak(q.thai, undefined, true);
-  document.getElementById("tqSlowBtn").onclick=()=> speakSlow(q.thai);
+  speak(q.say||q.thai);
+  document.getElementById("tqSayBtn").onclick=()=> speak(q.say||q.thai, undefined, true);
+  document.getElementById("tqSlowBtn").onclick=()=> speakSlow(q.say||q.thai);
 }
 
 function next(){
@@ -1452,7 +1487,7 @@ function finish(){
 
 /* ---------------- practice + mode ---------------- */
 let mode="practice";
-let pList=[], pIdx=0, pSetKey="mai";
+let pList=[], pIdx=0, pSetKey="maa";
 
 function show(id){
   try{ if("speechSynthesis" in window) window.speechSynthesis.cancel(); }catch(e){}
@@ -1510,10 +1545,10 @@ function renderPractice(){
   setTimeout(()=>animateTracer(svg,1300,false),150);
   // voice — safe to auto-play here since Practice mode is just browsing,
   // there's no answer at stake
-  speak(q.thai);
+  speak(q.say||q.thai);
 }
-document.getElementById("tpSayBtn").onclick=()=> speak(pList[pIdx].thai, undefined, true);
-document.getElementById("tpSlowBtn").onclick=()=> speakSlow(pList[pIdx].thai);
+document.getElementById("tpSayBtn").onclick=()=> speak(pList[pIdx].say||pList[pIdx].thai, undefined, true);
+document.getElementById("tpSlowBtn").onclick=()=> speakSlow(pList[pIdx].say||pList[pIdx].thai);
 document.getElementById("pPrev").onclick=()=>{ if(pIdx>0){ pIdx--; renderPractice(); } };
 document.getElementById("pNext").onclick=()=>{
   if(pIdx<pList.length-1){ pIdx++; renderPractice(); }
@@ -1536,7 +1571,7 @@ buildLegend();
 const PG_SETS = {
   greet: [
     {th:"สวัสดี", rom:"sà-wàt-dee", en:"hello", pic:"👋"},
-    {th:"สบายดี", rom:"sabai dee", en:"fine, well", pic:"😊"},
+    {th:"สบายดี", rom:"sà-baai dii", en:"fine, well", pic:"😊"},
     {th:"ขอบคุณ", rom:"khòp khun", en:"thank you", pic:"🙏"},
     {th:"คุณ", rom:"khun", en:"you", pic:"👤"},
     {th:"ครับ", rom:"khráp", en:"polite particle (male)", pic:"👨"},
@@ -1544,7 +1579,7 @@ const PG_SETS = {
     {th:"นะครับ", rom:"ná khráp", en:"softening particle", pic:"💬"},
   ],
   quest: [
-    {th:"ไหม", rom:"mái", en:"yes/no question", pic:"❓"},
+    {th:"ไหม", rom:"mǎi", en:"yes/no question", pic:"❓"},
     {th:"ล่ะ", rom:"lâ", en:"how about…?", pic:"🤔"},
     {th:"อะไร", rom:"à-rai", en:"what", pic:"❔"},
     {th:"วันนี้", rom:"wan níi", en:"today", pic:"📅"},
@@ -1610,7 +1645,7 @@ const PG_SETS = {
     {th:"ไม่", rom:"mâi", en:"no", pic:"❌"},
     {th:"ถูกต้อง", rom:"thùuk tôong", en:"correct", pic:"🎯"},
     {th:"เก่งมาก", rom:"gèng mâak", en:"great job!", pic:"🌟"},
-    {th:"เยี่ยมมาก", rom:"yiam mâak", en:"excellent!", pic:"🏆"},
+    {th:"เยี่ยมมาก", rom:"yîam mâak", en:"excellent!", pic:"🏆"},
     {th:"เริ่ม", rom:"rôerm", en:"start / begin", pic:"▶️"},
     {th:"เริ่มค่ะ", rom:"rôerm khâ", en:"let's begin", pic:"🚀"},
     {th:"พร้อมไหมคะ", rom:"phróom mǎi khá", en:"are you ready?", pic:"🙋"},
@@ -1618,10 +1653,10 @@ const PG_SETS = {
     {th:"พูด", rom:"phûut", en:"speak", pic:"🗣️"},
     {th:"อ่าน", rom:"àan", en:"read", pic:"📖"},
     {th:"ลองอีกครั้ง", rom:"loong ìik khráng", en:"try again", pic:"🔄"},
-    {th:"ไม่เป็นไร", rom:"mâi pen rai", en:"no problem", pic:"😌"},
-    {th:"จำได้ไหม", rom:"jam dâai mái", en:"Do you remember?", pic:"🧠"},
-    {th:"เข้าใจไหม", rom:"khâo jai mái", en:"Do you understand?", pic:"💡"},
-    {th:"มีคำถามไหม", rom:"mii kham thǎam mái", en:"Do you have a question?", pic:"🙋"},
+    {th:"ไม่เป็นไร", rom:"mâi bpen rai", en:"no problem", pic:"😌"},
+    {th:"จำได้ไหม", rom:"jam dâai mǎi", en:"Do you remember?", pic:"🧠"},
+    {th:"เข้าใจไหม", rom:"khâo jai mǎi", en:"Do you understand?", pic:"💡"},
+    {th:"มีคำถามไหม", rom:"mii kham thǎam mǎi", en:"Do you have a question?", pic:"🙋"},
   ],
   sea: [
     {th:"ทะเล", rom:"tá-lay", en:"sea", pic:"🌊"},
@@ -1643,7 +1678,7 @@ const PG_SETS = {
     {th:"ปะการัง", rom:"bpà-gaa-rang", en:"coral", pic:"🪸"},
     {th:"ปลา", rom:"bplaa", en:"fish", pic:"🐟"},
     {th:"เต่าทะเล", rom:"dtào tá-lay", en:"sea turtle", pic:"🐢"},
-    {th:"ฉลาม", rom:"chà-làam", en:"shark", pic:"🦈"},
+    {th:"ฉลาม", rom:"chà-lǎam", en:"shark", pic:"🦈"},
     {th:"แมงกะพรุน", rom:"maeng gà-phrun", en:"jellyfish", pic:"🪼"},
   ],
   destination: [
@@ -1666,7 +1701,7 @@ const PG_SETS = {
     {th:"ใกล้", rom:"Glâi", en:"Near", pic:"🤏"},
     {th:"ไกล", rom:"Glai", en:"Far", pic:"🏔️"},
     {th:"ใกล้หรือไกล", rom:"Glâi rǔe glai?", en:"Near or far?", pic:"🤔"},
-    {th:"ใกล้ไหม", rom:"Glâi mái?", en:"Is it near?", pic:"❓"},
+    {th:"ใกล้ไหม", rom:"Glâi mǎi?", en:"Is it near?", pic:"❓"},
   ],
   questwords: [
     {th:"อะไร", rom:"à-rai", en:"What?", pic:"❔"},
@@ -1696,12 +1731,12 @@ const PG_SETS = {
     {th:"ผม", rom:"phǒm", en:"my (male speaker)", pic:"🙋‍♂️"},
     {th:"ฉัน", rom:"chǎn", en:"my (female speaker)", pic:"🙋‍♀️"},
     {th:"คุณ", rom:"khun", en:"your", pic:"🫵"},
-    {th:"เขา", rom:"kháo", en:"his / her", pic:"🧍"},
-    {th:"พวกเขา", rom:"phûak kháo", en:"their", pic:"👥"},
+    {th:"เขา", rom:"khǎo", en:"his / her", pic:"🧍"},
+    {th:"พวกเขา", rom:"phûak khǎo", en:"their", pic:"👥"},
     {th:"พวกเรา", rom:"phûak rao", en:"our", pic:"🙌"},
     {th:"เงินของผม", rom:"Ngern khǒng phǒm", en:"My money", pic:"💰"},
     {th:"แมวของคุณ", rom:"Maew khǒng khun", en:"Your cat", pic:"🐱"},
-    {th:"บ้านของเขา", rom:"Bâan khǒng kháo", en:"His / Her house", pic:"🏠"},
+    {th:"บ้านของเขา", rom:"Bâan khǒng khǎo", en:"His / Her house", pic:"🏠"},
     {th:"รถของพวกเรา", rom:"Rót khǒng phûak rao", en:"Our car", pic:"🚗"},
   ],
   position: [
@@ -1783,12 +1818,12 @@ const PG_SETS = {
     {th:"หนึ่งพัน", rom:"nùeng-phan", en:"one thousand", pic:"🔢"},
   ],
   sentences: [
-    {th:"สบายดีไหม", rom:"Sabai dee mái?", en:"How are you?", pic:"😊"},
+    {th:"สบายดีไหม", rom:"Sà-baai dii mǎi?", en:"How are you?", pic:"😊"},
     {th:"แล้วคุณล่ะ", rom:"Láew khun lâ?", en:"How about you?", pic:"🔁"},
-    {th:"วันนี้มีแผนอะไรไหม", rom:"Wan níi mii phǎen à-rai mái?", en:"What plan do you have today?", pic:"📅"},
-    {th:"กินข้าวหรือยัง", rom:"Gin khâao reu yang?", en:"Have you eaten yet?", pic:"🍚"},
+    {th:"วันนี้มีแผนอะไรไหม", rom:"Wan níi mii phǎen à-rai mǎi?", en:"What plan do you have today?", pic:"📅"},
+    {th:"กินข้าวหรือยัง", rom:"Gin khâao rǔe yang?", en:"Have you eaten yet?", pic:"🍚"},
     {th:"กินอะไร", rom:"Gin à-rai?", en:"What did you eat?", pic:"🍜"},
-    {th:"อร่อยไหม", say:"อะ-ร่อย ไหม", rom:"À-ròi mái?", en:"Was it delicious?", pic:"😋"},
+    {th:"อร่อยไหม", say:"อะ-ร่อย ไหม", rom:"À-ròi mǎi?", en:"Was it delicious?", pic:"😋"},
     {th:"ดีเลย", rom:"Dii loei", en:"Sounds great!", pic:"🙌"},
     {th:"ขอให้สนุก", rom:"Khǎw hâi sà-nùk", en:"Have fun!", pic:"🥳"},
     {th:"วันนี้เป็นยังไงบ้าง", rom:"Wan níi bpen yang ngai bâang?", en:"How is your day today?", pic:"🌈"},
@@ -1813,7 +1848,7 @@ const PG_SETS = {
   ],
   everyday: [
     {th:"ค่อยเป็นค่อยไป", rom:"Khôi bpen khôi bpai", en:"Take it one step at a time.", pic:"🐢", textCat:true, pairId:1},
-    {th:"เอาที่สบายใจ", rom:"Ao thîi sa-baai jai", en:"Do whatever makes you feel comfortable.", pic:"😌", textCat:true, pairId:2},
+    {th:"เอาที่สบายใจ", rom:"Ao thîi sà-baai jai", en:"Do whatever makes you feel comfortable.", pic:"😌", textCat:true, pairId:2},
     {th:"อร่อยจนหยุดไม่ได้", rom:"À-ròi jon yùt mâi dâai", en:"It's so delicious I can't stop eating!", pic:"😋", textCat:true, pairId:3},
     {th:"ไม่ต้องเกรงใจ", rom:"Mâi dtông kreng jai", en:"Don't worry about bothering me.", pic:"🤗", textCat:true, pairId:4},
     {th:"ตามใจเลย", rom:"Dtaam jai loei", en:"It's totally up to you.", pic:"🤷", textCat:true, pairId:5},
@@ -1841,12 +1876,12 @@ const PG_SETS = {
     {th:"มันไม่ใช่เรื่องใหญ่ อย่าคิดมากนะ", rom:"Man mâi châi rêuang yài, yàa khít mâak ná", en:"It's not a big deal, don't overthink it.", pic:"😄", textCat:true, pairId:9},
     {th:"ใจเย็น ๆ เดี๋ยวดีเอง", rom:"Jai yen yen, dǐao dii eeng", en:"Stay calm, it'll get better on its own.", pic:"🌈", textCat:true, pairId:10},
     {th:"อย่าเพิ่งโกรธ ใจเย็นไว้ก่อนนะ", rom:"Yàa phêrng gròht, jai yen wái gòn ná", en:"Don't get angry yet, stay calm first.", pic:"🧘", textCat:true, pairId:11},
-    {th:"ทำพลาดนิดหน่อย ไม่ใช่เรื่องใหญ่", rom:"Tham phlàat nít-nòi, mâi châi rêuang yài", en:"Making a small mistake isn't a big deal.", pic:"🤏", textCat:true, pairId:12},
+    {th:"ทำพลาดนิดหน่อย ไม่ใช่เรื่องใหญ่", rom:"Tham phlâat nít-nòi, mâi châi rêuang yài", en:"Making a small mistake isn't a big deal.", pic:"🤏", textCat:true, pairId:12},
     {th:"เธอพูดถูก ก็จริงนะ", rom:"Thoe phûut thùuk, gôr jing ná", en:"What you said is right, that's true.", pic:"💯", textCat:true, pairId:13},
     {th:"ก่อนตัดสินใจ คิดดูดี ๆ ก่อนนะ", rom:"Gòn dtàt-sǐn-jai, khít duu dii dii gòn ná", en:"Before deciding, think about it carefully first.", pic:"🤔", textCat:true, pairId:16},
     {th:"ไม่ต้องรวย แค่มีความสุขก็พอ", rom:"Mâi dtông ruay, khâe mii khwaam-sùk gôr por", en:"You don't need to be rich, just happy is enough.", pic:"😊", textCat:true, pairId:18},
     {th:"วันนี้เหนื่อยแล้ว พรุ่งนี้ค่อยว่ากันนะ", rom:"Wan-níi nèuay láew, phrûng-níi khôi wâa gan ná", en:"I'm tired today, let's talk tomorrow.", pic:"🌙", textCat:true, pairId:19},
-    {th:"ในชีวิตอะไรก็เกิดขึ้นได้ ต้องพร้อมเสมอ", rom:"Nai chii-wít à-rai gôr gèrt khûen dâai, dtông phrôm sà-mǒe", en:"In life, anything can happen — always be ready.", pic:"🎲", textCat:true, pairId:20},
+    {th:"ในชีวิตอะไรก็เกิดขึ้นได้ ต้องพร้อมเสมอ", rom:"Nai chii-wít à-rai gôr gèrt khûen dâai, dtông phróom sà-mǒe", en:"In life, anything can happen — always be ready.", pic:"🎲", textCat:true, pairId:20},
     {th:"ความสุขอยู่ที่ใจ ไม่ใช่อยู่ที่เงิน", rom:"Khwaam-sùk yùu thîi jai, mâi châi yùu thîi ngern", en:"Happiness depends on your mindset, not on money.", pic:"❤️", textCat:true, pairId:21},
   ],
   introduce: [
@@ -1855,9 +1890,9 @@ const PG_SETS = {
     {th:"คุณชื่ออะไร", rom:"Khun chûue à-rai?", en:"What's your name?", pic:"🙋"},
     {th:"ผมชื่อ...", rom:"Phǒm chûue ___", en:"My name is ___ (male speaker)", pic:"🙋"},
     {th:"ฉันชื่อ...", rom:"Chǎn chûue ___", en:"My name is ___ (female speaker)", pic:"🙋"},
-    {th:"สบายดีไหม", rom:"Sà-baai-dee mái?", en:"How are you?", pic:"😊"},
-    {th:"สบายดีครับ", rom:"Sà-baai-dee khráp", en:"I'm good (male speaker)", pic:"😊"},
-    {th:"สบายดีค่ะ", rom:"Sà-baai-dee khâ", en:"I'm good (female speaker)", pic:"😊"},
+    {th:"สบายดีไหม", rom:"Sà-baai dii mǎi?", en:"How are you?", pic:"😊"},
+    {th:"สบายดีครับ", rom:"Sà-baai dii khráp", en:"I'm good (male speaker)", pic:"😊"},
+    {th:"สบายดีค่ะ", rom:"Sà-baai dii khâ", en:"I'm good (female speaker)", pic:"😊"},
     {th:"ยินดีที่ได้รู้จัก", rom:"Yin-dee thîi dâai rúu-jàk", en:"Nice to meet you.", pic:"🤝"},
     {th:"คุณมาจากไหน", rom:"Khun maa jàak nǎi?", en:"Where are you from?", pic:"🌍"},
     {th:"ผมมาจาก...", rom:"Phǒm maa jàak ___", en:"I'm from ___ (male speaker)", pic:"🌍"},
@@ -1873,13 +1908,13 @@ const PG_SETS = {
     {th:"คุณทำงานอะไร", rom:"Khun tham-ngaan à-rai?", en:"What do you do for work?", pic:"💼"},
     {th:"ผมเป็นครู", rom:"Phǒm bpen khruu", en:"I'm a teacher (male speaker)", pic:"👩‍🏫"},
     {th:"ฉันเป็นครู", rom:"Chǎn bpen khruu", en:"I'm a teacher (female speaker)", pic:"👩‍🏫"},
-    {th:"คุณชอบประเทศไทยไหม", rom:"Khun chôrp bprà-thêet Thai mái?", en:"Do you like Thailand?", pic:"🇹🇭"},
+    {th:"คุณชอบประเทศไทยไหม", rom:"Khun chôrp bprà-thêet Thai mǎi?", en:"Do you like Thailand?", pic:"🇹🇭"},
     {th:"ชอบ", rom:"Chôrp!", en:"I like it!", pic:"🇹🇭"},
     {th:"ไม่ชอบ", rom:"Mâi chôrp.", en:"I don't like it.", pic:"🇹🇭"},
-    {th:"คุณชอบอาหารไทยไหม", rom:"Khun chôrp aa-hǎan Thai mái?", en:"Do you like Thai food?", pic:"🍜"},
-    {th:"คุณพูดภาษาไทยได้ไหม", rom:"Khun phûut phaa-sǎa Thai dâai mái?", en:"Can you speak Thai?", pic:"🗣️"},
+    {th:"คุณชอบอาหารไทยไหม", rom:"Khun chôrp aa-hǎan Thai mǎi?", en:"Do you like Thai food?", pic:"🍜"},
+    {th:"คุณพูดภาษาไทยได้ไหม", rom:"Khun phûut phaa-sǎa Thai dâai mǎi?", en:"Can you speak Thai?", pic:"🗣️"},
     {th:"พูดได้นิดหน่อย", rom:"Phûut dâai nít-nòi", en:"I can speak a little.", pic:"🗣️"},
-    {th:"คุณมีพี่น้องไหม", rom:"Khun mii phîi-nóng mái?", en:"Do you have sibling?", pic:"👨‍👩‍👧"},
+    {th:"คุณมีพี่น้องไหม", rom:"Khun mii phîi-nóng mǎi?", en:"Do you have sibling?", pic:"👨‍👩‍👧"},
     {th:"มี", rom:"Mii.", en:"I have.", pic:"👨‍👩‍👧"},
     {th:"ไม่มี", rom:"Mâi mii.", en:"No, I don't have.", pic:"👨‍👩‍👧"},
     {th:"ขอโทษครับ", rom:"Khǒr-thôot khráp", en:"I'm sorry / Excuse me (male speaker)", pic:"🙏"},
@@ -1933,24 +1968,24 @@ const PG_SETS = {
     {th:"มีเพื่อนกี่คน", rom:"Mii phûean gìi khon?", en:"How many friends are there?", pic:"👥"},
   ],
   seven11: [
-    {th:"เวฟไหม", rom:"Wêep mái?", en:"Do you want it microwaved?", pic:"🍱"},
+    {th:"เวฟไหม", rom:"Wêep mǎi?", en:"Do you want it microwaved?", pic:"🍱"},
     {th:"เวฟ", rom:"Wêep.", en:"Yes, microwave it.", pic:"🍱"},
-    {th:"ใส่ถุงไหม", rom:"Sài thǔng mái?", en:"Do you want a bag?", pic:"🛍️"},
+    {th:"ใส่ถุงไหม", rom:"Sài thǔng mǎi?", en:"Do you want a bag?", pic:"🛍️"},
     {th:"ใส่", rom:"Sài.", en:"Yes, put it in a bag.", pic:"🛍️"},
-    {th:"เอาหลอดไหม", rom:"Ao lòot mái?", en:"Do you want a straw?", pic:"🥤"},
+    {th:"เอาหลอดไหม", rom:"Ao lòot mǎi?", en:"Do you want a straw?", pic:"🥤"},
     {th:"เอา", rom:"Ao.", en:"Yes, I'll take one.", pic:"🥤"},
-    {th:"รับสลิปไหม", rom:"Ráp sà-lìp mái?", en:"Do you want the receipt?", pic:"🧾"},
+    {th:"รับสลิปไหม", rom:"Ráp sà-líp mǎi?", en:"Do you want the receipt?", pic:"🧾"},
     {th:"รับ", rom:"Ráp.", en:"Yes, I'll take it.", pic:"🧾"},
-    {th:"มี ALL Member ไหม", rom:"Mii ALL Member mái?", en:"Do you have ALL Member?", pic:"📱"},
+    {th:"มี ALL Member ไหม", rom:"Mii ALL Member mǎi?", en:"Do you have ALL Member?", pic:"📱"},
     {th:"มี", rom:"Mii.", en:"Yes, I have one.", pic:"📱"},
     {th:"ไม่มี", rom:"Mâi mii.", en:"No, I don't have one.", pic:"📱"},
-    {th:"ขอหลอดหน่อยครับ/ค่ะ", rom:"Khǎaw lòot nòi khráp/kha.", en:"Please give me a straw.", pic:"🥤"},
-    {th:"ไม่เอาถุงครับ/ค่ะ", rom:"Mâi ao thǔng khráp/kha.", en:"I don't want a bag.", pic:"🛍️"},
-    {th:"เวฟให้หน่อยครับ/ค่ะ", rom:"Wêep hâi nòi khráp/kha.", en:"Please microwave it for me.", pic:"🍱"},
-    {th:"ไม่รับสลิปครับ/ค่ะ", rom:"Mâi ráp sà-lìp khráp/kha.", en:"I don't want the receipt.", pic:"🧾"},
-    {th:"ไม่มีครับ/ค่ะ", rom:"Mâi mii khráp/kha.", en:"No, I don't have it.", pic:"📱"},
-    {th:"จ่ายเงินสดใช่ไหม", rom:"Jàai ngern-sòt châi mái?", en:"Paying cash, right?", pic:"💵"},
-    {th:"ใช่ครับ/ค่ะ", rom:"Châi khráp/kha.", en:"Yes, that's right.", pic:"💵"},
+    {th:"ขอหลอดหน่อยครับ/ค่ะ", rom:"Khǎaw lòot nòi khráp/khâ.", en:"Please give me a straw.", pic:"🥤"},
+    {th:"ไม่เอาถุงครับ/ค่ะ", rom:"Mâi ao thǔng khráp/khâ.", en:"I don't want a bag.", pic:"🛍️"},
+    {th:"เวฟให้หน่อยครับ/ค่ะ", rom:"Wêep hâi nòi khráp/khâ.", en:"Please microwave it for me.", pic:"🍱"},
+    {th:"ไม่รับสลิปครับ/ค่ะ", rom:"Mâi ráp sà-líp khráp/khâ.", en:"I don't want the receipt.", pic:"🧾"},
+    {th:"ไม่มีครับ/ค่ะ", rom:"Mâi mii khráp/khâ.", en:"No, I don't have it.", pic:"📱"},
+    {th:"จ่ายเงินสดใช่ไหม", rom:"Jàai ngern-sòt châi mǎi?", en:"Paying cash, right?", pic:"💵"},
+    {th:"ใช่ครับ/ค่ะ", rom:"Châi khráp/khâ.", en:"Yes, that's right.", pic:"💵"},
   ],
 };
 const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
@@ -1974,7 +2009,7 @@ const BUILDER_INTRODUCE = [
   { en:"What's your name?",
     chunks:[{th:"คุณ",rom:"Khun"},{th:"ชื่อ",rom:"chûue"},{th:"อะไร",rom:"à-rai?"}] },
   { en:"How are you?",
-    chunks:[{th:"สบายดี",rom:"Sà-baai-dee"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"สบายดี",rom:"Sà-baai dii"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"Nice to meet you.",
     chunks:[{th:"ยินดี",rom:"Yin-dee"},{th:"ที่ได้",rom:"thîi dâai"},{th:"รู้จัก",rom:"rúu-jàk"}] },
   { en:"Where are you from?",
@@ -1988,30 +2023,30 @@ const BUILDER_INTRODUCE = [
   { en:"What do you do for work?",
     chunks:[{th:"คุณ",rom:"Khun"},{th:"ทำงาน",rom:"tham-ngaan"},{th:"อะไร",rom:"à-rai?"}] },
   { en:"Do you like Thailand?",
-    chunks:[{th:"คุณ",rom:"Khun"},{th:"ชอบ",rom:"chôrp"},{th:"ประเทศไทย",rom:"bprà-thêet Thai"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"คุณ",rom:"Khun"},{th:"ชอบ",rom:"chôrp"},{th:"ประเทศไทย",rom:"bprà-thêet Thai"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"Do you like Thai food?",
-    chunks:[{th:"คุณ",rom:"Khun"},{th:"ชอบ",rom:"chôrp"},{th:"อาหารไทย",rom:"aa-hǎan Thai"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"คุณ",rom:"Khun"},{th:"ชอบ",rom:"chôrp"},{th:"อาหารไทย",rom:"aa-hǎan Thai"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"Can you speak Thai?",
-    chunks:[{th:"คุณ",rom:"Khun"},{th:"พูด",rom:"phûut"},{th:"ภาษาไทย",rom:"phaa-sǎa Thai"},{th:"ได้ไหม",rom:"dâai mái?"}] },
+    chunks:[{th:"คุณ",rom:"Khun"},{th:"พูด",rom:"phûut"},{th:"ภาษาไทย",rom:"phaa-sǎa Thai"},{th:"ได้ไหม",rom:"dâai mǎi?"}] },
   { en:"Do you have sibling?",
-    chunks:[{th:"คุณ",rom:"Khun"},{th:"มี",rom:"mii"},{th:"พี่น้อง",rom:"phîi-nóng"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"คุณ",rom:"Khun"},{th:"มี",rom:"mii"},{th:"พี่น้อง",rom:"phîi-nóng"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"And you? / How about you?",
     chunks:[{th:"แล้ว",rom:"Láeo"},{th:"คุณ",rom:"khun"},{th:"ล่ะ",rom:"lâ?"}] },
 ];
 
 const BUILDER_SENTENCES = [
   { en:"How are you?",
-    chunks:[{th:"สบายดี",rom:"Sabai dee"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"สบายดี",rom:"Sà-baai dii"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"How about you?",
     chunks:[{th:"แล้ว",rom:"Láew"},{th:"คุณ",rom:"khun"},{th:"ล่ะ",rom:"lâ?"}] },
   { en:"What plan do you have today?",
-    chunks:[{th:"วันนี้",rom:"Wan níi"},{th:"มี",rom:"mii"},{th:"แผน",rom:"phǎen"},{th:"อะไร",rom:"à-rai"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"วันนี้",rom:"Wan níi"},{th:"มี",rom:"mii"},{th:"แผน",rom:"phǎen"},{th:"อะไร",rom:"à-rai"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"Have you eaten yet?",
-    chunks:[{th:"กิน",rom:"Gin"},{th:"ข้าว",rom:"khâao"},{th:"หรือยัง",rom:"reu yang?"}] },
+    chunks:[{th:"กิน",rom:"Gin"},{th:"ข้าว",rom:"khâao"},{th:"หรือยัง",rom:"rǔe yang?"}] },
   { en:"What did you eat?",
     chunks:[{th:"กิน",rom:"Gin"},{th:"อะไร",rom:"à-rai?"}] },
   { en:"Was it delicious?",
-    chunks:[{th:"อร่อย",rom:"À-ròi"},{th:"ไหม",rom:"mái?"}] },
+    chunks:[{th:"อร่อย",rom:"À-ròi"},{th:"ไหม",rom:"mǎi?"}] },
   { en:"Sounds great!",
     chunks:[{th:"ดี",rom:"Dii"},{th:"เลย",rom:"loei"}] },
   { en:"Have fun!",
@@ -2026,7 +2061,7 @@ const BUILDER_EVERYDAY = [
   { en:"Take it one step at a time.",
     chunks:[{th:"ค่อย",rom:"Khôi"},{th:"เป็น",rom:"bpen"},{th:"ค่อย",rom:"khôi"},{th:"ไป",rom:"bpai"}] },
   { en:"Do whatever makes you feel comfortable.",
-    chunks:[{th:"เอา",rom:"Ao"},{th:"ที่",rom:"thîi"},{th:"สบายใจ",rom:"sa-baai jai"}] },
+    chunks:[{th:"เอา",rom:"Ao"},{th:"ที่",rom:"thîi"},{th:"สบายใจ",rom:"sà-baai jai"}] },
   { en:"It's so delicious I can't stop eating!",
     chunks:[{th:"อร่อย",rom:"À-ròi"},{th:"จน",rom:"jon"},{th:"หยุด",rom:"yùt"},{th:"ไม่ได้",rom:"mâi dâai"}] },
   { en:"Don't worry about bothering me.",
@@ -2073,15 +2108,15 @@ const BUILDER_MIXED = [].concat(BUILDER_SENTENCES, BUILDER_EVERYDAY, BUILDER_INT
 // here too so students can practice building them any time via "Build it"
 const BUILDER_SEVEN11 = [
   { en:"Please give me a straw.",
-    chunks:[{th:"ขอ",rom:"Khǎaw"},{th:"หลอด",rom:"lòot"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}] },
+    chunks:[{th:"ขอ",rom:"Khǎaw"},{th:"หลอด",rom:"lòot"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}] },
   { en:"I don't want a bag.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"เอา",rom:"ao"},{th:"ถุง",rom:"thǔng"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}] },
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"เอา",rom:"ao"},{th:"ถุง",rom:"thǔng"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}] },
   { en:"Please microwave it for me.",
-    chunks:[{th:"เวฟ",rom:"Wêep"},{th:"ให้",rom:"hâi"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}] },
+    chunks:[{th:"เวฟ",rom:"Wêep"},{th:"ให้",rom:"hâi"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}] },
   { en:"I don't want the receipt.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"รับ",rom:"ráp"},{th:"สลิป",rom:"sà-lìp"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}] },
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"รับ",rom:"ráp"},{th:"สลิป",rom:"sà-líp"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}] },
   { en:"I don't have ALL Member.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"มี",rom:"mii"},{th:"ALL Member",rom:"ALL Member"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}] },
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"มี",rom:"mii"},{th:"ALL Member",rom:"ALL Member"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}] },
 ];
 
 const BUILDER_YAAK = [
@@ -2888,7 +2923,7 @@ show = function(id){
    ========================================================== */
 const KHONG_NOUNS = [
   {emoji:"💰", th:"เงิน", rom:"Ngern", en:"money"},
-  {emoji:"💳", th:"บัตรเครดิต", rom:"Bàt khré-dit", en:"credit card"},
+  {emoji:"💳", th:"บัตรเครดิต", rom:"Bàt khree-dìt", en:"credit card"},
   {emoji:"🐱", th:"แมว", rom:"Maew", en:"cat"},
   {emoji:"🐟", th:"ปลา", rom:"Bplaa", en:"fish"},
   {emoji:"🍲", th:"อาหาร", rom:"Aa-hǎan", en:"food"},
@@ -2922,8 +2957,8 @@ const KHONG_PRONOUNS = [
   {emoji:"🙋‍♂️", th:"ผม", rom:"phǒm", en:"My", label:"ผม · phǒm — I / my (male speaker)"},
   {emoji:"🙋‍♀️", th:"ฉัน", rom:"chǎn", en:"My", label:"ฉัน · chǎn — I / my (female speaker)"},
   {emoji:"🫵", th:"คุณ", rom:"khun", en:"Your", label:"คุณ · khun — you / your"},
-  {emoji:"🧍", th:"เขา", rom:"kháo", en:"His/Her", label:"เขา · kháo — he/she / his/her"},
-  {emoji:"👥", th:"พวกเขา", rom:"phûak kháo", en:"Their", label:"พวกเขา · phûak kháo — they / their"},
+  {emoji:"🧍", th:"เขา", rom:"khǎo", en:"His/Her", label:"เขา · khǎo — he/she / his/her"},
+  {emoji:"👥", th:"พวกเขา", rom:"phûak khǎo", en:"Their", label:"พวกเขา · phûak khǎo — they / their"},
   {emoji:"🙌", th:"พวกเรา", rom:"phûak rao", en:"Our", label:"พวกเรา · phûak rao — we / our"},
 ];
 const KHONG_DECK_SIZE = 15;
@@ -3158,52 +3193,52 @@ khongInitBuilder({
 
 const SEVEN11_GAME_DATA = [
   // ---------------- TYPE A — Listen/Read & React ⚡ ----------------
-  { type:"A", icon:"🍱", rom:"Wêep mái?", th:"เวฟไหม", en:"Do you want it microwaved?",
+  { type:"A", icon:"🍱", rom:"Wêep mǎi?", th:"เวฟไหม", en:"Do you want it microwaved?",
     correct:{rom:"Wêep.", th:"เวฟ"}, wrong:{rom:"Mâi ao.", th:"ไม่เอา"} },
-  { type:"A", icon:"🛍️", rom:"Sài thǔng mái?", th:"ใส่ถุงไหม", en:"Do you want a bag?",
+  { type:"A", icon:"🛍️", rom:"Sài thǔng mǎi?", th:"ใส่ถุงไหม", en:"Do you want a bag?",
     correct:{rom:"Sài.", th:"ใส่"}, wrong:{rom:"Mâi ráp.", th:"ไม่รับ"} },
-  { type:"A", icon:"🥤", rom:"Ao lòot mái?", th:"เอาหลอดไหม", en:"Do you want a straw?",
+  { type:"A", icon:"🥤", rom:"Ao lòot mǎi?", th:"เอาหลอดไหม", en:"Do you want a straw?",
     correct:{rom:"Ao.", th:"เอา"}, wrong:{rom:"Mâi châi.", th:"ไม่ใช่"} },
-  { type:"A", icon:"🧾", rom:"Ráp sà-lìp mái?", th:"รับสลิปไหม", en:"Do you want the receipt?",
+  { type:"A", icon:"🧾", rom:"Ráp sà-líp mǎi?", th:"รับสลิปไหม", en:"Do you want the receipt?",
     correct:{rom:"Ráp.", th:"รับ"}, wrong:{rom:"Mâi sài.", th:"ไม่ใส่"} },
-  { type:"A", icon:"📱", rom:"Mii ALL Member mái?", th:"มี ALL Member ไหม", en:"Do you have ALL Member?",
+  { type:"A", icon:"📱", rom:"Mii ALL Member mǎi?", th:"มี ALL Member ไหม", en:"Do you have ALL Member?",
     correct:{rom:"Mii.", th:"มี"}, wrong:{rom:"Mâi mii.", th:"ไม่มี"} },
 
   // ---------------- TYPE B — Situation → What to say 🎯 ----------------
   { type:"B", icon:"🥤", situation:"You want a straw. What do you say?",
-    correct:{rom:"Khǎaw lòot nòi khráp/kha.", th:"ขอหลอดหน่อยครับ/ค่ะ"},
-    wrong:{rom:"Mâi ao lòot khráp/kha.", th:"ไม่เอาหลอดครับ/ค่ะ"} },
+    correct:{rom:"Khǎaw lòot nòi khráp/khâ.", th:"ขอหลอดหน่อยครับ/ค่ะ"},
+    wrong:{rom:"Mâi ao lòot khráp/khâ.", th:"ไม่เอาหลอดครับ/ค่ะ"} },
   { type:"B", icon:"🛍️", situation:"You DON'T want a bag.",
-    correct:{rom:"Mâi ao thǔng khráp/kha.", th:"ไม่เอาถุงครับ/ค่ะ"},
-    wrong:{rom:"Ao thǔng khráp/kha.", th:"เอาถุงครับ/ค่ะ"} },
+    correct:{rom:"Mâi ao thǔng khráp/khâ.", th:"ไม่เอาถุงครับ/ค่ะ"},
+    wrong:{rom:"Ao thǔng khráp/khâ.", th:"เอาถุงครับ/ค่ะ"} },
   { type:"B", icon:"🍱", situation:"You want the staff to microwave your food.",
-    correct:{rom:"Wêep hâi nòi khráp/kha.", th:"เวฟให้หน่อยครับ/ค่ะ"},
-    wrong:{rom:"Mâi wêep khráp/kha.", th:"ไม่เวฟครับ/ค่ะ"} },
+    correct:{rom:"Wêep hâi nòi khráp/khâ.", th:"เวฟให้หน่อยครับ/ค่ะ"},
+    wrong:{rom:"Mâi wêep khráp/khâ.", th:"ไม่เวฟครับ/ค่ะ"} },
   { type:"B", icon:"🧾", situation:"You don't want the receipt.",
-    correct:{rom:"Mâi ráp sà-lìp khráp/kha.", th:"ไม่รับสลิปครับ/ค่ะ"},
-    wrong:{rom:"Ráp sà-lìp khráp/kha.", th:"รับสลิปครับ/ค่ะ"} },
+    correct:{rom:"Mâi ráp sà-líp khráp/khâ.", th:"ไม่รับสลิปครับ/ค่ะ"},
+    wrong:{rom:"Ráp sà-líp khráp/khâ.", th:"รับสลิปครับ/ค่ะ"} },
   { type:"B", icon:"📱", situation:"You don't have ALL Member.",
-    correct:{rom:"Mâi mii khráp/kha.", th:"ไม่มีครับ/ค่ะ"},
-    wrong:{rom:"Mii khráp/kha.", th:"มีครับ/ค่ะ"} },
+    correct:{rom:"Mâi mii khráp/khâ.", th:"ไม่มีครับ/ค่ะ"},
+    wrong:{rom:"Mii khráp/khâ.", th:"มีครับ/ค่ะ"} },
   { type:"B", icon:"💵", situation:"The cashier asks if you're paying cash. You ARE paying cash.",
-    correct:{rom:"Châi khráp/kha.", th:"ใช่ครับ/ค่ะ"},
-    wrong:{rom:"Mâi châi khráp/kha.", th:"ไม่ใช่ครับ/ค่ะ"} },
+    correct:{rom:"Châi khráp/khâ.", th:"ใช่ครับ/ค่ะ"},
+    wrong:{rom:"Mâi châi khráp/khâ.", th:"ไม่ใช่ครับ/ค่ะ"} },
 
   // ---------------- TYPE C — Build the Sentence 🧩 ----------------
   { type:"C", icon:"🥤", en:"Please give me a straw.",
-    chunks:[{th:"ขอ",rom:"Khǎaw"},{th:"หลอด",rom:"lòot"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}],
+    chunks:[{th:"ขอ",rom:"Khǎaw"},{th:"หลอด",rom:"lòot"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}],
     hint:"Start with \"Khǎaw...\"" },
   { type:"C", icon:"🛍️", en:"I don't want a bag.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"เอา",rom:"ao"},{th:"ถุง",rom:"thǔng"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}],
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"เอา",rom:"ao"},{th:"ถุง",rom:"thǔng"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}],
     hint:"Start with \"Mâi...\"" },
   { type:"C", icon:"🍱", en:"Please microwave it for me.",
-    chunks:[{th:"เวฟ",rom:"Wêep"},{th:"ให้",rom:"hâi"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}],
+    chunks:[{th:"เวฟ",rom:"Wêep"},{th:"ให้",rom:"hâi"},{th:"หน่อย",rom:"nòi"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}],
     hint:"Start with \"Wêep...\"" },
   { type:"C", icon:"🧾", en:"I don't want the receipt.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"รับ",rom:"ráp"},{th:"สลิป",rom:"sà-lìp"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}],
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"รับ",rom:"ráp"},{th:"สลิป",rom:"sà-líp"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}],
     hint:"Start with \"Mâi...\"" },
   { type:"C", icon:"📱", en:"I don't have ALL Member.",
-    chunks:[{th:"ไม่",rom:"Mâi"},{th:"มี",rom:"mii"},{th:"ALL Member",rom:"ALL Member"},{th:"ครับ/ค่ะ",rom:"khráp/kha"}],
+    chunks:[{th:"ไม่",rom:"Mâi"},{th:"มี",rom:"mii"},{th:"ALL Member",rom:"ALL Member"},{th:"ครับ/ค่ะ",rom:"khráp/khâ"}],
     hint:"Start with \"Mâi...\"" },
 ];
 
