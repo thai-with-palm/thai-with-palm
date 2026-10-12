@@ -145,6 +145,7 @@
   .example .ex-label{ color:var(--soft); font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:.6px;}
   .example .ex-thai{ font-family:var(--thai); font-weight:600; color:var(--ink); font-size:20px;}
   .example .ex-rom{ color:var(--kara); font-weight:800; }
+  .tnote{ margin:11px auto 0; max-width:300px; background:var(--peach); color:var(--ink); border-radius:12px; padding:9px 12px; font-size:13.5px; line-height:1.4; text-align:left; }
   .example .ex-mean{ color:var(--ink); }
   .example .ex-say{ border:none; background:var(--peach); color:var(--coral-d); border-radius:11px;
     padding:5px 10px; font-size:14px; font-weight:800; cursor:pointer; font-family:var(--sans);}
@@ -1214,78 +1215,56 @@ const ORDER = ["mid","low","falling","high","rising"];
 
 /* ---------------- questions ---------------- */
 const SETS = {
-  // Sets 1–5 follow the Thai Tones lesson deck — always in tone order: Mid · Low · Falling · High · Rising
+  // Exactly as in the Thai Tones lesson deck — tone order: Mid · Low · Falling · High · Rising
   maa: [
-    {thai:"มา",   rom:"maa", tone:"mid",     mean:"come"},
+    {thai:"มา",   rom:"maa", tone:"mid",     mean:"come",               pic:"🚶"},
     {thai:"หม่า", rom:"màa", tone:"low",     mean:"practice sound (not a real word)"},
-    {thai:"ม่า",  rom:"mâa", tone:"falling", mean:"grandma (Chinese)"},
-    {thai:"ม้า",  rom:"máa", tone:"high",    mean:"horse"},
-    {thai:"หมา",  rom:"mǎa", tone:"rising",  mean:"dog"},
+    {thai:"ม่า",  rom:"mâa", tone:"falling", mean:"grandma (Chinese)",  pic:"👵"},
+    {thai:"ม้า",  rom:"máa", tone:"high",    mean:"horse",              pic:"🐎"},
+    {thai:"หมา",  rom:"mǎa", tone:"rising",  mean:"dog",                pic:"🐕"},
   ],
   khaa: [
-    {thai:"คา",       rom:"khaa", tone:"mid",     mean:"stuck / owed"},
-    {thai:"ข่า",      rom:"khàa", tone:"low",     mean:"galangal"},
-    {thai:"ค่า / ฆ่า", rom:"khâa", tone:"falling", mean:"value, fee / to kill", say:"ค่า"},
-    {thai:"ค้า",      rom:"kháa", tone:"high",    mean:"to trade"},
-    {thai:"ขา",       rom:"khǎa", tone:"rising",  mean:"leg"},
+    {thai:"คา",       rom:"khaa", tone:"mid",     mean:"stuck / owed",           pic:"🔗"},
+    {thai:"ข่า",      rom:"khàa", tone:"low",     mean:"galangal",               pic:"🌿"},
+    {thai:"ค่า / ฆ่า", rom:"khâa", tone:"falling", mean:"value, fee / to kill",   pic:"💰", say:"ค่า",
+      note:"ค่า and ฆ่า sound identical — Thai spelling shows the difference in meaning."},
+    {thai:"ค้า",      rom:"kháa", tone:"high",    mean:"to trade",               pic:"🤝"},
+    {thai:"ขา",       rom:"khǎa", tone:"rising",  mean:"leg",                    pic:"🦵"},
   ],
   gaa: [
-    {thai:"กา",  rom:"gaa", tone:"mid",     mean:"crow"},
+    {thai:"กา",  rom:"gaa", tone:"mid",     mean:"crow", pic:"🐦",
+      note:"ก is a middle-class consonant — it can carry every one of the five tone marks."},
     {thai:"ก่า", rom:"gàa", tone:"low",     mean:"practice sound (not a real word)"},
     {thai:"ก้า", rom:"gâa", tone:"falling", mean:"practice sound (not a real word)"},
     {thai:"ก๊า", rom:"gáa", tone:"high",    mean:"practice sound (not a real word)"},
     {thai:"ก๋า", rom:"gǎa", tone:"rising",  mean:"practice sound (not a real word)"},
   ],
   bplaa: [
-    {thai:"ปลา",  rom:"bplaa", tone:"mid",     mean:"fish"},
+    {thai:"ปลา",  rom:"bplaa", tone:"mid",     mean:"fish", pic:"🐟",
+      note:"Only the mid tone — ปลา — means “fish.” The other four are practice syllables with no real meaning."},
     {thai:"ปล่า", rom:"bplàa", tone:"low",     mean:"practice sound (not a real word)"},
     {thai:"ปล้า", rom:"bplâa", tone:"falling", mean:"practice sound (not a real word)"},
     {thai:"ปล๊า", rom:"bpláa", tone:"high",    mean:"practice sound (not a real word)"},
     {thai:"ปล๋า", rom:"bplǎa", tone:"rising",  mean:"practice sound (not a real word)"},
   ],
   bai: [
-    {thai:"ใบ",  rom:"bai", tone:"mid",     mean:"leaf", example:{thai:"ใบไม้", rom:"bai máai", mean:"leaf (of a tree)"}},
+    {thai:"ใบ",  rom:"bai", tone:"mid",     mean:"leaf", pic:"🍃", example:{thai:"ใบไม้", rom:"bai máai", mean:"leaf (of a tree)"},
+      note:"Two tones make real words here: ใบ (leaf) on the mid tone, and ใบ้ (mute) on the falling tone."},
     {thai:"ไบ่", rom:"bài", tone:"low",     mean:"practice sound (not a real word)"},
-    {thai:"ใบ้", rom:"bâi", tone:"falling", mean:"mute"},
+    {thai:"ใบ้", rom:"bâi", tone:"falling", mean:"mute", pic:"🤐"},
     {thai:"ไบ๊", rom:"bái", tone:"high",    mean:"practice sound (not a real word)"},
     {thai:"ไบ๋", rom:"bǎi", tone:"rising",  mean:"practice sound (not a real word)"},
   ],
-  // Bonus sets
-  mai: [
-    {thai:"ไม",   rom:"mai", tone:"mid",     mean:"why (as in ทำไม)", example:{thai:"ทำไม", rom:"tham-mai", mean:"why"}},
-    {thai:"ใหม่", rom:"mài", tone:"low",     mean:"new"},
-    {thai:"ไม่",  rom:"mâi", tone:"falling", mean:"no / not"},
-    {thai:"ไม้",  rom:"mái", tone:"high",    mean:"wood"},
-    {thai:"ไหม",  rom:"mǎi", tone:"rising",  mean:"question particle / silk"},
-  ],
-  kham: [
-    {thai:"คำ",   rom:"kham", tone:"mid",     mean:"word"},
-    {thai:"ค่ำ",  rom:"khàm", tone:"low",     mean:"evening"},
-    {thai:"ข้าม", rom:"khâm", tone:"falling", mean:"to cross"},
-    {thai:"ค้ำ",  rom:"khám", tone:"high",    mean:"to support"},
-    {thai:"ขำ",   rom:"khǎm", tone:"rising",  mean:"funny / amused"},
-  ],
-  paa: [
-    {thai:"ปา",  rom:"paa", tone:"mid",     mean:"to throw"},
-    {thai:"ป่า", rom:"pàa", tone:"low",     mean:"forest"},
-    {thai:"ป้า", rom:"pâa", tone:"falling", mean:"aunt (older than your parent)"},
-    {thai:"ป๊า", rom:"páa", tone:"high",    mean:"dad (Chinese families, informal)"},
-    {thai:"ป๋า", rom:"pǎa", tone:"rising",  mean:"dad / boss / wealthy older man"},
-  ],
 };
-const ALLWORDS = [].concat(SETS.maa, SETS.khaa, SETS.gaa, SETS.bplaa, SETS.bai, SETS.mai, SETS.kham, SETS.paa);
-const SETLABEL = { maa:"SET 1 · MAA", khaa:"SET 2 · KHAA", gaa:"SET 3 · GAA", bplaa:"SET 4 · BPLAA", bai:"SET 5 · BAI",
-                   mai:"SET 6 · MAI", kham:"SET 7 · KHAM", paa:"SET 8 · PAA", mix:"MIXED CHALLENGE" };
+const ALLWORDS = [].concat(SETS.maa, SETS.khaa, SETS.gaa, SETS.bplaa, SETS.bai);
+const SETLABEL = { maa:"SET 1 · MAA", khaa:"SET 2 · KHAA", gaa:"SET 3 · GAA", bplaa:"SET 4 · BPLAA", bai:"SET 5 · BAI", mix:"MIXED CHALLENGE" };
 const SETMETA = [
   {key:"maa",   emo:"🐎", title:"Set 1 · “Maa”",   words:"มา · หม่า · ม่า · ม้า · หมา",   cls:"mai"},
   {key:"khaa",  emo:"🦵", title:"Set 2 · “Khaa”",  words:"คา · ข่า · ค่า · ค้า · ขา",      cls:"kha"},
   {key:"gaa",   emo:"🐦", title:"Set 3 · “Gaa”",   words:"กา · ก่า · ก้า · ก๊า · ก๋า",    cls:"kham"},
   {key:"bplaa", emo:"🐟", title:"Set 4 · “Bplaa”", words:"ปลา · ปล่า · ปล้า · ปล๊า · ปล๋า", cls:"paa"},
   {key:"bai",   emo:"🍃", title:"Set 5 · “Bai”",   words:"ใบ · ไบ่ · ใบ้ · ไบ๊ · ไบ๋",     cls:"mix"},
-  {key:"mai",   emo:"🌊", title:"Set 6 · “Mai”",   words:"ไม · ใหม่ · ไม่ · ไม้ · ไหม",   cls:"mai"},
-  {key:"kham",  emo:"🌆", title:"Set 7 · “Kham”",  words:"คำ · ค่ำ · ข้าม · ค้ำ · ขำ",    cls:"kham"},
-  {key:"paa",   emo:"👨‍👧", title:"Set 8 · “Paa”",   words:"ปา · ป่า · ป้า · ป๊า · ป๋า",    cls:"paa"},
-  {key:"mix",   emo:"🎯", title:"Mixed Challenge", words:"All sets · 10 random words", cls:"mix"},
+  {key:"mix",   emo:"🎯", title:"Mixed Challenge", words:"All 5 sets · 10 random words", cls:"mix"},
 ];
 
 /* ---------------- svg helpers ---------------- */
@@ -1332,6 +1311,8 @@ function playTone(tone){
   }catch(e){/* audio not available */}
 }
 
+function noteHTML(q){ return q.note?`<div class="tnote">💡 ${q.note}</div>`:""; }
+function picMean(q){ return (q.pic?q.pic+" ":"")+"= "+q.mean; }
 function exampleHTML(ex){
   return `<div class="example"><span class="ex-label">also</span>`+
     `<b class="ex-thai">${ex.thai}</b>`+
@@ -1438,8 +1419,9 @@ function showReveal(correct, q){
           <div class="pill" style="background:${t.color}">${t.name} tone</div>
         </div>
       </div>
-      <div class="mean"><span class="kara" style="font-size:20px">${q.rom}</span> &nbsp;·&nbsp; <b>${q.thai}</b> = ${q.mean}</div>
+      <div class="mean"><span class="kara" style="font-size:20px">${q.rom}</span> &nbsp;·&nbsp; <b>${q.thai}</b> ${picMean(q)}</div>
       ${q.example?exampleHTML(q.example):""}
+      ${noteHTML(q)}
       <div class="soundrow">
         <button class="soundbtn voice" id="tqSayBtn">🗣️ Hear it again</button>
         <button class="soundbtn" id="tqSlowBtn">🐢 Slow</button>
@@ -1533,9 +1515,9 @@ function renderPractice(){
   document.getElementById("pCount").textContent=(pIdx+1)+" / "+pList.length;
   document.getElementById("pProg").style.width=((pIdx+1)/pList.length*100)+"%";
   document.getElementById("pToneWrap").innerHTML=`<span class="pill" style="background:${t.color}">${t.name} tone</span>`;
-  document.getElementById("pMean").innerHTML="= "+q.mean;
+  document.getElementById("pMean").innerHTML=picMean(q);
   const pex=document.getElementById("pExample");
-  pex.innerHTML = q.example ? exampleHTML(q.example) : "";
+  pex.innerHTML = (q.example ? exampleHTML(q.example) : "") + noteHTML(q);
   document.getElementById("pContour").innerHTML=contourSVG(q.tone,true);
   const svg=document.getElementById("pContour").querySelector("svg");
   const prev=document.getElementById("pPrev"), next=document.getElementById("pNext");
