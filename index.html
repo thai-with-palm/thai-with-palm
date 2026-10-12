@@ -1429,7 +1429,7 @@ function showReveal(correct, q){
     </div>`;
   const svg=slot.querySelector(".reveal svg");
   setTimeout(()=>{ animateTracer(svg,1300,false);
-    slot.querySelector(".reveal").scrollIntoView({behavior:"smooth", block:"center"}); }, 180);
+    (slot.querySelector(".reveal")||document.body).scrollIntoView({behavior:"smooth", block:"center"}); }, 180);
   document.getElementById("nextBtn").onclick=next;
   // voice — plays on the reveal only (after the student has already
   // answered), same safe pattern as Word Games: hearing the tone before
