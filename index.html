@@ -1916,6 +1916,22 @@ const PG_SETS = {
     {th:"มีกี่คน", rom:"Mii gìi khon?", en:"How many people are there?", pic:"👥"},
     {th:"กี่ท่านคะ", rom:"Gìi thâan khá?", en:"How many people? (staff asks)", pic:"🧑‍🍳"},
   ],
+  classifiersent: [
+    {th:"เอากาแฟสองแก้ว", rom:"Ao gaa-fae sǎawng gâew", en:"I'll take two cups of coffee.", pic:"☕"},
+    {th:"เอาน้ำสามขวด", rom:"Ao náam sǎam khùat", en:"I'll take three bottles of water.", pic:"💧"},
+    {th:"ที่บ้านมีแมวสองตัว", rom:"Thîi bâan mii maew sǎawng dtua", en:"There are two cats at home.", pic:"🐱"},
+    {th:"ฉันมีหนังสือสามเล่ม", rom:"Chǎn mii nǎng-sǔue sǎam lêm", en:"I have three books.", pic:"📚"},
+    {th:"เขามีรถสองคัน", rom:"Khǎo mii rót sǎawng khan", en:"He has two cars.", pic:"🚗"},
+    {th:"เอาข้าวผัดสองจาน", rom:"Ao khâao phàt sǎawng jaan", en:"I'll take two plates of fried rice.", pic:"🍛"},
+    {th:"เอาหมูปิ้งสิบไม้", rom:"Ao mǔu-bpîng sìp máai", en:"I'll take ten pork skewers.", pic:"🍢"},
+    {th:"ฉันซื้อถุงสองใบ", rom:"Chǎn súue thǔng sǎawng bai", en:"I bought two bags.", pic:"🛍️"},
+    {th:"ลูกค้าสองท่านค่ะ", rom:"Lûuk-kháa sǎawng thâan khâ", en:"Two guests, please.", pic:"🙏"},
+    {th:"ที่นี่มีเพื่อนสามคน", rom:"Thîi nîi mii phûean sǎam khon", en:"Three friends are here.", pic:"🧑‍🤝‍🧑"},
+    {th:"เอาเค้กสามชิ้น", rom:"Ao khéek sǎam chín", en:"I'll take three pieces of cake.", pic:"🍰"},
+    {th:"ผมอยากได้กล่องสองอัน", rom:"Phǒm yàak dâai glàawng sǎawng an", en:"I want two boxes.", pic:"📦"},
+    {th:"มีหมากี่ตัว", rom:"Mii mǎa gìi dtua?", en:"How many dogs are there?", pic:"🐶"},
+    {th:"มีเพื่อนกี่คน", rom:"Mii phûean gìi khon?", en:"How many friends are there?", pic:"👥"},
+  ],
   seven11: [
     {th:"เวฟไหม", rom:"Wêep mái?", en:"Do you want it microwaved?", pic:"🍱"},
     {th:"เวฟ", rom:"Wêep.", en:"Yes, microwave it.", pic:"🍱"},
@@ -1937,7 +1953,7 @@ const PG_SETS = {
     {th:"ใช่ครับ/ค่ะ", rom:"Châi khráp/kha.", en:"Yes, that's right.", pic:"💵"},
   ],
 };
-const PG_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
+const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers,
@@ -1949,7 +1965,7 @@ const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers);
 // sentence pool used only by "Sentences Practice" Mixed option
-const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce, PG_SETS.yaak);
+const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce, PG_SETS.yaak, PG_SETS.classifiersent);
 
 // ---------- Sentence Builder data ----------
 // Each sentence is broken into tappable word/phrase chunks in the correct
@@ -2131,11 +2147,13 @@ const BUILDER_CLASSIFIERS = [
 ];
 const BUILDER_DATA_BY_KEY = {
   classifiers: BUILDER_CLASSIFIERS,
+  classifiersent: BUILDER_CLASSIFIERS,
   sentences: BUILDER_SENTENCES,
   everyday: BUILDER_EVERYDAY,
   introduce: BUILDER_INTRODUCE,
   allsent: BUILDER_MIXED,
   seven11: BUILDER_SEVEN11,
+  classifiersent: BUILDER_CLASSIFIERS,
   yaak: BUILDER_YAAK,
 };
 
@@ -2164,7 +2182,7 @@ const PG_META_SENT = [
   {key:"sentences",   emo:"💬", title:"Sentences",                sub:"สบายดีไหม · กินข้าวหรือยัง",            cls:"kham"},
   {key:"everyday",    emo:"🌈", title:"Everyday Expressions",     sub:"ค่อยเป็นค่อยไป · ตามใจเลย · อย่าคิดมาก",  cls:"paa"},
   {key:"introduce",   emo:"🙋", title:"Introduce & Get to Know",  sub:"คุณชื่ออะไร · คุณมาจากไหน · แล้วคุณล่ะ",   cls:"mai"},
-  {key:"classifiers", emo:"🧮", title:"Classifiers (ลักษณนาม)",  sub:"น้ำสามขวด · แมวสองตัว · เอาสามไม้",       cls:"kha"},
+  {key:"classifiersent", emo:"🧮", title:"Classifier Sentences", sub:"เอากาแฟสองแก้ว · ฉันมีหนังสือสามเล่ม",   cls:"kha"},
   {key:"yaak",        emo:"💭", title:"Want To... (อยาก)",        sub:"อยากไปตลาด · อยากกินผัดไทย · อยากดื่มกาแฟ", cls:"paa"},
   {key:"seven11",     emo:"🏪", title:"7-Eleven Challenge",       sub:"Recognize, choose, and build real Thai", cls:"kha", special:true},
   {key:"allsent",     emo:"🎯", title:"Mixed Sentences",          sub:"All "+PG_SENT_ALL.length+" sentences",  cls:"mix"},
@@ -2192,7 +2210,7 @@ function savePgProgress(){
 // "Mixed" pool that spans several categories
 const WORD_CATEGORY_MAP = {};
 const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","questwords","thisthat",
-  "sea","destination","directions","sentences","everyday","introduce","classifiers"];
+  "sea","destination","directions","sentences","everyday","introduce","classifiers","classifiersent"];
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
@@ -2215,7 +2233,7 @@ const PG_CARD_COLOR = {
   classroom:"#F0C05A", greet:"#FF6B8B", quest:"#FFD24B", action:"#FF7F6B", things:"#8DC63F",
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
   directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F", introduce:"#FFD24B",
-  seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B",
+  seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B", classifiersent:"#FF7F6B",
 };
 
 // how to group each context's categories into labeled sections on the new home screen
@@ -2225,7 +2243,7 @@ const PG_GROUPS_VOCAB = [
   {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
 ];
 const PG_GROUPS_SENT = [
-  {label:"Practice",   keys:["sentences","everyday","introduce","yaak","classifiers"]},
+  {label:"Practice",   keys:["sentences","everyday","introduce","yaak","classifiersent"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
@@ -2400,6 +2418,7 @@ function makeQ(w, pool, type){
 
 function startPgGame(key, mode){
   if(key==="classifiers") return clStartGame();
+  if(key==="classifiersent") return clStartGame(true);
   pgSetKey=key;
   lastGame="pic";
   const pool = key==="all" ? PG_VOCAB_ALL : key==="allsent" ? PG_SENT_ALL : PG_SETS[key];
@@ -2534,27 +2553,45 @@ const CL_WRONG = [
 ];
 // Fill in the Blank: whole sentence, classifier missing. pre/post = Thai around the blank (rpre/rpost = romanization). w = the 2 wrong choices.
 const CL_FILL = [
-  {pic:"☕", pre:"เอากาแฟสอง",     post:"",    rpre:"Ao gaa-fae sǎawng",         rpost:"",    k:"gaew",  w:["dtua","khan"],  en:"I'll take two cups of coffee."},
-  {pic:"💧", pre:"เอาน้ำสาม",       post:"",    rpre:"Ao náam sǎam",              rpost:"",    k:"khuat", w:["dtua","lem"],   en:"I'll take three bottles of water."},
-  {pic:"🐱", pre:"ที่บ้านมีแมวสอง", post:"",    rpre:"Thîi bâan mii maew sǎawng", rpost:"",    k:"dtua",  w:["khuat","lem"],  en:"There are two cats at home."},
-  {pic:"📚", pre:"ฉันมีหนังสือสาม", post:"",    rpre:"Chǎn mii nǎng-sǔue sǎam",   rpost:"",    k:"lem",   w:["dtua","khuat"], en:"I have three books."},
-  {pic:"🚗", pre:"เขามีรถสอง",      post:"",    rpre:"Khǎo mii rót sǎawng",       rpost:"",    k:"khan",  w:["bai","gaew"],   en:"He has two cars."},
-  {pic:"🍛", pre:"เอาข้าวผัดสอง",   post:"",    rpre:"Ao khâao phàt sǎawng",      rpost:"",    k:"jaan",  w:["gaew","lem"],   en:"I'll take two plates of fried rice."},
-  {pic:"🍢", pre:"เอาหมูปิ้งสิบ",   post:"",    rpre:"Ao mǔu-bpîng sìp",          rpost:"",    k:"maai",  w:["khuat","bai"],  en:"I'll take ten pork skewers."},
-  {pic:"🛍️", pre:"ฉันซื้อถุงสอง",   post:"",    rpre:"Chǎn súue thǔng sǎawng",    rpost:"",    k:"bai",   w:["khan","lem"],   en:"I bought two bags."},
-  {pic:"🙏", pre:"ลูกค้าสอง",       post:"ค่ะ", rpre:"Lûuk-kháa sǎawng",          rpost:"khâ", k:"thaan", w:["dtua","khuat"], en:"Two guests, please."},
-  {pic:"🧑‍🤝‍🧑", pre:"ที่นี่มีเพื่อนสาม", post:"", rpre:"Thîi nîi mii phûean sǎam", rpost:"",   k:"khon",  w:["dtua","khuat"], en:"Three friends are here."},
-  {pic:"🍰", pre:"เอาเค้กสาม",      post:"",    rpre:"Ao khéek sǎam",             rpost:"",    k:"chin",  w:["khuat","dtua"], en:"I'll take three pieces of cake."},
-  {pic:"📦", pre:"ผมอยากได้กล่องสอง", post:"", rpre:"Phǒm yàak dâai glàawng sǎawng", rpost:"", k:"an",    w:["lem","khan"],   en:"I want two boxes."},
-  {pic:"🐶", pre:"มีหมากี่",        post:"",    rpre:"Mii mǎa gìi",               rpost:"?",   k:"dtua",  w:["khon","lem"],   en:"How many dogs are there?"},
-  {pic:"👥", pre:"มีเพื่อนกี่",     post:"",    rpre:"Mii phûean gìi",            rpost:"?",   k:"khon",  w:["dtua","khuat"], en:"How many friends are there?"},
+  {pic:"☕", pre:"เอากาแฟสอง",     post:"",    rpre:"Ao gaa-fae sǎawng",         rpost:"",    k:"gaew",  w:["dtua","khan"],  x:"lem", en:"I'll take two cups of coffee."},
+  {pic:"💧", pre:"เอาน้ำสาม",       post:"",    rpre:"Ao náam sǎam",              rpost:"",    k:"khuat", w:["dtua","lem"],   x:"khan", en:"I'll take three bottles of water."},
+  {pic:"🐱", pre:"ที่บ้านมีแมวสอง", post:"",    rpre:"Thîi bâan mii maew sǎawng", rpost:"",    k:"dtua",  w:["khuat","lem"],  x:"khan", en:"There are two cats at home."},
+  {pic:"📚", pre:"ฉันมีหนังสือสาม", post:"",    rpre:"Chǎn mii nǎng-sǔue sǎam",   rpost:"",    k:"lem",   w:["dtua","khuat"], x:"khan", en:"I have three books."},
+  {pic:"🚗", pre:"เขามีรถสอง",      post:"",    rpre:"Khǎo mii rót sǎawng",       rpost:"",    k:"khan",  w:["bai","gaew"],   x:"dtua", en:"He has two cars."},
+  {pic:"🍛", pre:"เอาข้าวผัดสอง",   post:"",    rpre:"Ao khâao phàt sǎawng",      rpost:"",    k:"jaan",  w:["gaew","lem"],   x:"khan", en:"I'll take two plates of fried rice."},
+  {pic:"🍢", pre:"เอาหมูปิ้งสิบ",   post:"",    rpre:"Ao mǔu-bpîng sìp",          rpost:"",    k:"maai",  w:["khuat","bai"],  x:"lem", en:"I'll take ten pork skewers."},
+  {pic:"🛍️", pre:"ฉันซื้อถุงสอง",   post:"",    rpre:"Chǎn súue thǔng sǎawng",    rpost:"",    k:"bai",   w:["khan","lem"],   x:"dtua", en:"I bought two bags."},
+  {pic:"🙏", pre:"ลูกค้าสอง",       post:"ค่ะ", rpre:"Lûuk-kháa sǎawng",          rpost:"khâ", k:"thaan", w:["dtua","khuat"], x:"lem", en:"Two guests, please."},
+  {pic:"🧑‍🤝‍🧑", pre:"ที่นี่มีเพื่อนสาม", post:"", rpre:"Thîi nîi mii phûean sǎam", rpost:"",   k:"khon",  w:["dtua","khuat"], x:"khan", en:"Three friends are here."},
+  {pic:"🍰", pre:"เอาเค้กสาม",      post:"",    rpre:"Ao khéek sǎam",             rpost:"",    k:"chin",  w:["khuat","dtua"], x:"lem", en:"I'll take three pieces of cake."},
+  {pic:"📦", pre:"ผมอยากได้กล่องสอง", post:"", rpre:"Phǒm yàak dâai glàawng sǎawng", rpost:"", k:"an",    w:["lem","khan"],   x:"dtua", en:"I want two boxes."},
+  {pic:"🐶", pre:"มีหมากี่",        post:"",    rpre:"Mii mǎa gìi",               rpost:"?",   k:"dtua",  w:["khon","lem"],   x:"khan", en:"How many dogs are there?"},
+  {pic:"👥", pre:"มีเพื่อนกี่",     post:"",    rpre:"Mii phûean gìi",            rpost:"?",   k:"khon",  w:["dtua","khuat"], x:"gaew", en:"How many friends are there?"},
 ];
 CL_FILL.forEach(f=>{
   f.th = f.pre + CL_BY_KEY[f.k].th + f.post;
   f.rom = f.rpre + " " + CL_BY_KEY[f.k].rom + (f.rpost==="?" ? "?" : f.rpost ? " "+f.rpost : "");
 });
 
-function clStartGame(){
+// Sentences-only version (Sentences Practice): 5 fill-in-the-blank + 5 "wrong classifier" fixes, all with full sentences
+function clWrongFromFill(f){
+  const wk = f.w[0], wc = CL_BY_KEY[wk];
+  return { wk:wk, pic:f.pic, k:f.k, th:f.th, rom:f.rom, en:f.en, x:f.x,
+    wth: f.pre + wc.th + f.post,
+    wrom: f.rpre + " " + wc.rom + (f.rpost==="?" ? "?" : f.rpost ? " "+f.rpost : ""),
+    w:[f.w[1], f.x] };
+}
+function clStartGame(sentOnly){
+  if(sentOnly){
+    const pool = shuffle(CL_FILL);
+    lastGame = "cl"; pgSetKey = "classifiersent";
+    pgQueue = shuffle([].concat(
+      pool.slice(0,5).map(x=>({kind:"fill", item:x})),
+      pool.slice(5,10).map(x=>({kind:"wrong", item:clWrongFromFill(x)}))));
+    pgIdx = 0; pgScore = 0;
+    show("pgame"); renderPG();
+    return;
+  }
   // 10 questions: 2 word + 2 matching + 2 wrong-classifier + 4 fill-in-the-blank, shuffled together
   const pool = PG_SETS.classifiers;
   const words = shuffle(pool).slice(0,2).map(w=>makeQ(w, pool, "pic"));
