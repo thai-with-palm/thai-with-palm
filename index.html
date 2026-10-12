@@ -2678,6 +2678,8 @@ function scMount(id, infoFn){
   scFill(el);
   const nm = el.querySelector(".sc-name"), btn = el.querySelector(".sc-btn"), st = el.querySelector(".sc-status");
   try{ nm.value = localStorage.getItem(SC_NAME_KEY) || ""; }catch(e){}
+  // clearing the box also forgets the saved name on this device
+  nm.oninput = ()=>{ try{ if(!nm.value.trim()) localStorage.removeItem(SC_NAME_KEY); }catch(e){} };
   btn.onclick = async ()=>{
     const name = nm.value.trim();
     if(!name){ st.innerHTML = '<div class="fb-err">Please type your name first 😊</div>'; nm.focus(); return; }
