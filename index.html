@@ -145,6 +145,9 @@
   .example .ex-label{ color:var(--soft); font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:.6px;}
   .example .ex-thai{ font-family:var(--thai); font-weight:600; color:var(--ink); font-size:20px;}
   .example .ex-rom{ color:var(--kara); font-weight:800; }
+  .qhear{ margin:12px 0 4px; }
+  .qhear .soundbtn{ font-size:17px; padding:13px 20px; border-radius:16px; }
+  .qhear .soundbtn.voice{ animation:alPulse 1.8s ease-in-out 3; }
   .tnote{ margin:11px auto 0; max-width:300px; background:var(--peach); color:var(--ink); border-radius:12px; padding:9px 12px; font-size:13.5px; line-height:1.4; text-align:left; }
   .example .ex-mean{ color:var(--ink); }
   .example .ex-say{ border:none; background:var(--peach); color:var(--coral-d); border-radius:11px;
@@ -1107,6 +1110,10 @@
       <div class="qtag" id="setTag">SET 1 · MAI</div>
       <div class="thai" id="wThai">ไม</div>
       <div class="rom" id="wRom">mai</div>
+      <div class="soundrow qhear">
+        <button class="soundbtn voice" id="qHearBtn">🔊 Tap to hear</button>
+        <button class="soundbtn" id="qSlowBtn">🐢 Slow</button>
+      </div>
       <div class="ask">Which tone is this? <span id="scoreInline" style="color:var(--soft);font-weight:800;"></span></div>
       <div class="opts" id="opts"></div>
     </div>
@@ -1378,6 +1385,8 @@ function renderQ(){
   document.getElementById("progbar").style.width=((idx)/queue.length*100)+"%";
   document.getElementById("revealSlot").innerHTML="";
   const opts=document.getElementById("opts"); opts.innerHTML="";
+  document.getElementById("qHearBtn").onclick=()=> speak(q.say||q.thai, undefined, true);
+  document.getElementById("qSlowBtn").onclick=()=> speakSlow(q.say||q.thai);
   ORDER.forEach(tn=>{
     const b=document.createElement("button"); b.className="opt"; b.dataset.tone=tn;
     b.innerHTML=contourSVG(tn,false)+`<b style="color:${TONES[tn].color}">${TONES[tn].name}</b>`;
