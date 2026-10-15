@@ -1982,19 +1982,21 @@ const PG_SETS = {
     {th:"ใช่ครับ/ค่ะ", rom:"Châi khráp/khâ.", en:"Yes, that's right.", pic:"💵"},
   ],
 };
+// Sentences + Introductions are one card: merge the two lists (skip any repeated sentence)
+(function(){ const seen=new Set(PG_SETS.sentences.map(w=>w.th)); PG_SETS.sentences=PG_SETS.sentences.concat(PG_SETS.introduce.filter(w=>!seen.has(w.th))); delete PG_SETS.introduce; })();
 const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers,
                          PG_SETS.classifiers,
-                         PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce);
+                         PG_SETS.sentences, PG_SETS.everyday);
 // vocabulary pool used only by "Word Games" Mixed Challenge (sentences/everyday/introduce live in their own section)
 const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers);
 // sentence pool used only by "Sentences Practice" Mixed option
-const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.introduce, PG_SETS.yaak, PG_SETS.classifiersent);
+const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.yaak, PG_SETS.classifiersent);
 
 // ---------- Sentence Builder data ----------
 // Each sentence is broken into tappable word/phrase chunks in the correct
@@ -2177,9 +2179,8 @@ const BUILDER_CLASSIFIERS = [
 const BUILDER_DATA_BY_KEY = {
   classifiers: BUILDER_CLASSIFIERS,
   classifiersent: BUILDER_CLASSIFIERS,
-  sentences: BUILDER_SENTENCES,
+  sentences: BUILDER_SENTENCES.concat(BUILDER_INTRODUCE),
   everyday: BUILDER_EVERYDAY,
-  introduce: BUILDER_INTRODUCE,
   allsent: BUILDER_MIXED,
   seven11: BUILDER_SEVEN11,
   classifiersent: BUILDER_CLASSIFIERS,
@@ -2208,9 +2209,8 @@ const PG_META_VOCAB = [
   {key:"all",         emo:"🎯", title:"Mixed Challenge",          sub:"All "+PG_VOCAB_ALL.length+" words",    cls:"mix"},
 ];
 const PG_META_SENT = [
-  {key:"sentences",   emo:"💬", title:"Sentences",                sub:"สบายดีไหม · กินข้าวหรือยัง",            cls:"kham"},
+  {key:"sentences",   emo:"💬", title:"Sentences & Introductions", sub:"สบายดีไหม · คุณชื่ออะไร · คุณมาจากไหน",   cls:"kham"},
   {key:"everyday",    emo:"🌈", title:"Everyday Expressions",     sub:"ค่อยเป็นค่อยไป · ตามใจเลย · อย่าคิดมาก",  cls:"paa"},
-  {key:"introduce",   emo:"🙋", title:"Introduce & Get to Know",  sub:"คุณชื่ออะไร · คุณมาจากไหน · แล้วคุณล่ะ",   cls:"mai"},
   {key:"classifiersent", emo:"🧮", title:"Classifier Sentences", sub:"เอากาแฟสองแก้ว · ฉันมีหนังสือสามเล่ม",   cls:"kha"},
   {key:"yaak",        emo:"💭", title:"Want To... (อยาก)",        sub:"อยากไปตลาด · อยากกินผัดไทย · อยากดื่มกาแฟ", cls:"paa"},
   {key:"seven11",     emo:"🏪", title:"7-Eleven Challenge",       sub:"Recognize, choose, and build real Thai", cls:"kha", special:true},
@@ -2239,7 +2239,7 @@ function savePgProgress(){
 // "Mixed" pool that spans several categories
 const WORD_CATEGORY_MAP = {};
 const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","questwords","thisthat",
-  "sea","destination","directions","sentences","everyday","introduce","classifiers","classifiersent"];
+  "sea","destination","directions","sentences","everyday","classifiers","classifiersent"];
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
@@ -2261,7 +2261,7 @@ function getCategoryProgress(key){
 const PG_CARD_COLOR = {
   classroom:"#F0C05A", greet:"#FF6B8B", quest:"#FFD24B", action:"#FF7F6B", things:"#8DC63F",
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
-  directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F", introduce:"#FFD24B",
+  directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F",
   seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B", classifiersent:"#FF7F6B",
 };
 
@@ -2272,7 +2272,7 @@ const PG_GROUPS_VOCAB = [
   {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
 ];
 const PG_GROUPS_SENT = [
-  {label:"Practice",   keys:["sentences","everyday","introduce","yaak","classifiersent"]},
+  {label:"Practice",   keys:["sentences","everyday","yaak","classifiersent"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
