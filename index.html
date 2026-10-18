@@ -2460,8 +2460,8 @@ function startPgGame(key, mode){
   pgSetKey=key;
   lastGame="pic";
   const pool = key==="all" ? PG_VOCAB_ALL : key==="allsent" ? PG_SENT_ALL : PG_SETS[key];
-  // Classroom Expressions: every word & phrase in one round, so students drill the whole set
-  const n = key==="classroom" ? pool.length : Math.min(pool.length, (key==="all"||key==="allsent") ? 10 : 8);
+  // every word / sentence of the set (or of the whole mix) is asked, once each, so students drill it all
+  const n = pool.length;
   pgQueue = shuffle(pool).slice(0,n).map(w=> makeQ(w, pool, "pic"));
   pgIdx=0; pgScore=0; show("pgame"); renderPG();
 }
@@ -2624,19 +2624,20 @@ function clStartGame(sentOnly){
   if(sentOnly){
     const pool = shuffle(CL_FILL);
     lastGame = "cl"; pgSetKey = "classifiersent";
+    // every sentence is asked twice, in two different ways: fill the blank, and fix the wrong classifier
     pgQueue = shuffle([].concat(
-      pool.slice(0,5).map(x=>({kind:"fill", item:x})),
-      pool.slice(5,10).map(x=>({kind:"wrong", item:clWrongFromFill(x)}))));
+      pool.map(x=>({kind:"fill", item:x})),
+      pool.map(x=>({kind:"wrong", item:clWrongFromFill(x)}))));
     pgIdx = 0; pgScore = 0;
     show("pgame"); renderPG();
     return;
   }
-  // 10 questions: 2 word + 2 matching + 2 wrong-classifier + 4 fill-in-the-blank, shuffled together
+  // everything: every classifier word + every matching + wrong-classifier + fill-in-the-blank question, shuffled together
   const pool = PG_SETS.classifiers;
-  const words = shuffle(pool).slice(0,2).map(w=>makeQ(w, pool, "pic"));
-  const match = shuffle(CL_MATCH).slice(0,2).map(x=>({kind:"match", item:x}));
-  const wrong = shuffle(CL_WRONG).slice(0,2).map(x=>({kind:"wrong", item:x}));
-  const fill  = shuffle(CL_FILL).slice(0,4).map(x=>({kind:"fill",  item:x}));
+  const words = shuffle(pool).map(w=>makeQ(w, pool, "pic"));
+  const match = shuffle(CL_MATCH).map(x=>({kind:"match", item:x}));
+  const wrong = shuffle(CL_WRONG).map(x=>({kind:"wrong", item:x}));
+  const fill  = shuffle(CL_FILL).map(x=>({kind:"fill",  item:x}));
   lastGame = "cl"; pgSetKey = "classifiers";
   pgQueue = shuffle([].concat(words, match, wrong, fill));
   pgIdx = 0; pgScore = 0;
