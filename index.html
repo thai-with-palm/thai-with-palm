@@ -3987,7 +3987,7 @@ function alNameRom(c){
   const r = init + (c.c==="h" ? "ǎw" : "aw");          // high class = rising tone, mid/low = mid tone (same "aw" spelling as ขอ Khǎw)
   return r.charAt(0).toUpperCase()+r.slice(1);
 }
-function alQCount(i){ const n=alLetters(i).length; return n<=7 ? n : Math.min(n,10); }
+function alQCount(i){ return alLetters(i).length; }   // every letter of the lesson / class / all 44 is asked, once each
 // For the voice only: obsolete/rare letters and letters that sound the same are spoken with the common twin
 // (so the engine never skips or misreads them), the word uses a phonetic spelling where needed,
 // and the letter name and picture word are spoken as ONE phrase (no comma): a comma made the voice fall on
@@ -4026,20 +4026,20 @@ function alRenderMenu(){
   });
   h += '<div class="al-sec">🎨 Consonant classes — Mid · High · Low</div><div class="al-menu">';
   [["-2","m","🟡"],["-3","h","🔴"],["-4","l","🔵"]].forEach(([id,k,emo])=>{
-    const L = alLetters(+id), best = alProg["l"+id], col = AL_CLASS[k].c;
+    const L = alLetters(+id), best = alProg["l"+id+"_full"], col = AL_CLASS[k].c;
     h += `<button class="al-lesson" data-l="${id}"><span class="num" style="background:${col}22;color:${col}">${emo}</span>
       <span><b>${AL_CLASS[k].n} · ${L.length} letters</b><span class="letters" style="font-size:17px;letter-spacing:1px;color:${col}">${L.map(c=>c.l).join(" ")}</span></span>
       <span class="best">${best!=null ? "⭐ "+best+"/"+alQCount(+id) : ""}</span></button>`;
   });
-  const bCls = alProg["cls"];
+  const bCls = alProg["cls_full"];
   h += `<button class="al-lesson all" id="alClassGame"><span class="num">🎯</span>
-      <span><b>Which class? game</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">See a letter · pick Mid, High or Low</span></span>
-      <span class="best">${bCls!=null ? "⭐ "+bCls+"/10" : ""}</span></button></div>
+      <span><b>Which class? game</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">See a letter · pick Mid, High or Low · all 44</span></span>
+      <span class="best">${bCls!=null ? "⭐ "+bCls+"/"+AL_DATA.length : ""}</span></button></div>
     <div class="al-sec">🎲 Review</div><div class="al-menu">`;
-  const bAll = alProg["all"];
+  const bAll = alProg["all_full"];
   h += `<button class="al-lesson all" data-l="-1"><span class="num">🎲</span>
-      <span><b>All 44 letters</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">Mix everything · random review</span></span>
-      <span class="best">${bAll!=null ? "⭐ "+bAll+"/10" : ""}</span></button></div>`;
+      <span><b>All 44 letters</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">Mix everything · all 44 letters, random order</span></span>
+      <span class="best">${bAll!=null ? "⭐ "+bAll+"/"+AL_DATA.length : ""}</span></button></div>`;
   h += `<div class="al-legend">${["m","h","l"].map(k=>`<span class="al-tag" style="background:${AL_CLASS[k].c}">${AL_CLASS[k].n}</span>`).join("")}</div>`;
   $al("alBody").innerHTML = h;
   $al("alClassGame").onclick=()=>{ alLesson=-1; alStartQuiz("class"); };
@@ -4083,7 +4083,7 @@ function alRenderLesson(){
 /* ---- quizzes ---- */
 function alStartQuiz(kind){
   const pool = alLetters(alLesson);
-  const n = kind==="class" ? 10 : alQCount(alLesson);
+  const n = kind==="class" ? AL_DATA.length : alQCount(alLesson);
   alQ = {kind, qs: shuffle(pool).slice(0,n), i:0, score:0, done:false, opts:[]};
   alView="quiz"; alRender();
 }
@@ -4143,7 +4143,8 @@ function alAnswer(i){
   if(Q.kind!=="listen") speak(alSay(q));        // one automatic play after the answer (listen mode already played it)
 }
 function alFinish(){
-  const key = alQ.kind==="class" ? "cls" : alLesson===-1 ? "all" : "l"+alLesson;
+  // new "_full" keys: older saved scores were out of 10, these are out of every letter
+  const key = alQ.kind==="class" ? "cls_full" : alLesson===-1 ? "all_full" : alLesson<0 ? "l"+alLesson+"_full" : "l"+alLesson;
   if(alProg[key]==null || alQ.score>alProg[key]) alProg[key]=alQ.score;
   alSave();
   alView="result"; alRender();
