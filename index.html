@@ -2460,7 +2460,8 @@ function startPgGame(key, mode){
   pgSetKey=key;
   lastGame="pic";
   const pool = key==="all" ? PG_VOCAB_ALL : key==="allsent" ? PG_SENT_ALL : PG_SETS[key];
-  const n = Math.min(pool.length, (key==="all"||key==="allsent") ? 10 : 8);
+  // Classroom Expressions: every word & phrase in one round, so students drill the whole set
+  const n = key==="classroom" ? pool.length : Math.min(pool.length, (key==="all"||key==="allsent") ? 10 : 8);
   pgQueue = shuffle(pool).slice(0,n).map(w=> makeQ(w, pool, "pic"));
   pgIdx=0; pgScore=0; show("pgame"); renderPG();
 }
@@ -2515,7 +2516,7 @@ function pgChoose(c,q){
       '<div class="rev-en">'+q.w.en+'</div>'+
       '<button class="nextbtn" id="pgNext">'+(pgIdx+1<pgQueue.length?"Next →":"See results")+'</button>'+
     '</div>';
-  setTimeout(()=>{ slot.querySelector(".reveal").scrollIntoView({behavior:"smooth",block:"center"}); },60);
+  setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
   document.getElementById("pgNext").onclick=()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
 }
 
