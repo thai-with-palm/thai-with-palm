@@ -3965,11 +3965,13 @@ const AL_SVG = {
   "ฐ": _alS('<rect x="19" y="11" width="26" height="11" rx="2" fill="#D8C8AE" stroke="#8C7A5E" stroke-width="2.2"/><rect x="11" y="22" width="42" height="13" rx="2" fill="#CDBA9C" stroke="#8C7A5E" stroke-width="2.2"/><rect x="3" y="35" width="58" height="15" rx="2" fill="#C2AE8E" stroke="#8C7A5E" stroke-width="2.2"/>')
 };
 AL_DATA.forEach(c=>{ if(AL_SVG[c.l]) c.e = AL_SVG[c.l]; });
-const AL_SIZES = [7,7,6,6,6,6,6];            // 6–7 letters per lesson
+const AL_SIZES = [7,6,6,6,7,7,5];            // follows the real Thai alphabet order; lesson 1 (ก–ง) is unchanged
 const AL_CLASS = {m:{n:"Mid class",c:"#E0912A"}, h:{n:"High class",c:"#E7503F"}, l:{n:"Low class",c:"#0E877F"}};
 const AL_KEY = "twp_alpha_v1";
 let alProg = {};
 try{ alProg = JSON.parse(localStorage.getItem(AL_KEY)||"{}") || {}; }catch(e){ alProg = {}; }
+// Lesson 1 keeps its saved ⭐ score ("l0"); lessons 2–7 were re-cut, so their scores start fresh under "_v2" keys
+function alKeyFor(i){ return i===0 ? "l0" : "l"+i+"_v2"; }
 function alSave(){ try{ localStorage.setItem(AL_KEY, JSON.stringify(alProg)); }catch(e){} }
 let alView="menu", alLesson=0, alIdx=0, alQ=null;
 
@@ -4019,7 +4021,7 @@ function alRenderMenu(){
   $al("alSub").textContent = "44 consonants · see it, hear it, pick it";
   let h = '<div class="al-menu">';
   AL_SIZES.forEach((n,i)=>{
-    const L = alLetters(i), best = alProg["l"+i];
+    const L = alLetters(i), best = alProg[alKeyFor(i)];
     h += `<button class="al-lesson" data-l="${i}"><span class="num">${i+1}</span>
       <span><b>Lesson ${i+1}</b><span class="letters">${L.map(c=>c.l).join(" ")}</span></span>
       <span class="best">${best!=null ? "⭐ "+best+"/"+L.length : n+" letters"}</span></button>`;
@@ -4144,7 +4146,7 @@ function alAnswer(i){
 }
 function alFinish(){
   // new "_full" keys: older saved scores were out of 10, these are out of every letter
-  const key = alQ.kind==="class" ? "cls_full" : alLesson===-1 ? "all_full" : alLesson<0 ? "l"+alLesson+"_full" : "l"+alLesson;
+  const key = alQ.kind==="class" ? "cls_full" : alLesson===-1 ? "all_full" : alLesson<0 ? "l"+alLesson+"_full" : alKeyFor(alLesson);
   if(alProg[key]==null || alQ.score>alProg[key]) alProg[key]=alQ.score;
   alSave();
   alView="result"; alRender();
