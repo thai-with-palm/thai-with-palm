@@ -621,6 +621,17 @@
   .cl-wrongrom{ font-weight:800; color:#e0556b; font-size:25px; line-height:1.3; }
   .choice .crom.big{ font-size:25px; }
   .rev-rom.big{ font-size:25px; font-weight:800; }
+  .nf-scene{ font-size:34px; line-height:1.3; letter-spacing:2px; }
+  .nf-bigscene{ font-size:54px; line-height:1.25; white-space:nowrap; }
+  .nf-ask{ font-family:var(--thai); font-weight:700; font-size:30px; color:var(--ink); margin-top:6px; }
+  .nf-askrom{ font-size:25px; font-weight:800; color:var(--kara); }
+  .nf-listen{ display:inline-flex; flex-direction:column; align-items:center; gap:2px; border:none; cursor:pointer; background:var(--peach); color:var(--coral-d);
+    font-weight:800; font-size:18px; padding:14px 26px; border-radius:20px; box-shadow:var(--shadow-sm); font-family:var(--sans); animation:alPulse 1.8s ease-in-out 3; }
+  .nf-listen .ic{ font-size:40px; line-height:1.1; }
+  .nf-row{ display:flex; gap:10px; align-items:stretch; }
+  .nf-row .choice{ flex:1; }
+  .nf-spk{ flex:0 0 auto; border:none; cursor:pointer; background:var(--peach); color:var(--coral-d); border-radius:16px; padding:0 18px; font-size:30px; box-shadow:var(--shadow-sm); }
+  .nf-spk:active{ transform:scale(.95); }
   .cl-hint{ color:var(--soft); font-weight:700; font-size:14px; margin-top:4px; }
   .cl-fixed{ font-family:var(--thai); font-weight:600; font-size:28px; color:var(--ink); line-height:1.3; margin-top:2px; }
   /* ===== THAI ALPHABET ===== */
@@ -1059,6 +1070,8 @@
       <div class="scorebig"><span id="pgrScore">0</span><small>/<span id="pgrTotal">8</span></small></div>
       <div class="stars" id="pgrStars">★★★☆☆</div>
       <div class="rmsg" id="pgrMsg"></div>
+      <div class="cl-hint" id="pgrRepNote" style="margin-top:10px;"></div>
+      <button class="again" id="pgrRepeat" style="display:none;width:100%;margin-top:12px;background:var(--kara);color:#fff;border:none;border-radius:16px;padding:14px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:var(--shadow-sm);font-family:var(--sans);">🔁 Repeat mistakes</button>
       <div class="ractions">
         <button class="again" id="pgrAgain">Play again</button>
         <button class="change" data-go="pghome">Change set</button>
@@ -1154,6 +1167,8 @@
       <div class="scorebig"><span id="rScore">0</span><small>/<span id="rTotal">5</span></small></div>
       <div class="stars" id="rStars">★★★☆☆</div>
       <div class="rmsg" id="rMsg"></div>
+      <div class="cl-hint" id="rRepNote" style="margin-top:10px;"></div>
+      <button class="again" id="rRepeat" style="display:none;width:100%;margin-top:12px;background:var(--kara);color:#fff;border:none;border-radius:16px;padding:14px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:var(--shadow-sm);font-family:var(--sans);">🔁 Repeat mistakes</button>
       <div class="ractions">
         <button class="again" id="againBtn">Try again</button>
         <button class="change" id="changeBtn">Change set</button>
@@ -1351,6 +1366,7 @@ function confetti(n=26, big=false){
 
 /* ---------------- quiz state ---------------- */
 let queue=[], idx=0, score=0, curSet="maa", answered=false;
+let tnMissed=[], tnTotal=0, tnFixed=0, tnRound=0;   // Repeat mistakes (tone test)
 
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
@@ -1369,7 +1385,7 @@ function buildLegend(){
 function startSet(set){
   curSet=set;
   const base = set==="mix" ? shuffle(ALLWORDS).slice(0,10) : SETS[set];
-  queue=shuffle(base); idx=0; score=0;
+  queue=shuffle(base); idx=0; score=0; tnMissed=[]; tnTotal=queue.length; tnFixed=0; tnRound=0;
   show("quiz");
   renderQ();
 }
@@ -1408,7 +1424,7 @@ function choose(tone, btn){
     else el.classList.add("dim");
     el.style.pointerEvents="none";
   });
-  if(correct){ score++; confetti(20); }
+  if(correct){ score++; confetti(20); if(tnRound>0) tnFixed++; } else tnMissed.push(q);
   document.getElementById("scoreInline").textContent="· "+score+" correct";
   document.getElementById("progbar").style.width=((idx+1)/queue.length*100)+"%";
   showReveal(correct, q);
@@ -1457,7 +1473,7 @@ function next(){
 
 function finish(){
   show("result");
-  const total=queue.length, pct=score/total;
+  const total=tnTotal||queue.length, pct=score/total;
   document.getElementById("rScore").textContent=score;
   document.getElementById("rTotal").textContent=total;
   const stars = pct>=1?5 : pct>=.8?4 : pct>=.6?3 : pct>=.4?2 : 1;
@@ -1473,8 +1489,18 @@ function finish(){
   document.getElementById("rTitle").textContent=title;
   document.getElementById("rMsg").innerHTML='<span class="th">'+th+'</span> · <span class="rm">'+rom+'</span><br>'+en;
   if(pct>=.8){ confetti(40,true); setTimeout(()=>confetti(30,true),300); }
-  scMount("sc_tone", ()=>({ game:"Tone Test · "+(SETLABEL[curSet]||curSet), score:score, total:queue.length }));
+  const rb=document.getElementById("rRepeat"), rn=document.getElementById("rRepNote");
+  if(tnMissed.length){ rb.style.display=""; rb.textContent="🔁 Repeat mistakes ("+tnMissed.length+")"; } else rb.style.display="none";
+  rn.innerHTML = tnRound>0
+    ? '✅ '+(score-tnFixed)+' right first time + <b>'+tnFixed+' fixed</b> by repeating'+(tnMissed.length?' · '+tnMissed.length+' still to fix':' — all done! 🎉')
+    : (tnMissed.length ? 'Tap <b>Repeat mistakes</b> to practise the '+tnMissed.length+' you missed — if you get them right, they are added to your score 💪' : '');
+  scMount("sc_tone", ()=>({ game:"Tone Test · "+(SETLABEL[curSet]||curSet), score:score, total:total,
+    detail: tnRound>0 ? ("Repeated mistakes: "+(score-tnFixed)+" right first time + "+tnFixed+" fixed on repeat") : "" }));
 }
+
+document.getElementById("rRepeat").onclick=()=>{
+  queue = shuffle(tnMissed.slice()); tnMissed=[]; tnRound++; idx=0; show("quiz"); renderQ();
+};
 
 /* ---------------- practice + mode ---------------- */
 let mode="practice";
@@ -1705,6 +1731,7 @@ const PG_SETS = {
     {th:"ไกล", rom:"Glai", en:"Far", pic:"🏔️"},
     {th:"ใกล้หรือไกล", rom:"Glâi rǔe glai?", en:"Near or far?", pic:"🤔"},
     {th:"ใกล้ไหม", rom:"Glâi mǎi?", en:"Is it near?", pic:"❓"},
+    {th:"ไกลไหม", rom:"Glai mǎi?", en:"Is it far?", pic:"❓"},
   ],
   questwords: [
     {th:"อะไร", rom:"à-rai", en:"What?", pic:"❔"},
@@ -2288,6 +2315,17 @@ const PG_GROUPS_SENT = [
 let pgMode="practice", pgSetKey="greet";
 let ppList=[], ppIdx=0;
 let pgQueue=[], pgIdx=0, pgScore=0, pgAnswered=false;
+// "Repeat mistakes": wrong answers are collected; repeating them and getting them right ADDS to the same score
+const PG_MAX = 20;   // each Word / Sentence game = at most 20 random questions (smaller sets ask everything)
+let pgMissed=[], pgTotal=0, pgFixed=0, pgRound=0;
+function pgBeginRun(){ if(pgQueue.length>PG_MAX) pgQueue = shuffle(pgQueue).slice(0,PG_MAX); pgTotal=pgQueue.length; pgMissed=[]; pgFixed=0; pgRound=0; }
+function pgNoteResult(q, ok){ if(ok){ if(pgRound>0) pgFixed++; } else pgMissed.push(q); }
+function pgRepeatMistakes(){
+  const again = pgMissed.slice(); pgMissed = []; pgRound++;
+  again.forEach(q=>{ if(q.choices && !q.kind) q.choices = shuffle(q.choices); });
+  pgQueue = shuffle(again); pgIdx = 0;
+  show("pgame"); renderPG();
+}
 
 /* ---------- set menu ---------- */
 function pgCardClickHandler(m){
@@ -2463,11 +2501,14 @@ function startPgGame(key, mode){
   // every word / sentence of the set (or of the whole mix) is asked, once each, so students drill it all
   const n = pool.length;
   pgQueue = shuffle(pool).slice(0,n).map(w=> makeQ(w, pool, "pic"));
-  pgIdx=0; pgScore=0; show("pgame"); renderPG();
+  // Directions also drills Near-or-Far by SOUND (Glâi vs Glai): mixed in with the word questions
+  if(key==="directions") pgQueue = shuffle(pgQueue.concat(nfQuestions()));
+  pgIdx=0; pgScore=0; pgBeginRun(); show("pgame"); renderPG();
 }
 
 function renderPG(){
   const q0 = pgQueue[pgIdx];
+  if(q0 && q0.kind && q0.kind.indexOf('nf')===0) return nfRender();
   if(q0 && q0.kind) return clRender();
   renderPGWord();
 }
@@ -2505,6 +2546,7 @@ function pgChoose(c,q){
     el.style.pointerEvents="none";
   });
   if(c.correct){ pgScore++; confetti(18); markWordCorrect(q.w.th); }
+  pgNoteResult(q, !!c.correct);
   document.getElementById("pgProg").style.width=((pgIdx+1)/pgQueue.length*100)+"%";
   const slot=document.getElementById("pgReveal");
   slot.innerHTML=
@@ -2522,7 +2564,7 @@ function pgChoose(c,q){
 
 function pgFinish(){
   show("pgresult");
-  const total=pgQueue.length, pct=pgScore/total;
+  const total=pgTotal||pgQueue.length, pct=pgScore/total;
   document.getElementById("pgrScore").textContent=pgScore;
   document.getElementById("pgrTotal").textContent=total;
   const stars = pct>=1?5 : pct>=.8?4 : pct>=.6?3 : pct>=.4?2 : 1;
@@ -2537,8 +2579,17 @@ function pgFinish(){
   document.getElementById("pgrTitle").textContent=title;
   document.getElementById("pgrMsg").innerHTML='<span class="th">'+th+'</span> · <span class="rm">'+rom+'</span><br>'+en;
   if(pct>=.8){ confetti(38,true); setTimeout(()=>confetti(28,true),300); }
-  scMount("sc_pg", ()=>({ game:"Word Game · "+(PG_LABEL[pgSetKey]||pgSetKey), score:pgScore, total:pgQueue.length }));
+  // repeat-mistakes button + breakdown
+  const rb=document.getElementById("pgrRepeat"), rn=document.getElementById("pgrRepNote");
+  if(pgMissed.length){ rb.style.display=""; rb.textContent="🔁 Repeat mistakes ("+pgMissed.length+")"; }
+  else rb.style.display="none";
+  rn.innerHTML = pgRound>0
+    ? '✅ '+(pgScore-pgFixed)+' right first time + <b>'+pgFixed+' fixed</b> by repeating'+(pgMissed.length?' · '+pgMissed.length+' still to fix':' — all done! 🎉')
+    : (pgMissed.length ? '<div style="font-size:19px;font-weight:800;color:#e0556b;">❌ '+pgMissed.length+' wrong out of '+total+'</div>Repeat them now — if you get them right they are added to your score. Then send your score to Teacher Palm 💪' : '');
+  scMount("sc_pg", ()=>({ game:"Word Game · "+(PG_LABEL[pgSetKey]||pgSetKey), score:pgScore, total:total,
+    detail: pgRound>0 ? ("Repeated mistakes: "+(pgScore-pgFixed)+" right first time + "+pgFixed+" fixed on repeat") : "" }));
 }
+document.getElementById("pgrRepeat").onclick=()=>pgRepeatMistakes();
 document.getElementById("pgrAgain").onclick=()=>startPgGame(pgSetKey, lastGame);
 
 
@@ -2628,7 +2679,7 @@ function clStartGame(sentOnly){
     pgQueue = shuffle([].concat(
       pool.map(x=>({kind:"fill", item:x})),
       pool.map(x=>({kind:"wrong", item:clWrongFromFill(x)}))));
-    pgIdx = 0; pgScore = 0;
+    pgIdx = 0; pgScore = 0; pgBeginRun();
     show("pgame"); renderPG();
     return;
   }
@@ -2640,7 +2691,7 @@ function clStartGame(sentOnly){
   const fill  = shuffle(CL_FILL).map(x=>({kind:"fill",  item:x}));
   lastGame = "cl"; pgSetKey = "classifiers";
   pgQueue = shuffle([].concat(words, match, wrong, fill));
-  pgIdx = 0; pgScore = 0;
+  pgIdx = 0; pgScore = 0; pgBeginRun();
   show("pgame"); renderPG();
 }
 function clChoices(q){
@@ -2687,6 +2738,7 @@ function clChoose(c, q, opts){
     el.style.pointerEvents = "none";
   });
   if(ok){ pgScore++; confetti(18); }
+  pgNoteResult(q, ok);
   document.getElementById("pgProg").style.width = ((pgIdx+1)/pgQueue.length*100)+"%";
   const last = pgIdx+1>=pgQueue.length, slot = document.getElementById("pgReveal");
   slot.innerHTML =
@@ -2704,6 +2756,113 @@ function clChoose(c, q, opts){
   document.getElementById("clNext").onclick = ()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
   setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
   setTimeout(()=>speak(it.th), 350);   // one automatic play of the full correct phrase
+}
+
+/* ---------- Near or Far? (ใกล้ / ไกล) — answered by SOUND, inside the Directions game ---------- */
+const NF_SCENES = [{a:"🏠",b:"📍"},{a:"👩",b:"☕"},{a:"🏨",b:"🚉"},{a:"🏫",b:"🏪"}];
+const NF_WORD = {
+  near:{k:"near", th:"ใกล้", rom:"Glâi", en:"Near"},
+  far: {k:"far",  th:"ไกล",  rom:"Glai", en:"Far"}
+};
+function nfScene(sc,k){ return k==="near" ? sc.a+sc.b : sc.a+" ——— "+sc.b; }
+function nfQuestions(){
+  // for every scene, both its near and far version, asked 3 ways = 24 questions
+  const out=[];
+  NF_SCENES.forEach(sc=>["near","far"].forEach((k,i)=>{
+    out.push({kind:"nfsound", sc, k});                        // see the picture → hear two answers → pick the right sound
+    out.push({kind:"nfhear",  sc, k});                        // hear the word → pick the picture
+    out.push({kind:"nfq",     sc, k, ask: (Math.random()<.5)?"near":"far"});  // hear "Glâi mǎi? / Glai mǎi?" → answer
+  }));
+  return out;
+}
+function nfAskTh(q){ return (q.ask==="near"?"ใกล้":"ไกล")+"ไหม"; }
+function nfAskRom(q){ return (q.ask==="near"?"Glâi":"Glai")+" mǎi?"; }
+function nfRender(){
+  pgAnswered = false;
+  const q = pgQueue[pgIdx];
+  const pic=document.getElementById("pgPic"), meaning=document.getElementById("pgMeaning"), host=document.getElementById("pgChoices");
+  document.getElementById("pgCount").textContent = (pgIdx+1)+" / "+pgQueue.length;
+  document.getElementById("pgProg").style.width = (pgIdx/pgQueue.length*100)+"%";
+  document.getElementById("pgReveal").innerHTML = ""; host.innerHTML = "";
+  pic.style.display="block"; meaning.style.display="block";
+  const order = shuffle([NF_WORD.near, NF_WORD.far]);
+  const pick = (w)=> nfChoose(w, q);
+  if(q.kind==="nfsound"){
+    document.getElementById("pgKicker").textContent = "👂 Listen to the answers — which one is right?";
+    pic.innerHTML = '<div class="nf-bigscene">'+nfScene(q.sc,q.k)+'</div>';
+    meaning.innerHTML = '<div class="nf-ask">ใกล้หรือไกล?</div><div class="nf-askrom">Glâi rǔe glai?</div><div class="cl-hint">Near or far? Tap 🔊 to hear each answer, then choose.</div>';
+    order.forEach((w,i)=>{
+      const row=document.createElement("div"); row.className="nf-row";
+      const sp=document.createElement("button"); sp.className="nf-spk"; sp.textContent="🔊"; sp.title="Hear answer "+LETTERS_PG[i];
+      sp.onclick=(e)=>{ e.stopPropagation(); speak(w.th, undefined, true); };
+      const b=document.createElement("button"); b.className="choice"; b.dataset.k=w.k;
+      b.innerHTML='<span class="ltr">'+LETTERS_PG[i]+'</span><span><span class="cth">Choose '+LETTERS_PG[i]+'</span></span>';
+      b.onclick=()=>pick(w);
+      row.appendChild(sp); row.appendChild(b); host.appendChild(row);
+    });
+  } else if(q.kind==="nfhear"){
+    document.getElementById("pgKicker").textContent = "👂 Listen — which picture is it?";
+    pic.innerHTML = '<button class="nf-listen" id="nfPlay"><span class="ic">🔊</span>Tap to hear</button>';
+    meaning.innerHTML = '<div class="cl-hint">Glâi (near) or Glai (far)? Pick the matching picture.</div>';
+    document.getElementById("nfPlay").onclick=()=> speak(NF_WORD[q.k].th, undefined, true);
+    order.forEach((w,i)=>{
+      const b=document.createElement("button"); b.className="choice"; b.dataset.k=w.k;
+      b.innerHTML='<span class="ltr">'+LETTERS_PG[i]+'</span><span><span class="cth nf-scene">'+nfScene(q.sc,w.k)+'</span></span>';
+      b.onclick=()=>pick(w); host.appendChild(b);
+    });
+    setTimeout(()=>{ if(pgQueue[pgIdx]===q) speak(NF_WORD[q.k].th); }, 250);
+  } else { // nfq
+    document.getElementById("pgKicker").textContent = "❓ Listen to the question — then answer";
+    pic.innerHTML = '<div class="nf-bigscene">'+nfScene(q.sc,q.k)+'</div>';
+    meaning.innerHTML = '<button class="nf-listen" id="nfPlay"><span class="ic">🔊</span>Tap to hear the question</button><div class="nf-ask">'+nfAskTh(q)+'</div><div class="nf-askrom">'+nfAskRom(q)+'</div><div class="cl-hint">'+(q.ask==="near"?"Is it near?":"Is it far?")+'</div>';
+    document.getElementById("nfPlay").onclick=()=> speak(nfAskTh(q), undefined, true);
+    order.forEach((w,i)=>{
+      const b=document.createElement("button"); b.className="choice"; b.dataset.k=w.k;
+      b.innerHTML='<span class="ltr">'+LETTERS_PG[i]+'</span><span><span class="cth">'+w.th+'</span><br><span class="crom big">'+w.rom+'</span></span>';
+      b.onclick=()=>pick(w); host.appendChild(b);
+    });
+    setTimeout(()=>{ if(pgQueue[pgIdx]===q) speak(nfAskTh(q)); }, 250);
+  }
+}
+function nfChoose(w, q){
+  if(pgAnswered) return; pgAnswered = true;
+  const ok = w.k===q.k, right = NF_WORD[q.k];
+  [...document.querySelectorAll("#pgChoices .choice")].forEach(el=>{
+    if(el.dataset.k===q.k) el.classList.add("correct");
+    else if(el.dataset.k===w.k) el.classList.add("wrong");
+    else el.classList.add("dim");
+    el.style.pointerEvents = "none";
+  });
+  document.querySelectorAll("#pgChoices .nf-spk").forEach(b=>{ b.disabled=false; });
+  // after answering, show the Thai on the sound-only choices
+  if(q.kind==="nfsound"){
+    [...document.querySelectorAll("#pgChoices .choice")].forEach(el=>{
+      const ww = NF_WORD[el.dataset.k];
+      el.querySelector(".cth").innerHTML = ww.th+'<br><span class="crom big">'+ww.rom+'</span>';
+    });
+  }
+  if(ok){ pgScore++; confetti(18); }
+  pgNoteResult(q, ok);
+  document.getElementById("pgProg").style.width = ((pgIdx+1)/pgQueue.length*100)+"%";
+  const last = pgIdx+1>=pgQueue.length, slot = document.getElementById("pgReveal");
+  const sentence = q.kind==="nfq";
+  const sayTh = sentence ? right.th : right.th;
+  slot.innerHTML =
+    '<div class="reveal">'+
+      '<div class="verdict" style="color:'+(ok?"#2f9e59":"#e0556b")+'">'+(ok ? "✓ Correct!" : "✗ Not quite")+'</div>'+
+      '<div class="nf-bigscene" style="font-size:44px;margin-top:4px;">'+nfScene(q.sc,q.k)+'</div>'+
+      '<div class="cl-fixed">'+right.th+'</div>'+
+      '<div class="rev-rom big">'+right.rom+'</div>'+
+      '<div class="rev-en">'+right.en+(sentence ? ' — '+(q.k==="near"?"it\'s near":"it\'s far") : '')+'</div>'+
+      '<div class="cl-hint" style="margin-top:6px;">'+(q.k==="near"?"Glâi = falling tone ↘":"Glai = mid tone →")+'</div>'+
+      '<div class="soundrow"><button class="soundbtn voice" id="nfHear">🗣️ Hear it</button><button class="soundbtn slow" id="nfSlow">🐢 Slow</button></div>'+
+      '<button class="nextbtn" id="nfNext">'+(last?"See results":"Next →")+'</button>'+
+    '</div>';
+  document.getElementById("nfHear").onclick = ()=> speak(sayTh, undefined, true);
+  document.getElementById("nfSlow").onclick = ()=> speakSlow(sayTh);
+  document.getElementById("nfNext").onclick = ()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
+  setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
+  setTimeout(()=>speak(sayTh), 350);
 }
 
 /* ---------- nav ---------- */
@@ -4087,7 +4246,7 @@ function alRenderLesson(){
 function alStartQuiz(kind){
   const pool = alLetters(alLesson);
   const n = kind==="class" ? AL_DATA.length : alQCount(alLesson);
-  alQ = {kind, qs: shuffle(pool).slice(0,n), i:0, score:0, done:false, opts:[]};
+  alQ = {kind, qs: shuffle(pool).slice(0,n), i:0, score:0, done:false, opts:[], total:n, missed:[], fixed:0, round:0};
   alView="quiz"; alRender();
 }
 function alOptionsFor(q){
@@ -4129,7 +4288,7 @@ function alAnswer(i){
   const Q=alQ; if(Q.done) return;
   Q.done = true;
   const q=Q.qs[Q.i], opts=Q.opts[Q.i], isCls = Q.kind==="class", same = o => isCls ? o.k===q.c : o.l===q.l, ok = same(opts[i]);
-  if(ok) Q.score++;
+  if(ok){ Q.score++; if(Q.round>0) Q.fixed++; } else (Q.missed=Q.missed||[]).push(q);
   document.querySelectorAll("#alBody .al-opt").forEach((b,k)=>{
     b.disabled = true;
     if(same(opts[k])) b.classList.add("right"); else if(k===i) b.classList.add("wrong");
@@ -4153,15 +4312,18 @@ function alFinish(){
   alView="result"; alRender();
 }
 function alRenderResult(){
-  const Q=alQ, n=Q.qs.length, great = Q.score===n;
+  const Q=alQ, n=Q.total||Q.qs.length, great = Q.score===n, miss=(Q.missed||[]).length;
   $al("alSub").textContent = "Result";
   $al("alBody").innerHTML = `<div class="al-card">
       <div class="al-emoji">${great?"🎉":Q.score>=n/2?"👏":"💪"}</div>
       <div class="al-score">${Q.score} / ${n}</div>
       <div class="al-en" style="font-size:19px">${great?"Perfect! All letters correct":Q.score>=n/2?"Nice work — keep going":"Keep practising, you will get it"}</div>
-      <div class="al-row"><button class="al-btn next" id="alAgain">🔁 Try again</button></div>
+      ${Q.round>0 ? `<div class="al-en" style="font-size:15px">✅ ${Q.score-Q.fixed} right first time + <b>${Q.fixed} fixed</b> by repeating${miss?` · ${miss} still to fix`:" — all done! 🎉"}</div>` : (miss ? `<div class="al-en" style="font-size:15px">Practise the ${miss} you missed — if you get them right, they are added to your score 💪</div>` : "")}
+      ${miss ? `<div class="al-row"><button class="al-btn next" id="alRepeat">🔁 Repeat mistakes (${miss})</button></div>` : ""}
+      <div class="al-row"><button class="al-btn ${miss?"ghost":"next"}" id="alAgain">🔁 Try again</button></div>
       <div class="al-row"><button class="al-btn ghost" id="alToLesson">${Q.kind==="class"?"Back to menu":"Back to letters"}</button><button class="al-btn ghost" id="alToMenu">All lessons</button></div></div>` + scCardHTML("sc_al");
-  scMount("sc_al", ()=>({ game:"Thai Alphabet · "+({listen:"Listen & pick",pic:"Picture → letter",letter:"Letter → picture",class:"Which class?"}[Q.kind]||Q.kind)+" · "+(alLesson===-1?"All 44 letters":AL_CLS_LESSON[alLesson]?AL_CLASS[AL_CLS_LESSON[alLesson]].n:"Lesson "+(alLesson+1)), score:Q.score, total:n }));
+  scMount("sc_al", ()=>({ game:"Thai Alphabet · "+({listen:"Listen & pick",pic:"Picture → letter",letter:"Letter → picture",class:"Which class?"}[Q.kind]||Q.kind)+" · "+(alLesson===-1?"All 44 letters":AL_CLS_LESSON[alLesson]?AL_CLASS[AL_CLS_LESSON[alLesson]].n:"Lesson "+(alLesson+1)), score:Q.score, total:n, detail: Q.round>0 ? ("Repeated mistakes: "+(Q.score-Q.fixed)+" right first time + "+Q.fixed+" fixed on repeat") : "" }));
+  if($al("alRepeat")) $al("alRepeat").onclick=()=>{ Q.qs=shuffle(Q.missed); Q.missed=[]; Q.i=0; Q.opts=[]; Q.done=false; Q.round++; alView="quiz"; alRender(); };
   $al("alAgain").onclick=()=>alStartQuiz(Q.kind);
   $al("alToLesson").onclick=()=>{ if(Q.kind==="class"){ alView="menu"; } else { alView="lesson"; alMode="learn"; } alRender(); };
   $al("alToMenu").onclick=()=>{ alView="menu"; alRender(); };
