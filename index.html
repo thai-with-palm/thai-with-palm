@@ -621,6 +621,9 @@
   .cl-wrongrom{ font-weight:800; color:#e0556b; font-size:25px; line-height:1.3; }
   .choice .crom.big{ font-size:25px; }
   .rev-rom.big{ font-size:25px; font-weight:800; }
+  .mchip{ display:block; margin:0 auto 8px; border:none; cursor:pointer; background:#ffe4e8; color:#c0334d; font-weight:800; font-size:14px;
+    padding:8px 16px; border-radius:999px; box-shadow:var(--shadow-sm); font-family:var(--sans); }
+  .mchip:active{ transform:scale(.97); }
   .nf-scene{ font-size:34px; line-height:1.3; letter-spacing:2px; }
   .nf-bigscene{ font-size:54px; line-height:1.25; white-space:nowrap; }
   .nf-ask{ font-family:var(--thai); font-weight:700; font-size:30px; color:var(--ink); margin-top:6px; }
@@ -994,6 +997,7 @@
       <div class="hubtitle">🧩 Build the Sentence</div>
     </div>
     <div class="sb-topiclabel" id="sbTopicLabel">🧩 Sentences</div>
+    <button class="mchip" id="sbMChip" style="display:none;"></button>
     <div class="sv-progress" id="sbProgress">Sentence 1 of 13</div>
     <div class="sb-prompt" id="sbPrompt">What's your name?</div>
 
@@ -1019,7 +1023,8 @@
         <div class="sv-stat"><span class="n" id="sbrGood">10</span><span class="l">Got it first try</span></div>
         <div class="sv-stat"><span class="n" id="sbrRetry">3</span><span class="l">Needed a retry</span></div>
       </div>
-      <p>Nicely done putting those sentences together!</p>
+      <div id="sbrNote" style="margin:8px 0;"></div>
+      <button class="sv-continuebtn" id="sbrRepeat" style="display:none;background:var(--kara);margin-bottom:10px;">🔁 Repeat mistakes</button>
       <div class="sc-card" id="sc_sb"></div>
       <button class="sv-continuebtn" data-go="pghome">Back to Sentences Practice</button>
     </div>
@@ -1053,6 +1058,7 @@
       <div class="progwrap"><div class="progbar" id="pgProg"></div></div>
       <div class="qcount" id="pgCount">1 / 8</div>
     </div>
+    <button class="mchip" id="pgMChip" style="display:none;"></button>
     <div class="kicker2" id="pgKicker">Look at the picture — which word is it?</div>
     <div class="piccard">
       <div class="pic-big" id="pgPic">👋</div>
@@ -2317,15 +2323,32 @@ let ppList=[], ppIdx=0;
 let pgQueue=[], pgIdx=0, pgScore=0, pgAnswered=false;
 // "Repeat mistakes": wrong answers are collected; repeating them and getting them right ADDS to the same score
 const PG_MAX = 20;   // each Word / Sentence game = at most 20 random questions (smaller sets ask everything)
-let pgMissed=[], pgTotal=0, pgFixed=0, pgRound=0;
-function pgBeginRun(){ if(pgQueue.length>PG_MAX) pgQueue = shuffle(pgQueue).slice(0,PG_MAX); pgTotal=pgQueue.length; pgMissed=[]; pgFixed=0; pgRound=0; }
-function pgNoteResult(q, ok){ if(ok){ if(pgRound>0) pgFixed++; } else pgMissed.push(q); }
+let pgMissed=[], pgTotal=0, pgFixed=0, pgRepeated=false, pgInRepeat=false, pgSaved=null;
+function pgBeginRun(){ if(pgQueue.length>PG_MAX) pgQueue = shuffle(pgQueue).slice(0,PG_MAX); pgTotal=pgQueue.length; pgMissed=[]; pgFixed=0; pgRepeated=false; pgInRepeat=false; pgSaved=null; }
+function pgChipUpdate(){
+  const c=document.getElementById("pgMChip"); if(!c) return;
+  const n=pgMissed.length;
+  if(n && !pgInRepeat){ c.style.display=""; c.textContent="❌ "+n+" mistake"+(n>1?"s":"")+" · tap to repeat"; } else c.style.display="none";
+}
+function pgNoteResult(q, ok){ if(ok){ if(pgInRepeat) pgFixed++; } else pgMissed.push(q); pgChipUpdate(); }
+function pgIsLast(){ return pgIdx+1>=pgQueue.length && !(pgInRepeat && pgSaved && pgSaved.idx<pgSaved.queue.length); }
+function pgAdvance(){
+  pgIdx++;
+  if(pgIdx<pgQueue.length){ renderPG(); return; }
+  if(pgInRepeat && pgSaved && pgSaved.idx<pgSaved.queue.length){        // mistakes done → carry on with the game
+    pgQueue=pgSaved.queue; pgIdx=pgSaved.idx; pgSaved=null; pgInRepeat=false; renderPG(); return; }
+  pgSaved=null; pgInRepeat=false; pgFinish();
+}
 function pgRepeatMistakes(){
-  const again = pgMissed.slice(); pgMissed = []; pgRound++;
+  if(!pgMissed.length) return;
+  const midGame = !document.getElementById("pgame").classList.contains("hidden");
+  pgSaved = midGame ? {queue:pgQueue, idx: pgAnswered ? pgIdx+1 : pgIdx} : null;
+  const again = pgMissed.slice(); pgMissed = []; pgRepeated = true; pgInRepeat = true;
   again.forEach(q=>{ if(q.choices && !q.kind) q.choices = shuffle(q.choices); });
   pgQueue = shuffle(again); pgIdx = 0;
   show("pgame"); renderPG();
 }
+document.getElementById("pgMChip").onclick=()=>pgRepeatMistakes();
 
 /* ---------- set menu ---------- */
 function pgCardClickHandler(m){
@@ -2508,9 +2531,14 @@ function startPgGame(key, mode){
 
 function renderPG(){
   const q0 = pgQueue[pgIdx];
-  if(q0 && q0.kind && q0.kind.indexOf('nf')===0) return nfRender();
-  if(q0 && q0.kind) return clRender();
-  renderPGWord();
+  if(q0 && q0.kind && q0.kind.indexOf('nf')===0) nfRender();
+  else if(q0 && q0.kind) clRender();
+  else renderPGWord();
+  pgChipUpdate();
+  if(pgInRepeat){
+    document.getElementById("pgCount").textContent = "🔁 "+(pgIdx+1)+" / "+pgQueue.length;
+    const k=document.getElementById("pgKicker"); k.textContent = "🔁 Repeat mistake — "+k.textContent;
+  }
 }
 function renderPGWord(){
   pgAnswered=false;
@@ -2556,10 +2584,10 @@ function pgChoose(c,q){
       '<div class="rev-th">'+q.w.th+'</div>'+
       '<div class="rev-rom">'+q.w.rom+'</div>'+
       '<div class="rev-en">'+q.w.en+'</div>'+
-      '<button class="nextbtn" id="pgNext">'+(pgIdx+1<pgQueue.length?"Next →":"See results")+'</button>'+
+      '<button class="nextbtn" id="pgNext">'+(!pgIsLast()?"Next →":"See results")+'</button>'+
     '</div>';
   setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
-  document.getElementById("pgNext").onclick=()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
+  document.getElementById("pgNext").onclick=pgAdvance;
 }
 
 function pgFinish(){
@@ -2583,11 +2611,11 @@ function pgFinish(){
   const rb=document.getElementById("pgrRepeat"), rn=document.getElementById("pgrRepNote");
   if(pgMissed.length){ rb.style.display=""; rb.textContent="🔁 Repeat mistakes ("+pgMissed.length+")"; }
   else rb.style.display="none";
-  rn.innerHTML = pgRound>0
+  rn.innerHTML = pgRepeated
     ? '✅ '+(pgScore-pgFixed)+' right first time + <b>'+pgFixed+' fixed</b> by repeating'+(pgMissed.length?' · '+pgMissed.length+' still to fix':' — all done! 🎉')
     : (pgMissed.length ? '<div style="font-size:19px;font-weight:800;color:#e0556b;">❌ '+pgMissed.length+' wrong out of '+total+'</div>Repeat them now — if you get them right they are added to your score. Then send your score to Teacher Palm 💪' : '');
   scMount("sc_pg", ()=>({ game:"Word Game · "+(PG_LABEL[pgSetKey]||pgSetKey), score:pgScore, total:total,
-    detail: pgRound>0 ? ("Repeated mistakes: "+(pgScore-pgFixed)+" right first time + "+pgFixed+" fixed on repeat") : "" }));
+    detail: pgRepeated ? ("Repeated mistakes: "+(pgScore-pgFixed)+" right first time + "+pgFixed+" fixed on repeat") : "" }));
 }
 document.getElementById("pgrRepeat").onclick=()=>pgRepeatMistakes();
 document.getElementById("pgrAgain").onclick=()=>startPgGame(pgSetKey, lastGame);
@@ -2740,7 +2768,7 @@ function clChoose(c, q, opts){
   if(ok){ pgScore++; confetti(18); }
   pgNoteResult(q, ok);
   document.getElementById("pgProg").style.width = ((pgIdx+1)/pgQueue.length*100)+"%";
-  const last = pgIdx+1>=pgQueue.length, slot = document.getElementById("pgReveal");
+  const last = pgIsLast(), slot = document.getElementById("pgReveal");
   slot.innerHTML =
     '<div class="reveal">'+
       '<div class="verdict" style="color:'+(ok?"#2f9e59":"#e0556b")+'">'+(ok ? "✓ Correct!" : "✗ Not quite")+'</div>'+
@@ -2753,7 +2781,7 @@ function clChoose(c, q, opts){
     '</div>';
   document.getElementById("clHear").onclick = ()=> speak(it.th, undefined, true);
   document.getElementById("clSlow").onclick = ()=> speakSlow(it.th);
-  document.getElementById("clNext").onclick = ()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
+  document.getElementById("clNext").onclick = pgAdvance;
   setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
   setTimeout(()=>speak(it.th), 350);   // one automatic play of the full correct phrase
 }
@@ -2844,7 +2872,7 @@ function nfChoose(w, q){
   if(ok){ pgScore++; confetti(18); }
   pgNoteResult(q, ok);
   document.getElementById("pgProg").style.width = ((pgIdx+1)/pgQueue.length*100)+"%";
-  const last = pgIdx+1>=pgQueue.length, slot = document.getElementById("pgReveal");
+  const last = pgIsLast(), slot = document.getElementById("pgReveal");
   const sentence = q.kind==="nfq";
   const sayTh = sentence ? right.th : right.th;
   slot.innerHTML =
@@ -2860,7 +2888,7 @@ function nfChoose(w, q){
     '</div>';
   document.getElementById("nfHear").onclick = ()=> speak(sayTh, undefined, true);
   document.getElementById("nfSlow").onclick = ()=> speakSlow(sayTh);
-  document.getElementById("nfNext").onclick = ()=>{ pgIdx++; if(pgIdx<pgQueue.length) renderPG(); else pgFinish(); };
+  document.getElementById("nfNext").onclick = pgAdvance;
   setTimeout(()=>{ const r=slot.querySelector(".reveal"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); },60);
   setTimeout(()=>speak(sayTh), 350);
 }
@@ -3670,14 +3698,29 @@ document.getElementById("svrContinueBtn").onclick = ()=>{
    ========================================================== */
 
 let sbQueue=[], sbIdx=0, sbGoodCount=0, sbRetryCount=0;
+let sbMissed=[], sbFixed=0, sbTotal=0, sbRepeated=false, sbInRepeat=false, sbSaved=null;
+function sbChipUpdate(){
+  const c=document.getElementById("sbMChip"), n=sbMissed.length;
+  if(n && !sbInRepeat){ c.style.display=""; c.textContent="❌ "+n+" mistake"+(n>1?"s":"")+" · tap to repeat"; } else c.style.display="none";
+}
+function sbRepeatMistakes(){
+  if(!sbMissed.length) return;
+  const mid = !document.getElementById("sentbuilder").classList.contains("hidden");
+  const answered = document.getElementById("sbNextBtn").style.display!=="none";
+  sbSaved = mid ? {queue:sbQueue, idx: answered ? sbIdx+1 : sbIdx} : null;
+  sbQueue = svShuffle(sbMissed.slice()); sbMissed=[]; sbRepeated=true; sbInRepeat=true; sbIdx=0;
+  show("sentbuilder"); renderBuilderQ();
+}
+document.getElementById("sbMChip").onclick=()=>sbRepeatMistakes();
 let sbPlaced=[], sbHasRetried=false, sbChipEls=[];
 
 function startSentenceBuilder(key){
   const data = BUILDER_DATA_BY_KEY[key] || BUILDER_MIXED;
   window.sbKey = key;
   document.querySelector("#sentbuilder .back").dataset.go = key==="classifiers" ? "pghome" : "pghome";
-  sbQueue = svShuffle(data);
+  sbQueue = svShuffle(data).slice(0,PG_MAX);
   sbIdx = 0; sbGoodCount = 0; sbRetryCount = 0;
+  sbMissed=[]; sbFixed=0; sbTotal=sbQueue.length; sbRepeated=false; sbInRepeat=false; sbSaved=null;
   document.getElementById("sbTopicLabel").textContent = "🧩 " + (PG_LABEL[key] || "Mixed Sentences");
   show("sentbuilder");
   renderBuilderQ();
@@ -3687,7 +3730,8 @@ function renderBuilderQ(){
   const q = sbQueue[sbIdx];
   sbPlaced = []; sbHasRetried = false; sbChipEls = [];
 
-  document.getElementById("sbProgress").textContent = "Sentence "+(sbIdx+1)+" of "+sbQueue.length;
+  document.getElementById("sbProgress").textContent = sbInRepeat ? "🔁 Repeat mistake "+(sbIdx+1)+" of "+sbQueue.length : "Sentence "+(sbIdx+1)+" of "+sbQueue.length;
+  sbChipUpdate();
   document.getElementById("sbPrompt").textContent = q.en;
   document.getElementById("sbAnswerRow").innerHTML = "";
   document.getElementById("sbFeedback").textContent = "";
@@ -3731,7 +3775,8 @@ function sbCheckAnswer(){
   const fb = document.getElementById("sbFeedback");
 
   if(correct){
-    if(!sbHasRetried) sbGoodCount++; else sbRetryCount++;
+    if(!sbInRepeat){ if(!sbHasRetried) sbGoodCount++; else sbRetryCount++; }
+    else if(!sbHasRetried) sbFixed++;
     fb.textContent = "✅ Correct! Nicely assembled.";
     fb.className = "sb-feedback sb-fb-good";
     document.getElementById("sbNextBtn").style.display = "inline-block";
@@ -3746,7 +3791,8 @@ function sbCheckAnswer(){
     soundRow.children[0].onclick=()=> speak(fullThai, undefined, true);
     soundRow.children[1].onclick=()=> speakSlow(fullThai);
   } else {
-    sbHasRetried = true;
+    if(!sbHasRetried && !sbMissed.includes(q)) sbMissed.push(q);
+    sbHasRetried = true; sbChipUpdate();
     fb.textContent = "❌ Not quite the right order — try again!";
     fb.className = "sb-feedback sb-fb-bad";
     setTimeout(sbResetAttempt, 1200);
@@ -3764,19 +3810,29 @@ document.getElementById("sbResetBtn").onclick = sbResetAttempt;
 
 function sbNext(){
   sbIdx++;
-  if(sbIdx < sbQueue.length){ renderBuilderQ(); }
-  else {
-    document.getElementById("sbrGood").textContent = sbGoodCount;
-    document.getElementById("sbrRetry").textContent = sbRetryCount;
-    const rb = document.querySelector("#sentbuilderresult .sv-continuebtn");
-    if(window.sbKey==="classifiers"){ rb.textContent = "Back to Classifiers"; rb.dataset.go = "pghome"; }
-    else { rb.textContent = "Back to Sentences Practice"; rb.dataset.go = "pghome"; }
-    show("sentbuilderresult");
-    scMount("sc_sb", ()=>({ game:"Build the Sentence · "+(PG_LABEL[window.sbKey]||"Mixed Sentences"), score:sbGoodCount, total:sbQueue.length,
-      detail:sbGoodCount+" right first try, "+sbRetryCount+" needed a retry" }));
-    confetti(35, true);
-  }
+  if(sbIdx < sbQueue.length){ renderBuilderQ(); return; }
+  if(sbInRepeat && sbSaved && sbSaved.idx<sbSaved.queue.length){
+    sbQueue=sbSaved.queue; sbIdx=sbSaved.idx; sbSaved=null; sbInRepeat=false; renderBuilderQ(); return; }
+  sbSaved=null; sbInRepeat=false; sbShowResult();
 }
+function sbShowResult(){
+  const score = sbGoodCount + sbFixed, miss = sbMissed.length;
+  document.getElementById("sbrGood").textContent = sbGoodCount;
+  document.getElementById("sbrRetry").textContent = sbRetryCount;
+  const rb = document.querySelector("#sentbuilderresult .sv-continuebtn");
+  if(window.sbKey==="classifiers"){ rb.textContent = "Back to Classifiers"; rb.dataset.go = "pghome"; }
+  else { rb.textContent = "Back to Sentences Practice"; rb.dataset.go = "pghome"; }
+  const note=document.getElementById("sbrNote"), rep=document.getElementById("sbrRepeat");
+  note.innerHTML = '<div style="font-size:22px;font-weight:800;">Score: '+score+' / '+sbTotal+'</div>' +
+    (sbRepeated ? '<div class="cl-hint">✅ '+sbGoodCount+' right first try + <b>'+sbFixed+' fixed</b> by repeating'+(miss?' · '+miss+' still to fix':' — all done! 🎉')+'</div>'
+     : (miss ? '<div style="font-size:19px;font-weight:800;color:#e0556b;">❌ '+miss+' mistake'+(miss>1?'s':'')+' out of '+sbTotal+'</div><div class="cl-hint">Repeat them now — if you get them right they are added to your score. Then send your score to Teacher Palm 💪</div>' : ''));
+  if(miss){ rep.style.display=""; rep.textContent="🔁 Repeat mistakes ("+miss+")"; } else rep.style.display="none";
+  show("sentbuilderresult");
+  scMount("sc_sb", ()=>({ game:"Build the Sentence · "+(PG_LABEL[window.sbKey]||"Mixed Sentences"), score:sbGoodCount+sbFixed, total:sbTotal,
+    detail:sbGoodCount+" right first try, "+sbRetryCount+" needed a retry"+(sbRepeated?(" · "+sbFixed+" fixed on repeat"):"") }));
+  if(!miss) confetti(35, true);
+}
+document.getElementById("sbrRepeat").onclick=()=>sbRepeatMistakes();
 document.getElementById("sbNextBtn").onclick = sbNext;
 
 /* ==========================================================
