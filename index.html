@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@500;700&family=Sarabun:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --coral:#FF6B5C; --coral-d:#E7503F; --teal:#12A79E; --teal-d:#0E877F;
@@ -611,7 +611,7 @@
     color:#fff; font-weight:800; font-size:16px; padding:15px; border-radius:15px; box-shadow:var(--shadow-sm);
     font-family:var(--sans); }
   .sv-continuebtn:active{ transform:scale(.98); }
-  :root{ --loop:"Noto Sans Thai Looped","Mali","Itim","Mitr","Noto Sans Thai",sans-serif; }
+  :root{ --loop:"Sarabun","Noto Sans Thai Looped","Mali","Noto Sans Thai",sans-serif; }   /* Sarabun: clear open heads/curls (e.g. ซ) */
   /* ===== CLASSIFIER GAME ===== */
   .cl-blank{ display:inline-block; width:72px; height:1em; border-bottom:4px solid #E5567F; margin:0 6px; vertical-align:-2px; }
   .cl-fillth{ font-family:var(--thai); font-weight:600; font-size:30px; color:var(--ink); line-height:1.5; }
@@ -659,15 +659,15 @@
   .al-tab.active{ background:linear-gradient(135deg,#E5567F,#ff88a8); color:#fff; }
   .al-grid{ display:flex; gap:6px; margin-bottom:8px; overflow-x:auto; padding:2px 2px 4px; scrollbar-width:none; }
   .al-grid::-webkit-scrollbar{ display:none; }
-  .al-tile{ flex:1 0 38px; border:2px solid transparent; cursor:pointer; background:var(--white); border-radius:11px; height:42px; font-family:var(--loop); font-size:22px; line-height:1; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); padding:0; }
+  .al-tile{ flex:1 0 38px; border:2px solid transparent; cursor:pointer; background:var(--white); border-radius:11px; height:42px; font-family:var(--loop); font-size:25px; line-height:1; font-weight:700; color:var(--ink); box-shadow:var(--shadow-sm); padding:0; }
   .al-tile.sel{ border-color:#E5567F; background:#FFE9F0; }
   .al-card{ background:var(--white); border-radius:20px; box-shadow:var(--shadow); padding:10px 12px 12px; text-align:center; }
   .al-top{ display:flex; align-items:center; justify-content:center; gap:14px; }
-  .al-bigletter{ line-height:1.5; padding-bottom:14px; font-family:var(--loop); font-weight:700; font-size:92px; color:var(--kara); }
+  .al-bigletter{ line-height:1.5; padding-bottom:14px; font-family:var(--loop); font-weight:700; font-size:104px; color:var(--kara); }
   .al-emoji{ font-size:58px; line-height:1.15; }
   .al-top .al-emoji{ font-size:72px; }
   .al-en{ font-size:21px; font-weight:900; color:var(--ink); font-family:var(--sans); margin-top:0; line-height:1.2; }
-  .al-word{ font-family:var(--loop); font-size:23px; font-weight:700; color:var(--kara); margin-top:2px; line-height:1.4; }
+  .al-word{ font-family:var(--loop); font-size:26px; font-weight:700; color:var(--kara); margin-top:2px; line-height:1.4; }
   .al-rom{ font-size:14.5px; font-weight:800; color:var(--soft); font-family:var(--sans); }
   .al-meta{ display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:5px; font-weight:800; font-size:13px; color:var(--soft); }
   .al-note{ font-size:12px; font-weight:700; color:var(--coral-d); margin-top:3px; }
@@ -684,7 +684,7 @@
   .al-progress{ height:7px; border-radius:9px; background:#F0E3DB; margin:0 0 4px; overflow:hidden; }
   .al-progress i{ display:block; height:100%; background:linear-gradient(90deg,#E5567F,#ff88a8); border-radius:9px; transition:width .25s; }
   .al-prompt{ background:var(--white); border-radius:20px; box-shadow:var(--shadow); padding:10px 12px; text-align:center; margin-bottom:8px; }
-  .al-prompt .al-bigletter{ font-size:64px; padding-bottom:8px; line-height:1.45; }
+  .al-prompt .al-bigletter{ font-size:74px; padding-bottom:8px; line-height:1.45; }
   .al-prompt .al-emoji{ font-size:54px; }
   .al-listen{ padding:14px 12px 14px; }
   .al-listen .hint{ font-size:16px; color:var(--ink); margin-bottom:10px; }
@@ -697,7 +697,8 @@
   .al-prompt .hint{ font-weight:800; color:var(--soft); font-size:13.5px; margin-bottom:4px; font-family:var(--sans); }
   .al-hearbig{ border:none; cursor:pointer; width:92px; height:92px; border-radius:50%; font-size:42px; background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; box-shadow:var(--shadow-sm); }
   .al-opts{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .al-opt{ border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:16px; padding:4px 6px; box-shadow:var(--shadow-sm); font-family:var(--loop); font-size:38px; line-height:1.3; font-weight:700; color:var(--kara); min-height:64px; }
+  .al-opt{ position:relative; border:3px solid transparent; cursor:pointer; background:var(--white); border-radius:16px; padding:4px 6px; box-shadow:var(--shadow-sm); font-family:var(--loop); font-size:44px; line-height:1.3; font-weight:700; color:var(--kara); min-height:64px; }
+  .al-n{ position:absolute; top:5px; left:6px; width:22px; height:22px; border-radius:50%; background:#f0ece8; color:var(--soft); font:800 12px/22px var(--sans); font-style:normal; text-align:center; }
   .al-opt.pic{ font-family:var(--sans); color:var(--ink); font-size:13.5px; font-weight:800; line-height:1.15; }
   .al-opt.pic span{ display:block; font-size:34px; line-height:1.15; }
   .al-opt.right{ border-color:var(--teal); background:#E3F7F2; }
@@ -2500,7 +2501,7 @@ document.getElementById("ppNext").onclick=()=>{
 };
 
 /* ---------- GAME · picture / listening / mix ---------- */
-const LETTERS_PG=["A","B","C","D"];
+const LETTERS_PG=["1","2","3","4"];   // choices are numbered so students can say "number 2"
 let lastGame="pic";
 
 function makeQ(w, pool, type){
@@ -4326,10 +4327,10 @@ function alRenderQ(){
     h += `<div class="al-prompt"><div class="hint">Which picture belongs to this letter?</div><div class="al-bigletter">${q.l}</div></div>`;
   }
   h += `<div class="al-opts ${Q.kind==="class"?"cls":""}">${opts.map((o,i)=> Q.kind==="class"
-      ? `<button class="al-opt clsopt" data-i="${i}" style="background:${AL_CLASS[o.k].c};color:#fff">${AL_CLASS[o.k].n}</button>`
+      ? `<button class="al-opt clsopt" data-i="${i}" style="background:${AL_CLASS[o.k].c};color:#fff"><i class="al-n">${i+1}</i>${AL_CLASS[o.k].n}</button>`
       : Q.kind==="letter"
-      ? `<button class="al-opt pic" data-i="${i}"><span>${o.e}</span>${o.en}</button>`
-      : `<button class="al-opt" data-i="${i}">${o.l}</button>`).join("")}</div>`;
+      ? `<button class="al-opt pic" data-i="${i}"><i class="al-n">${i+1}</i><span>${o.e}</span>${o.en}</button>`
+      : `<button class="al-opt" data-i="${i}"><i class="al-n">${i+1}</i>${o.l}</button>`).join("")}</div>`;
   h += `<div class="al-fb" id="alFb"></div>`;
   $al("alBody").innerHTML = h;
   const body = $al("alBody");
