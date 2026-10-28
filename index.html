@@ -677,7 +677,7 @@
   .al-btn.next{ background:linear-gradient(135deg,#E5567F,#ff88a8); }
   .al-btn.ghost{ background:var(--white); color:var(--ink); }
   .al-btn:active{ transform:scale(.97); }
-  .al-anim{ height:170px; width:auto; max-width:60%; margin:0 auto; border-radius:14px; display:block; }
+  .al-anim{ height:140px; width:auto; max-width:60%; margin:0 auto; border-radius:14px; display:block; }
   .al-writebox{ display:block; width:100%; text-align:center; margin:2px 0 6px; background:none; border:none; padding:0; cursor:pointer; font-family:var(--sans); }
   .al-writecap{ background:#fff3e0; color:#d9631e; border-radius:999px; display:inline-block; padding:6px 14px; }
   #alWriteModal{ position:fixed; inset:0; z-index:9999; background:rgba(40,25,15,.62); display:flex; align-items:center; justify-content:center; padding:16px; }
@@ -4308,8 +4308,8 @@ function alRenderLesson(){
     <button class="al-tab" data-m="letter"><span>🔤</span>ก → Pic</button></div>`;
   h += `<div class="al-grid">${L.map((x,i)=>`<button class="al-tile ${i===alIdx?"sel":""}" data-i="${i}">${x.l}</button>`).join("")}</div>`;
   h += `<div class="al-card">
-      <div class="al-top"><div class="al-bigletter">${c.l}</div><div class="al-emoji">${c.e}</div></div>
       <button class="al-writebox" id="alWriteBtn"><img class="al-anim" id="alAnimImg" src="${alAnimSrc(c)}" alt="How to write ${c.l}"><div class="al-writecap">✍️ How to write · tap to enlarge</div></button>
+      <div class="al-top"><div class="al-bigletter">${c.l}</div><div class="al-emoji">${c.e}</div></div>
       <div class="al-en">${c.en}</div>
       <div class="al-word">${alName(c)} ${c.w}</div>
       <div class="al-rom">${alNameRom(c)} · ${c.rom}</div>
