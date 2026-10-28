@@ -286,6 +286,8 @@
     border-radius:50%; font-size:24px; box-shadow:0 4px 18px rgba(255,107,92,.35);
     transition:transform .15s, box-shadow .15s; display:flex; align-items:center; justify-content:center;
     animation:floatBounce 2.5s ease-in-out infinite 1.4s; flex-shrink:0; }
+  .fb-float{ touch-action:none; -webkit-user-select:none; user-select:none; }
+  .fb-float.fb-dragging{ animation:none; transform:scale(1.12); cursor:grabbing; }
   .fb-float:hover{ transform:scale(1.1); box-shadow:0 6px 24px rgba(255,107,92,.45); }
   .fb-float:active{ transform:scale(.93); animation:none; }
 
@@ -3002,8 +3004,42 @@ document.querySelectorAll(".fb-emoji-row").forEach(row=>{
   });
 });
 
+// floating button → drag it anywhere (so it never covers the arrows); a plain tap still opens feedback
+let fbJustDragged = false;
+(function(){
+  const wrap=document.getElementById("fbFloatWrap"), btn=document.getElementById("fbFloatBtn");
+  const KEY="twp_fb_pos";
+  function place(x,y){   // x,y = top-left of the wrap, clamped inside the screen
+    const w=wrap.offsetWidth, h=wrap.offsetHeight;
+    x=Math.max(4,Math.min(window.innerWidth-w-4,x)); y=Math.max(4,Math.min(window.innerHeight-h-4,y));
+    wrap.style.left=x+"px"; wrap.style.top=y+"px"; wrap.style.right="auto"; wrap.style.bottom="auto"; return [x,y];
+  }
+  try{ const p=JSON.parse(localStorage.getItem(KEY)||"null"); if(p){ document.getElementById("fbBubble").classList.add("fb-dismissed"); place(p[0],p[1]); } }catch(e){}
+  window.addEventListener("resize",()=>{ if(wrap.style.left){ place(parseFloat(wrap.style.left),parseFloat(wrap.style.top)); } });
+  let sx=0,sy=0,ox=0,oy=0,moved=false,down=false;
+  btn.addEventListener("pointerdown",e=>{
+    down=true; moved=false; sx=e.clientX; sy=e.clientY;
+    const r=wrap.getBoundingClientRect(); ox=r.left; oy=r.top;
+    try{ btn.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  btn.addEventListener("pointermove",e=>{
+    if(!down) return;
+    const dx=e.clientX-sx, dy=e.clientY-sy;
+    if(!moved && Math.hypot(dx,dy)<8) return;
+    if(!moved){ moved=true; btn.classList.add("fb-dragging"); document.getElementById("fbBubble").classList.add("fb-dismissed");
+      const r=btn.getBoundingClientRect(); ox=r.left; oy=r.top; }   // bubble is gone now: wrap == button
+    place(ox+dx, oy+dy); e.preventDefault();
+  });
+  const end=()=>{
+    if(!down) return; down=false; btn.classList.remove("fb-dragging");
+    if(moved){ fbJustDragged=true; setTimeout(()=>{ fbJustDragged=false; },350);
+      try{ localStorage.setItem(KEY, JSON.stringify([parseFloat(wrap.style.left),parseFloat(wrap.style.top)])); }catch(_){} }
+  };
+  btn.addEventListener("pointerup",end); btn.addEventListener("pointercancel",end);
+})();
 // floating button → open modal
 document.getElementById("fbFloatBtn").onclick = () => {
+  if(fbJustDragged) return;
   document.getElementById("fbBubble").classList.add("fb-dismissed");
   document.getElementById("fbOverlay").classList.remove("hidden");
 };
