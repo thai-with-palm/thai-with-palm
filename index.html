@@ -677,8 +677,9 @@
   .al-btn.next{ background:linear-gradient(135deg,#E5567F,#ff88a8); }
   .al-btn.ghost{ background:var(--white); color:var(--ink); }
   .al-btn:active{ transform:scale(.97); }
-  .al-anim{ height:168px; width:auto; max-width:60%; border-radius:14px; display:block; }
-  .al-writebtn{ display:block; width:100%; margin-top:8px; background:linear-gradient(135deg,#ffb347,#f0932b); }
+  .al-anim{ height:170px; width:auto; max-width:60%; margin:0 auto; border-radius:14px; display:block; }
+  .al-writebox{ text-align:center; margin:2px 0 6px; }
+  .al-writecap{ font-weight:800; font-size:13px; color:var(--soft); margin-top:4px; }
   .al-nav{ display:flex; align-items:center; margin-top:8px; gap:6px; }
   .al-nav .al-btn{ flex:1 1 0; padding:10px 4px; }
   .al-nav .al-btn.ghost{ flex:0 0 46px; }
@@ -4267,15 +4268,12 @@ function alRenderMenu(){
 
 /* ---- lesson: learn + 3 practice modes ---- */
 let alMode="learn";
-let alAnimFor=null;   // letter currently showing its "How to write" animation
 const alAnimSrc = c => "alphabet/anim/c"+String(AL_DATA.indexOf(c)+1).padStart(2,"0")+".gif";
 function alRenderLesson(){
   const L = alLetters(alLesson);
   $al("alSub").textContent = AL_CLS_LESSON[alLesson] ? AL_CLASS[AL_CLS_LESSON[alLesson]].n+" · "+L.length+" letters" : alLesson<0 ? "All 44 letters" : "Lesson "+(alLesson+1)+" · "+L.map(c=>c.l).join(" ");
   if(alIdx>=L.length) alIdx=0;
   const c = L[alIdx];
-  if(alAnimFor && alAnimFor!==c.l) alAnimFor=null;
-  const animOn = alAnimFor===c.l;
   let h = `<div class="al-tabs">
     <button class="al-tab ${alMode==="learn"?"active":""}" data-m="learn"><span>📖</span>Learn</button>
     <button class="al-tab" data-m="listen"><span>👂</span>Listen</button>
@@ -4283,13 +4281,13 @@ function alRenderLesson(){
     <button class="al-tab" data-m="letter"><span>🔤</span>ก → Pic</button></div>`;
   h += `<div class="al-grid">${L.map((x,i)=>`<button class="al-tile ${i===alIdx?"sel":""}" data-i="${i}">${x.l}</button>`).join("")}</div>`;
   h += `<div class="al-card">
-      <div class="al-top">${animOn ? `<img class="al-anim" id="alAnimImg" src="${alAnimSrc(c)}" alt="How to write ${c.l}">` : `<div class="al-bigletter">${c.l}</div>`}<div class="al-emoji">${c.e}</div></div>
+      <div class="al-top"><div class="al-bigletter">${c.l}</div><div class="al-emoji">${c.e}</div></div>
+      <div class="al-writebox"><img class="al-anim" id="alAnimImg" src="${alAnimSrc(c)}" alt="How to write ${c.l}"><div class="al-writecap">✍️ How to write</div></div>
       <div class="al-en">${c.en}</div>
       <div class="al-word">${alName(c)} ${c.w}</div>
       <div class="al-rom">${alNameRom(c)} · ${c.rom}</div>
       <div class="al-meta">${alTag(c)}<span>Sound: <b>${c.s}</b></span><span>· ${alIdx+1} / ${L.length}</span></div>
       ${c.rare?'<div class="al-note">Rarely used today — still part of the 44.</div>':''}
-      <button class="al-btn al-writebtn" id="alWriteBtn">${animOn ? "🔤 Show the letter" : "✍️ How to write"}</button>
       <div class="al-nav"><button class="al-btn ghost" id="alPrev">←</button><button class="al-btn" id="alHearBtn">🔊 Hear it</button><button class="al-btn slow" id="alSlowBtn">🐢 Slow</button><button class="al-btn ghost" id="alNext">→</button></div>
     </div>`;
   $al("alBody").innerHTML = h;
@@ -4298,7 +4296,6 @@ function alRenderLesson(){
   body.querySelectorAll(".al-tile").forEach(b=> b.onclick=()=>{ alIdx=+b.dataset.i; alRender(); alHear(alLetters(alLesson)[alIdx]); });
   const selT = body.querySelector(".al-tile.sel"), gridEl = body.querySelector(".al-grid");
   if(selT && gridEl) gridEl.scrollLeft = selT.offsetLeft - gridEl.clientWidth/2 + selT.offsetWidth/2;
-  $al("alWriteBtn").onclick=()=>{ alAnimFor = animOn ? null : c.l; alRender(); };
   $al("alHearBtn").onclick=()=>alHear(c);
   $al("alSlowBtn").onclick=()=>alSlow(c);
   $al("alPrev").onclick=()=>{ alIdx=(alIdx-1+L.length)%L.length; alRender(); alHear(L[alIdx]); };
