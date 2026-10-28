@@ -4279,21 +4279,15 @@ function alRenderMenu(){
 
 /* ---- lesson: learn + 3 practice modes ---- */
 let alMode="learn";
-const alStrokeSrc = c => "alphabet/strokes/c"+String(AL_DATA.indexOf(c)+1).padStart(2,"0")+".png";
 function alWriteOpen(c){
   let m=document.getElementById("alWriteModal");
   if(!m){ m=document.createElement("div"); m.id="alWriteModal"; m.className="hidden"; document.body.appendChild(m);
     m.onclick=e=>{ if(e.target===m) m.classList.add("hidden"); }; }
-  const show=(kind)=>{
-    m.innerHTML = `<div class="alw-box"><button class="alw-close" id="alwClose" aria-label="Close">✕</button>
-      <div class="alw-head">${c.l}</div><div class="alw-sub">✍️ How to write · ${alName(c)} ${c.w}</div>
-      <img class="alw-img" src="${kind==="still"?alStrokeSrc(c):alAnimSrc(c)}" alt="How to write ${c.l}">
-      <div class="alw-tabs"><button class="${kind==="anim"?"on":""}" id="alwAnim">▶ Watch</button><button class="${kind==="still"?"on":""}" id="alwStill">🖼️ Step guide</button></div></div>`;
-    document.getElementById("alwClose").onclick=()=>m.classList.add("hidden");
-    document.getElementById("alwAnim").onclick=()=>show("anim");
-    document.getElementById("alwStill").onclick=()=>show("still");
-  };
-  show("anim"); m.classList.remove("hidden");
+  m.innerHTML = `<div class="alw-box"><button class="alw-close" id="alwClose" aria-label="Close">✕</button>
+    <div class="alw-head">${c.l}</div><div class="alw-sub">✍️ How to write · ${alName(c)} ${c.w}</div>
+    <img class="alw-img" src="${alAnimSrc(c)}" alt="How to write ${c.l}"></div>`;
+  document.getElementById("alwClose").onclick=()=>m.classList.add("hidden");
+  m.classList.remove("hidden");
 }
 const alAnimSrc = c => "alphabet/anim/c"+String(AL_DATA.indexOf(c)+1).padStart(2,"0")+".gif";
 function alRenderLesson(){
