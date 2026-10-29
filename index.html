@@ -2135,7 +2135,7 @@ Object.assign(PG_SETS, {
     {th:"กิโล", rom:"gi-lo", en:"kilo", pic:"🏋️"},
     {th:"ครึ่งกิโล", rom:"khrûng gi-lo", en:"half a kilo", pic:"⚖️"},
     {th:"หนึ่งกิโล", rom:"nùng gi-lo", en:"one kilo", pic:"⚖️"},
-    {th:"กล่อง", rom:"glàorng", en:"carton / box", pic:"🥛"},
+    {th:"กล่อง", rom:"glàorng", en:"box", pic:"🥛"},
     {th:"ขวด", rom:"khùat", en:"bottle", pic:"🧴"},
     {th:"ฟอง", rom:"forng", en:"egg counter", pic:"🥚"},
     {th:"ลูก", rom:"lûuk", en:"round fruits counter", pic:"🍊"},
@@ -2247,7 +2247,7 @@ addWords("animals", [
   {th:"ปู", rom:"bpuu", en:"crab", pic:"🦀"},
 ]);
 addWords("classifiers", [
-  {th:"กล่อง", rom:"glàorng", en:"classifier: cartons / boxes", pic:"🥛"},
+  {th:"กล่อง", rom:"glàorng", en:"classifier: boxes", pic:"🥛"},
   {th:"ฟอง", rom:"forng", en:"classifier: eggs", pic:"🥚"},
   {th:"ลูก", rom:"lûuk", en:"classifier: round fruits", pic:"🍊"},
   {th:"ถุง", rom:"thǔng", en:"classifier: bags (of snacks)", pic:"🛍️"},
@@ -2284,7 +2284,7 @@ const CONV_RAW = {
     ["🥚","มีอะไรให้ช่วยไหมคะ","Mii à-rai hâi chûai mǎi khá?","Can I help you?","ไข่=Khài|อยู่=yùu|ที่ไหน=thîi nǎi|ครับ/คะ=khráp/khá","Where are the eggs?"],
     ["👉","ตรงไปแล้วเลี้ยวขวาค่ะ","Dtrong bpai láew líao khwǎa khâ.","Go straight, then turn right.","ตรงไป=Dtrong bpai|แล้ว=láew|เลี้ยวขวา=líao khwǎa|ใช่ไหม=châi mǎi|ครับ/คะ=khráp/khá","Straight, then right, correct?"],
     ["🍊","เอาส้มกี่กิโลคะ","Ao sôm gìi gi-lo khá?","How many kilos of oranges?","เอา=Ao|ส้ม=sôm|ครึ่งกิโล=khrûng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like half a kilo."],
-    ["🥛","เอานมกี่กล่องคะ","Ao nom gìi glàorng khá?","How many cartons of milk?","เอา=Ao|นม=nom|สอง=sǎorng|กล่อง=glàorng|ครับ/ค่ะ=khráp/khâ","I'd like two cartons."],
+    ["🥛","เอานมกี่กล่องคะ","Ao nom gìi glàorng khá?","How many boxes of milk?","เอา=Ao|นม=nom|สอง=sǎorng|กล่อง=glàorng|ครับ/ค่ะ=khráp/khâ","I'd like two boxes."],
     ["🧴","เอาน้ำกี่ขวดคะ","Ao náam gìi khùat khá?","How many bottles of water?","เอา=Ao|น้ำ=náam|สาม=sǎam|ขวด=khùat|ครับ/ค่ะ=khráp/khâ","I'd like three bottles."],
     ["🥩","เอาเนื้อกี่กิโลคะ","Ao néua gìi gi-lo khá?","How many kilos of meat?","เอา=Ao|เนื้อ=néua|ครึ่งกิโล=khrûng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like half a kilo."],
     ["🥬","เอาผักกี่กิโลคะ","Ao phàk gìi gi-lo khá?","How many kilos of vegetables?","เอา=Ao|ผัก=phàk|หนึ่งกิโล=nùng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like one kilo."],
@@ -3041,7 +3041,7 @@ const CL_TOOL = [
   {k:"thaan", th:"ท่าน", rom:"thâan", en:"people (polite)"},
   {k:"an",    th:"อัน",  rom:"an",    en:"general objects"},
   {k:"chin",  th:"ชิ้น", rom:"chín",  en:"pieces / items"},
-  {k:"glaawng", th:"กล่อง", rom:"glàorng", en:"cartons / boxes"},
+  {k:"glaawng", th:"กล่อง", rom:"glàorng", en:"boxes"},
   {k:"fong",  th:"ฟอง",  rom:"forng", en:"eggs"},
   {k:"luuk",  th:"ลูก",  rom:"lûuk",  en:"round fruits"},
   {k:"thung", th:"ถุง",  rom:"thǔng", en:"bags (of snacks)"},
@@ -3062,7 +3062,7 @@ const CL_MATCH = [
   {pic:"🍛", noun:"fried rice",      k:"jaan",  th:"ข้าวผัดหนึ่งจาน",  rom:"Khâao phàt nùeng jaan", en:"one plate of fried rice"},
   {pic:"🥚", noun:"eggs",            k:"fong",  th:"ไข่สามฟอง",       rom:"Khài sǎam forng",       en:"three eggs"},
   {pic:"🍊", noun:"oranges",         k:"luuk",  th:"ส้มสามลูก",       rom:"Sôm sǎam lûuk",         en:"three oranges"},
-  {pic:"🥛", noun:"milk",            k:"glaawng", th:"นมสองกล่อง",    rom:"Nom sǎorng glàorng",    en:"two cartons of milk"},
+  {pic:"🥛", noun:"milk",            k:"glaawng", th:"นมสองกล่อง",    rom:"Nom sǎorng glàorng",    en:"two boxes of milk"},
   {pic:"🍿", noun:"snacks",          k:"thung", th:"ขนมหนึ่งถุง",     rom:"Khà-nǒm nùng thǔng",    en:"one bag of snacks"},
   {pic:"🥩", noun:"meat",            k:"gilo",  th:"เนื้อหนึ่งกิโล",   rom:"Néua nùng gi-lo",       en:"one kilo of meat"},
 ];
@@ -3079,7 +3079,7 @@ const CL_WRONG = [
   {wk:"bai",   pic:"🍛", wth:"ข้าวผัดสองใบ",    wrom:"Khâao phàt sǎawng bai", k:"jaan",  th:"ข้าวผัดสองจาน",  rom:"Khâao phàt sǎawng jaan", en:"Two plates of fried rice"},
   {wk:"dtua",  pic:"🥚", wth:"ไข่สองตัว",       wrom:"Khài sǎorng dtua",      k:"fong",  th:"ไข่สองฟอง",      rom:"Khài sǎorng forng",     en:"Two eggs"},
   {wk:"khuat", pic:"🍊", wth:"ส้มสามขวด",       wrom:"Sôm sǎam khùat",        k:"luuk",  th:"ส้มสามลูก",      rom:"Sôm sǎam lûuk",         en:"Three oranges"},
-  {wk:"khan",  pic:"🥛", wth:"นมสองคัน",        wrom:"Nom sǎorng khan",       k:"glaawng", th:"นมสองกล่อง",   rom:"Nom sǎorng glàorng",    en:"Two cartons of milk"},
+  {wk:"khan",  pic:"🥛", wth:"นมสองคัน",        wrom:"Nom sǎorng khan",       k:"glaawng", th:"นมสองกล่อง",   rom:"Nom sǎorng glàorng",    en:"Two boxes of milk"},
   {wk:"dtua",  pic:"🍿", wth:"ขนมหนึ่งตัว",      wrom:"Khà-nǒm nùng dtua",     k:"thung", th:"ขนมหนึ่งถุง",    rom:"Khà-nǒm nùng thǔng",    en:"One bag of snacks"},
   {wk:"lem",   pic:"🥩", wth:"เนื้อหนึ่งเล่ม",    wrom:"Néua nùng lêm",         k:"gilo",  th:"เนื้อหนึ่งกิโล",  rom:"Néua nùng gi-lo",       en:"One kilo of meat"},
 ];
@@ -3101,7 +3101,7 @@ const CL_FILL = [
   {pic:"👥", pre:"มีเพื่อนกี่",     post:"",    rpre:"Mii phûean gìi",            rpost:"?",   k:"khon",  w:["dtua","khuat"], x:"gaew", en:"How many friends are there?"},
   {pic:"🥚", pre:"เอาไข่สาม",       post:"",    rpre:"Ao khài sǎam",              rpost:"",    k:"fong",  w:["khuat","lem"],  x:"khan", en:"I'll take three eggs."},
   {pic:"🍊", pre:"เอาส้มสาม",       post:"",    rpre:"Ao sôm sǎam",               rpost:"",    k:"luuk",  w:["khan","lem"],   x:"dtua", en:"I'll take three oranges."},
-  {pic:"🥛", pre:"เอานมสอง",        post:"",    rpre:"Ao nom sǎorng",             rpost:"",    k:"glaawng", w:["dtua","khan"], x:"lem", en:"I'd like two cartons of milk."},
+  {pic:"🥛", pre:"เอานมสอง",        post:"",    rpre:"Ao nom sǎorng",             rpost:"",    k:"glaawng", w:["dtua","khan"], x:"lem", en:"I'd like two boxes of milk."},
   {pic:"🍿", pre:"เอาขนมหนึ่ง",     post:"",    rpre:"Ao khà-nǒm nùng",           rpost:"",    k:"thung", w:["khan","dtua"],  x:"lem", en:"I'd like one bag of snacks."},
   {pic:"🥩", pre:"เอาเนื้อหนึ่ง",    post:"",    rpre:"Ao néua nùng",              rpost:"",    k:"gilo",  w:["khuat","lem"],  x:"dtua", en:"I'd like one kilo of meat."},
 ];
