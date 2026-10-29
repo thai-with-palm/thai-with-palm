@@ -532,6 +532,24 @@
   .sv-choice.sv-missed{ background:linear-gradient(135deg,#ffb23e,#ffcf7d); box-shadow:0 6px 18px rgba(255,178,62,.35); }
   .sv-choice.sv-missed .sv-crom, .sv-choice.sv-missed .sv-cth{ color:#5a3d00; }
 
+  .sv-tb4{ grid-template-columns:1fr 1fr; }
+  .sv-tb4 .sv-choice{ position:relative; padding:22px 8px 14px; }
+  .sv-tb4 .sv-crom{ font-size:17px; }
+  .sv-tb4 .sv-cth{ font-size:15px; color:var(--ink); margin-top:5px; overflow-wrap:anywhere; word-break:break-word; line-height:1.4; }
+  .sv-tb4 .sv-crom{ overflow-wrap:anywhere; }
+  .sv-tb4 .sv-choice.sv-picked .sv-cth, .sv-tb4 .sv-choice.sv-wrong-pick .sv-cth, .sv-tb4 .sv-choice.sv-correct-reveal .sv-cth{ color:#fff; }
+  .sv-num{ position:absolute; top:6px; left:8px; width:22px; height:22px; border-radius:50%; background:var(--peach);
+    color:var(--coral-d); font-weight:900; font-size:13px; display:flex; align-items:center; justify-content:center; }
+  .sv-bigspk{ appearance:none; border:none; cursor:pointer; font-size:46px; width:92px; height:92px; border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; box-shadow:var(--shadow-sm); margin:4px 0 8px; }
+  .sv-bigspk:active{ transform:scale(.94); }
+  .sv-hearbtn{ appearance:none; border:none; cursor:pointer; background:var(--peach); color:var(--coral-d); font-weight:800;
+    font-family:var(--sans); font-size:13px; padding:7px 14px; border-radius:999px; margin-top:10px; }
+  .sv-yn{ display:inline-block; margin-top:8px; background:var(--peach); color:var(--coral-d); font-weight:900; font-size:14px;
+    padding:4px 12px; border-radius:999px; }
+  .sv-reveal{ background:var(--white); border-radius:16px; box-shadow:var(--shadow-sm); padding:12px 14px; margin-top:12px;
+    font-size:15px; line-height:1.45; color:var(--ink); text-align:center; }
+  .sv-rv-row{ margin:3px 0; }
   .sv-feedback{ text-align:center; font-weight:800; font-size:15px; margin-top:14px; min-height:22px; color:var(--soft); }
   .sv-feedback.sv-fb-good{ color:#2f9e59; }
   .sv-feedback.sv-fb-miss{ color:#e0556b; }
@@ -823,7 +841,7 @@
   <section id="sevengame" class="hidden">
     <div class="topbar">
       <button class="back" data-go="pghome">←</button>
-      <div class="hubtitle">🏪 7-Eleven Challenge</div>
+      <div class="hubtitle" id="svTitle">🏪 7-Eleven Challenge</div>
     </div>
     <div class="sv-progress" id="svProgress">Round 1 of 16 <span id="svTypeBadge" class="sv-typebadge">⚡</span></div>
     <div class="sv-cyclelabel" id="svCycleLabel" style="display:none;"></div>
@@ -849,7 +867,7 @@
   <section id="sevencomplete" class="hidden">
     <div class="sv-resultcard">
       <div class="em">🎉</div>
-      <h2>7-Eleven Challenge Complete!</h2>
+      <h2 id="svcTitle">7-Eleven Challenge Complete!</h2>
       <p>You got every question right. Nice work — that's exactly the real-life Thai you'll use in the store!</p>
       <div class="sc-card" id="sc_svc"></div>
       <button class="sv-continuebtn" id="svAgainBtn">Play again</button>
@@ -2039,19 +2057,177 @@ const PG_SETS = {
     {th:"ใช่ครับ/ค่ะ", rom:"Châi khráp/khâ.", en:"Yes, that's right.", pic:"💵"},
   ],
 };
+// ---------- Ordering Food + Supermarket word sets (from the two Thai with Palm decks) ----------
+Object.assign(PG_SETS, {
+  foodmeat: [
+    {th:"ไก่", rom:"gài", en:"chicken", pic:"🍗"},
+    {th:"หมู", rom:"mǔu", en:"pork", pic:"🥓"},
+    {th:"เนื้อ", rom:"néua", en:"beef / meat", pic:"🥩"},
+    {th:"ปลา", rom:"bplaa", en:"fish", pic:"🐟"},
+    {th:"กุ้ง", rom:"gûng", en:"shrimp", pic:"🦐"},
+    {th:"ไข่", rom:"khài", en:"egg", pic:"🥚"},
+    {th:"ข้าว", rom:"khâao", en:"rice", pic:"🍚"},
+    {th:"ผัก", rom:"phàk", en:"vegetables", pic:"🥦"},
+    {th:"ผลไม้", rom:"phǒn-la-mái", en:"fruit", pic:"🍉"},
+    {th:"น้ำ", rom:"náam", en:"water", pic:"💧"},
+  ],
+  drinktable: [
+    {th:"น้ำเปล่า", rom:"náam bplàao", en:"plain water", pic:"💧"},
+    {th:"น้ำแข็ง", rom:"náam khǎeng", en:"ice", pic:"🧊"},
+    {th:"น้ำเย็น", rom:"náam yen", en:"cold water", pic:"🥤"},
+    {th:"กาแฟดำ", rom:"gaa-fae dam", en:"black coffee", pic:"☕"},
+    {th:"ส้อม", rom:"sâorm", en:"fork", pic:"🍴"},
+    {th:"ช้อน", rom:"cháorn", en:"spoon", pic:"🥄"},
+    {th:"แก้ว", rom:"gâew", en:"glass", pic:"🥛"},
+    {th:"ทิชชู่", rom:"chét-chûu", en:"tissue / napkin", pic:"🧻"},
+    {th:"กล่อง", rom:"glàwng", en:"to-go box", pic:"🥡"},
+  ],
+  tastecook: [
+    {th:"สุก", rom:"sùk", en:"well done / cooked", pic:"🔥"},
+    {th:"สุกปานกลาง", rom:"sùk bpaan-glaang", en:"medium (cooked)", pic:"🥩"},
+    {th:"ดิบ", rom:"dìp", en:"raw", pic:"🍣"},
+    {th:"เผ็ด", rom:"phèt", en:"spicy", pic:"🌶️"},
+    {th:"ไม่เผ็ด", rom:"mâi phèt", en:"not spicy", pic:"🚫"},
+    {th:"เผ็ดนิดหน่อย", rom:"phèt nít-nòi", en:"a little spicy", pic:"🤏"},
+    {th:"เปรี้ยว", rom:"bprîao", en:"sour", pic:"🍋"},
+    {th:"หวาน", rom:"wǎan", en:"sweet", pic:"🍬"},
+    {th:"เค็ม", rom:"khem", en:"salty", pic:"🧂"},
+    {th:"ขม", rom:"khǎm", en:"bitter", pic:"🍵"},
+    {th:"จืด", rom:"jùut", en:"mild, not much flavour", pic:"🥣"},
+    {th:"มัน", rom:"man", en:"rich, oily", pic:"🧈"},
+  ],
+  condiments: [
+    {th:"น้ำตาล", rom:"náam-dtaan", en:"sugar", pic:"🍬"},
+    {th:"พริก", rom:"phrík", en:"chili", pic:"🌶️"},
+    {th:"พริกป่น", rom:"phrík bpòn", en:"chili flakes", pic:"🔥"},
+    {th:"น้ำปลา", rom:"náam-bplaa", en:"fish sauce", pic:"🐟"},
+    {th:"น้ำส้มสายชู", rom:"náam-sôm-sǎai-chuu", en:"vinegar", pic:"🫙"},
+  ],
+  desserts: [
+    {th:"ข้าวเหนียวมะม่วง", rom:"khâao-nǐao má-mûang", en:"mango sticky rice", pic:"🥭"},
+    {th:"ขนมครก", rom:"khà-nǒm khrók", en:"coconut pancakes", pic:"🥞"},
+    {th:"ทับทิมกรอบ", rom:"tháp-thim gròp", en:"red rubies in coconut milk", pic:"🍧"},
+    {th:"ไอศกรีมกะทิ", rom:"ai-sà-khriim gà-thí", en:"coconut ice cream", pic:"🍨"},
+    {th:"กล้วยบวชชี", rom:"glûai bùat chii", en:"bananas in coconut milk", pic:"🍌"},
+    {th:"บัวลอย", rom:"bua loi", en:"coconut rice balls", pic:"🍡"},
+    {th:"ทองหยิบ", rom:"thorng yìp", en:"golden flowers (sweet)", pic:"🌼"},
+    {th:"ทองหยอด", rom:"thorng yàwt", en:"golden drops (sweet)", pic:"🟡"},
+    {th:"ฝอยทอง", rom:"fǎawy thorng", en:"golden threads (sweet)", pic:"🧵"},
+  ],
+  billpay: [
+    {th:"บิล", rom:"bin", en:"bill", pic:"🧾"},
+    {th:"ใบเสร็จ", rom:"bai-sèt", en:"receipt", pic:"📄"},
+    {th:"เงินทอน", rom:"ngern thorn", en:"change (money back)", pic:"🪙"},
+    {th:"เงินสด", rom:"ngern-sòt", en:"cash", pic:"💵"},
+    {th:"บัตร", rom:"bàt", en:"card", pic:"💳"},
+    {th:"คิวอาร์", rom:"khiu-aa", en:"QR code", pic:"📱"},
+    {th:"จ่ายแยก", rom:"jàai yàek", en:"pay separately", pic:"👥"},
+  ],
+  supermkt: [
+    {th:"ราคา", rom:"raa-khaa", en:"price", pic:"🏷️"},
+    {th:"แพง", rom:"phaeng", en:"expensive", pic:"💸"},
+    {th:"ถูก", rom:"thùuk", en:"cheap", pic:"🪙"},
+    {th:"เท่าไหร่", rom:"thâo-rài", en:"how much?", pic:"💰"},
+    {th:"สมาชิก", rom:"sà-maa-chík", en:"member", pic:"🪪"},
+    {th:"สลิป", rom:"sà-lìp", en:"receipt (slip)", pic:"🧾"},
+    {th:"ถุง", rom:"thǔng", en:"bag", pic:"🛍️"},
+    {th:"ครึ่งกิโล", rom:"khrûng gi-lo", en:"half a kilo", pic:"⚖️"},
+    {th:"หนึ่งกิโล", rom:"nùng gi-lo", en:"one kilo", pic:"⚖️"},
+    {th:"กิโล", rom:"gi-lo", en:"kilo", pic:"🏋️"},
+    {th:"ซื้อ", rom:"súue", en:"buy", pic:"🛒"},
+    {th:"หา", rom:"hǎa", en:"look for", pic:"🔍"},
+  ],
+});
+
+// ---------- Conversation sets: staff line -> your reply (used by Talk Back, Practice and Build it) ----------
+// pair = [emoji, staff Thai, staff rom, staff English, "reply chunks th=rom|th=rom", reply English, yes/no flag]
+const CONV_RAW = {
+  convfood: [
+    ["👥","กี่ท่านคะ","Gìi thâan khá?","How many people?","สอง=Sǎorng|ท่าน=thâan","Two people."],
+    ["🍗","รับอะไรดีคะ","Ráp à-rai dii khá?","What would you like?","เอา=Ao|ไก่=gài|ครับ/ค่ะ=khráp/khâ","I want chicken."],
+    ["🍛","เอาอะไรดีคะ","Ao à-rai dii khá?","What would you like to order?","เอา=Ao|ผัดกะเพรา=phàt kà-phrao|ครับ/ค่ะ=khráp/khâ","I want basil stir-fry."],
+    ["💧","เอาเครื่องดื่มอะไรคะ","Ao khrûeang-dùem à-rai khá?","What drink would you like?","เอา=Ao|น้ำเปล่า=náam bplàao|ครับ/ค่ะ=khráp/khâ","I'll have plain water."],
+    ["💧","เอาน้ำไหมคะ","Ao náam mǎi khá?","Do you want water?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, please.","y"],
+    ["🌿","เอาผักชีไหมคะ","Ao phàk-chii mǎi khá?","Do you want coriander?","ไม่=Mâi|เอา=ao|ครับ/ค่ะ=khráp/khâ","No, thank you.","n"],
+    ["🍚","เอาข้าวไหมคะ","Ao khâao mǎi khá?","Do you want rice?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, please.","y"],
+    ["🧊","เอาน้ำแข็งไหมคะ","Ao náam-khǎeng mǎi khá?","Do you want ice?","ไม่=Mâi|เอา=ao|ครับ/ค่ะ=khráp/khâ","No, thank you.","n"],
+    ["🥩","เอาความสุกระดับไหนคะ","Ao khwaam-sùk ra-dàp nǎi khá?","How would you like it cooked?","สุกปานกลาง=Sùk bpaan-glaang|ครับ/ค่ะ=khráp/khâ","Medium, please."],
+    ["🍽️","ทานที่นี่หรือกลับบ้านคะ","Thaan thîi-nîi rǔe glàp bâan khá?","Eat here or to go?","ทาน=Thaan|ที่นี่=thîi-nîi|ครับ/ค่ะ=khráp/khâ","Eat here, please."],
+    ["🌶️","เผ็ดไหมคะ","Phèt mǎi khá?","Do you want it spicy?","ไม่=Mâi|เผ็ด=phèt|ครับ/ค่ะ=khráp/khâ","Not spicy, please.","n"],
+    ["🍰","รับของหวานไหมคะ","Ráp khǒng-wǎan mǎi khá?","Would you like dessert?","ขอ=Khǎor|เมนู=manu|ของหวาน=khǒng-wǎan|หน่อย=nòi|ครับ/ค่ะ=khráp/khâ","Can I have the dessert menu, please?","y"],
+  ],
+  convbill: [
+    ["🧾","รับอะไรเพิ่มไหมคะ","Ráp à-rai phôem mǎi khá?","Anything else?","เก็บ=Gèp|เงิน=ngern|ด้วย=dûai|ครับ/ค่ะ=khráp/khâ","The bill, please.","y"],
+    ["💳","ห้าร้อยบาทค่ะ","Hâa-rói bàat khâ.","That's 500 baht.","จ่าย=Jàai|ด้วย=dûai|บัตร=bàt|ครับ/ค่ะ=khráp/khâ","I'll pay with a card."],
+    ["💵","จ่ายด้วยอะไรคะ","Jàai dûai à-rai khá?","How would you like to pay?","จ่าย=Jàai|ด้วย=dûai|เงินสด=ngern-sòt|ครับ/ค่ะ=khráp/khâ","I'll pay with cash."],
+    ["👥","จ่ายแยกไหมคะ","Jàai yàek mǎi khá?","Pay separately?","จ่าย=Jàai|แยก=yàek|ครับ/ค่ะ=khráp/khâ","Yes, separately.","y"],
+    ["📄","รับใบเสร็จไหมคะ","Ráp bai-sèt mǎi khá?","Would you like a receipt?","รับ=Ráp|ครับ/ค่ะ=khráp/khâ","Yes, please.","y"],
+    ["😋","อร่อยไหมคะ","À-ròi mǎi khá?","Was it delicious?","อาหาร=Aa-hǎan|อร่อย=à-ròi|มาก=mâak|ครับ/ค่ะ=khráp/khâ","The food was very delicious.","y"],
+  ],
+  convshop: [
+    ["🥛","หาอะไรอยู่คะ","Hǎa à-rai yùu khá?","What are you looking for?","กำลัง=Gam-lang|หา=hǎa|นม=nom|ครับ/ค่ะ=khráp/khâ","I'm looking for milk."],
+    ["🥚","มีอะไรให้ช่วยไหมคะ","Mii à-rai hâi chûai mǎi khá?","Can I help you?","ไข่=Khài|อยู่=yùu|ที่ไหน=thîi nǎi|ครับ/คะ=khráp/khá","Where are the eggs?"],
+    ["👉","ตรงไปแล้วเลี้ยวขวาค่ะ","Dtrong bpai láew líao khwǎa khâ.","Go straight, then turn right.","ตรงไป=Dtrong bpai|แล้ว=láew|เลี้ยวขวา=líao khwǎa|ใช่ไหม=châi mǎi","Straight, then right, correct?"],
+    ["🙏","ใช่ค่ะ","Châi khâ.","Yes, that's right.","ขอบคุณ=Khòp-khun|ครับ/ค่ะ=khráp/khâ","Thank you."],
+    ["🍊","เอาส้มกี่กิโลคะ","Ao sôm gìi gi-lo khá?","How many kilos of oranges?","เอา=Ao|ส้ม=sôm|ครึ่งกิโล=khrûng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like half a kilo."],
+    ["🥛","เอานมกี่กล่องคะ","Ao nom gìi glàorng khá?","How many cartons of milk?","เอา=Ao|นม=nom|สอง=sǎorng|กล่อง=glàorng|ครับ/ค่ะ=khráp/khâ","I'd like two cartons."],
+    ["🧴","เอาน้ำกี่ขวดคะ","Ao náam gìi khùat khá?","How many bottles of water?","เอา=Ao|น้ำ=náam|สาม=sǎam|ขวด=khùat|ครับ/ค่ะ=khráp/khâ","I'd like three bottles."],
+    ["🥩","เอาเนื้อกี่กิโลคะ","Ao néua gìi gi-lo khá?","How many kilos of meat?","เอา=Ao|เนื้อ=néua|ครึ่งกิโล=khrûng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like half a kilo."],
+    ["🥬","เอาผักกี่กิโลคะ","Ao phàk gìi gi-lo khá?","How many kilos of vegetables?","เอา=Ao|ผัก=phàk|หนึ่งกิโล=nùng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like one kilo."],
+    ["🍿","เอาขนมกี่ถุงคะ","Ao khà-nǒm gìi thǔng khá?","How many bags of snacks?","เอา=Ao|ขนม=khà-nǒm|หนึ่ง=nùng|ถุง=thǔng|ครับ/ค่ะ=khráp/khâ","I'd like one bag."],
+  ],
+  convcash: [
+    ["🪪","มีสมาชิกไหมคะ","Mii sà-maa-chík mǎi khá?","Do you have a membership?","มี=Mii|ครับ/ค่ะ=khráp/khâ","Yes, I do.","y"],
+    ["🪪","เป็นสมาชิกไหมคะ","Bpen sà-maa-chík mǎi khá?","Are you a member?","ไม่=Mâi|มี=mii|ครับ/ค่ะ=khráp/khâ","No, I don't have one.","n"],
+    ["🛍️","เอาถุงไหมคะ","Ao thǔng mǎi khá?","Do you want a bag?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, I'll take one.","y"],
+    ["🛍️","เอาถุงกี่ใบคะ","Ao thǔng gìi bai khá?","How many bags would you like?","เอา=Ao|ถุง=thǔng|สอง=sǎorng|ใบ=bai|ครับ/ค่ะ=khráp/khâ","I'll take two bags."],
+    ["💳","จ่ายเงินสดหรือบัตรคะ","Jàai ngern-sòt rǔe bàt khá?","Cash or card?","จ่าย=Jàai|โดย=dooi|บัตร=bàt|ครับ/ค่ะ=khráp/khâ","I'll pay by card."],
+    ["💵","จ่ายเงินสดหรือบัตรคะ","Jàai ngern-sòt rǔe bàt khá?","Cash or card?","จ่าย=Jàai|โดย=dooi|เงินสด=ngern-sòt|ครับ/ค่ะ=khráp/khâ","I'll pay by cash."],
+    ["🧾","รับสลิปไหมคะ","Ráp sà-lìp mǎi khá?","Would you like a receipt?","รับ=Ráp|สลิป=sà-lìp|ครับ/ค่ะ=khráp/khâ","Yes, I'd like a receipt.","y"],
+    ["🧾","รับสลิปไหมคะ","Ráp sà-lìp mǎi khá?","Would you like a receipt?","ไม่=Mâi|รับ=ráp|สลิป=sà-lìp|ครับ/ค่ะ=khráp/khâ","No receipt, thanks.","n"],
+  ],
+  convchat: [
+    ["😊","สบายดีไหมคะ","Sà-baai dii mǎi khá?","How are you?","สบายดี=Sà-baai dii|ครับ/ค่ะ=khráp/khâ","I'm fine.","y"],
+    ["🍚","กินข้าวหรือยังคะ","Gin khâao rǔe yang khá?","Have you eaten yet?","กิน=Gin|แล้ว=láew|ครับ/ค่ะ=khráp/khâ","I've eaten already."],
+    ["🍛","กินอะไรคะ","Gin à-rai khá?","What did you eat?","กิน=Gin|ผัดกะเพรา=phàt kà-phrao|ครับ/ค่ะ=khráp/khâ","I ate basil stir-fry."],
+    ["🌈","วันนี้เป็นยังไงบ้างคะ","Wan níi bpen yang ngai bâang khá?","How is your day today?","วันนี้=Wan níi|ดี=dii|มาก=mâak|ครับ/ค่ะ=khráp/khâ","Today is very good."],
+    ["🥳","ขอให้สนุกนะคะ","Khǎw hâi sà-nùk ná khá.","Have fun!","ขอบคุณ=Khòp-khun|ครับ/ค่ะ=khráp/khâ","Thank you."],
+  ],
+};
+const CONV_PAIRS = {};
+const CONV_ALL = [];
+Object.keys(CONV_RAW).forEach(k=>{
+  CONV_PAIRS[k] = CONV_RAW[k].map((a,i)=>{
+    const chunks = a[4].split("|").map(x=>{ const j=x.indexOf("="); return {th:x.slice(0,j), rom:x.slice(j+1)}; });
+    chunks[0].rom = chunks[0].rom.charAt(0).toUpperCase()+chunks[0].rom.slice(1);
+    return { id:k+i, set:k, icon:a[0], q:{th:a[1], rom:a[2], en:a[3]},
+             a:{th:chunks.map(c=>c.th).join(""), rom:chunks.map(c=>c.rom).join(" ")+".", en:a[5], chunks}, yn:a[6]||"" };
+  });
+  CONV_ALL.push(...CONV_PAIRS[k]);
+});
+CONV_PAIRS.convmix = CONV_ALL.slice();
+// Practice mode shows both lines of every conversation (with the English meaning)
+Object.keys(CONV_PAIRS).forEach(k=>{
+  PG_SETS[k] = [];
+  CONV_PAIRS[k].forEach(p=>{
+    PG_SETS[k].push({th:p.q.th, rom:p.q.rom, en:"Staff: "+p.q.en, pic:p.icon});
+    PG_SETS[k].push({th:p.a.th, rom:p.a.rom, en:"You: "+p.a.en, pic:p.icon});
+  });
+});
 // Sentences + Introductions are one card: merge the two lists (skip any repeated sentence)
 (function(){ const seen=new Set(PG_SETS.sentences.map(w=>w.th)); PG_SETS.sentences=PG_SETS.sentences.concat(PG_SETS.introduce.filter(w=>!seen.has(w.th))); delete PG_SETS.introduce; })();
 const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers,
-                         PG_SETS.classifiers,
+                         PG_SETS.classifiers, PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.supermkt,
                          PG_SETS.sentences, PG_SETS.everyday);
 // vocabulary pool used only by "Word Games" Mixed Challenge (sentences/everyday/introduce live in their own section)
 const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
-                         PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers);
+                         PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers,
+                         PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.supermkt);
 // sentence pool used only by "Sentences Practice" Mixed option
 const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.yaak, PG_SETS.classifiersent);
 
@@ -2243,6 +2419,10 @@ const BUILDER_DATA_BY_KEY = {
   classifiersent: BUILDER_CLASSIFIERS,
   yaak: BUILDER_YAAK,
 };
+// conversation sets: English prompt = what the staff says -> what you want to say; build the Thai reply
+Object.keys(CONV_PAIRS).forEach(k=>{
+  BUILDER_DATA_BY_KEY[k] = CONV_PAIRS[k].map(p=>({ en:"Staff: “"+p.q.en+"”  →  You say: “"+p.a.en+"”", chunks:p.a.chunks.map(c=>({th:c.th, rom:c.rom})) }));
+});
 
 
 const PG_META_VOCAB = [
@@ -2263,6 +2443,13 @@ const PG_META_VOCAB = [
   {key:"sea",         emo:"🏖️", title:"Sea, Boats & Diving",      sub:"ทะเล · เรือ · ดำน้ำ · ปะการัง · ฉลาม",  cls:"paa"},
   {key:"destination", emo:"📍", title:"Thai Destinations",        sub:"ภูเก็ต · กระบี่ · เกาะพีพี",              cls:"mix"},
   {key:"directions",  emo:"🧭", title:"Directions",                sub:"ไป · ซ้าย · ขวา · เลี้ยวซ้าย · ใกล้ · ไกล", cls:"mai"},
+  {key:"foodmeat",    emo:"🍗", title:"Food & Meat",              sub:"ไก่ · หมู · เนื้อ · ปลา · กุ้ง",         cls:"paa"},
+  {key:"drinktable",  emo:"🥤", title:"Drinks & Table",           sub:"น้ำเปล่า · น้ำแข็ง · ส้อม · ช้อน",       cls:"kha"},
+  {key:"tastecook",   emo:"🌶️", title:"Cooked, Spicy & Taste",    sub:"สุก · เผ็ด · เปรี้ยว · หวาน · เค็ม",     cls:"kham"},
+  {key:"condiments",  emo:"🧂", title:"Condiments",               sub:"น้ำตาล · พริก · น้ำปลา · พริกป่น",        cls:"mai"},
+  {key:"desserts",    emo:"🍨", title:"Thai Desserts",            sub:"ข้าวเหนียวมะม่วง · บัวลอย · ฝอยทอง",   cls:"mix"},
+  {key:"billpay",     emo:"💳", title:"Bill & Paying",            sub:"บิล · เงินสด · บัตร · ใบเสร็จ",          cls:"kha"},
+  {key:"supermkt",    emo:"🛒", title:"Supermarket Words",        sub:"ราคา · แพง · ถูก · ถุง · กิโล · ซื้อ",   cls:"paa"},
   {key:"all",         emo:"🎯", title:"Mixed Challenge",          sub:"All "+PG_VOCAB_ALL.length+" words",    cls:"mix"},
 ];
 const PG_META_SENT = [
@@ -2270,6 +2457,12 @@ const PG_META_SENT = [
   {key:"everyday",    emo:"🌈", title:"Everyday Expressions",     sub:"ค่อยเป็นค่อยไป · ตามใจเลย · อย่าคิดมาก",  cls:"paa"},
   {key:"classifiersent", emo:"🧮", title:"Classifier Sentences", sub:"เอากาแฟสองแก้ว · ฉันมีหนังสือสามเล่ม",   cls:"kha"},
   {key:"yaak",        emo:"💭", title:"Want To... (อยาก)",        sub:"อยากไปตลาด · อยากกินผัดไทย · อยากดื่มกาแฟ", cls:"paa"},
+  {key:"convfood",    emo:"🍜", title:"Ordering Food",            sub:"รับอะไรดีคะ · เอาน้ำไหม · เผ็ดไหม",       cls:"paa", conv:true},
+  {key:"convbill",    emo:"🧾", title:"Bill & Paying (Talk)",     sub:"เก็บเงินด้วย · จ่ายด้วยบัตร",             cls:"kha", conv:true},
+  {key:"convshop",    emo:"🛒", title:"At the Supermarket",       sub:"หาอะไรอยู่คะ · เอากี่กิโลคะ",             cls:"kham", conv:true},
+  {key:"convcash",    emo:"💳", title:"At the Cashier",           sub:"มีสมาชิกไหม · เอาถุงไหม · รับสลิปไหม",   cls:"mai", conv:true},
+  {key:"convchat",    emo:"💬", title:"Everyday Chat",            sub:"สบายดีไหม · กินข้าวหรือยัง",              cls:"mix", conv:true},
+  {key:"convmix",     emo:"🗣️", title:"Mixed Conversation",       sub:"All "+CONV_ALL.length+" conversations", cls:"mix", conv:true},
   {key:"seven11",     emo:"🏪", title:"7-Eleven Challenge",       sub:"Recognize, choose, and build real Thai", cls:"kha", special:true},
   {key:"allsent",     emo:"🎯", title:"Mixed Sentences",          sub:"All "+PG_SENT_ALL.length+" sentences",  cls:"mix"},
 ];
@@ -2296,7 +2489,8 @@ function savePgProgress(){
 // "Mixed" pool that spans several categories
 const WORD_CATEGORY_MAP = {};
 const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","questwords","thisthat",
-  "sea","destination","directions","sentences","everyday","classifiers","classifiersent"];
+  "sea","destination","directions","sentences","everyday","classifiers","classifiersent",
+  "foodmeat","drinktable","tastecook","condiments","desserts","billpay","supermkt"];
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
@@ -2319,6 +2513,9 @@ const PG_CARD_COLOR = {
   classroom:"#F0C05A", greet:"#FF6B8B", quest:"#FFD24B", action:"#FF7F6B", things:"#8DC63F",
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
   directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F",
+  foodmeat:"#FF7F6B", drinktable:"#3FB6C9", tastecook:"#E85D75", condiments:"#F0C05A", desserts:"#C983E0",
+  billpay:"#5DBB7A", supermkt:"#8DC63F", convfood:"#FF7F6B", convbill:"#5DBB7A", convshop:"#8DC63F", convcash:"#3FB6C9",
+  convchat:"#FF6B8B", convmix:"#E8663C",
   seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B", classifiersent:"#FF7F6B",
 };
 
@@ -2327,9 +2524,11 @@ const PG_GROUPS_VOCAB = [
   {label:"Core Basics",         keys:["classroom","greet","quest","action","things","feel","animals","numbers","classifiers"]},
   {label:"Grammar & Reference", keys:["questwords","thisthat","khong","position","colors"]},
   {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
+  {label:"Food & Shopping",     keys:["foodmeat","drinktable","tastecook","condiments","desserts","billpay","supermkt"]},
 ];
 const PG_GROUPS_SENT = [
   {label:"Practice",   keys:["sentences","everyday","yaak","classifiersent"]},
+  {label:"Conversations · Talk Back", keys:["convfood","convbill","convshop","convcash","convchat","convmix"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
@@ -2374,12 +2573,13 @@ function pgCardClickHandler(m){
 }
 
 function pgCardHTML(m){
-  const isSpecial = m.key==="all" || m.key==="allsent" || m.key==="seven11";
+  const isSpecial = m.key==="all" || m.key==="allsent" || m.key==="seven11" || m.conv;
   const prog = isSpecial ? null : getCategoryProgress(m.key);
   const color = PG_CARD_COLOR[m.key] || "#E8663C";
   const done = prog && prog.total>0 && prog.pct>=100;
   const countLabel = m.key==="all" ? "All "+PG_VOCAB_ALL.length+" words"
     : m.key==="allsent" ? "All "+PG_SENT_ALL.length+" sentences"
+    : m.conv ? CONV_PAIRS[m.key].length+" CONVERSATIONS"
     : (PG_SETS[m.key]?PG_SETS[m.key].length:"")+" WORDS";
   const barHTML = prog
     ? '<div class="pg-growbar"><div class="pg-growfill" style="width:'+prog.pct+'%;background:'+color+'"></div></div>'
@@ -2388,7 +2588,7 @@ function pgCardHTML(m){
   return '<div class="pg-card'+(done?' done':'')+'" data-key="'+m.key+'">'+
     '<span class="pg-icon">'+m.emo+'</span>'+
     '<h3>'+m.title+'</h3>'+
-    '<div class="pg-sample">'+m.sub.replace(/^All \d+ (words|sentences)$/,'')+'</div>'+
+    '<div class="pg-sample">'+m.sub.replace(/^All \d+ (words|sentences|conversations)$/,'')+'</div>'+
     barHTML+
     '<div class="pg-countrow"><span class="pg-count">'+countLabel+'</span>'+badge+'</div>'+
   '</div>';
@@ -2531,6 +2731,7 @@ function makeQ(w, pool, type){
 }
 
 function startPgGame(key, mode){
+  if(CONV_PAIRS[key]) return startTalkBack(key);
   if(key==="classifiers") return clStartGame();
   if(key==="classifiersent") return clStartGame(true);
   pgSetKey=key;
@@ -3483,7 +3684,7 @@ const SEVEN11_GAME_DATA = [
     hint:"Start with \"Mâi...\"" },
 ];
 
-const SV_TYPE_BADGE = { A:"⚡", B:"🎯", C:"🧩" };
+const SV_TYPE_BADGE = { A:"⚡", B:"🎯", C:"🧩", L:"🔊", P:"🎯" };
 
 let svQueue=[], svIdx=0, svMissedNext=[], svGoodCount=0, svMissCount=0, svCycleNum=1, svAnswered=false;
 let svTimerTimeout=null, svTimerInterval=null;
@@ -3492,13 +3693,15 @@ let svCWrongTries=0, svCPlaced=[], svCChipEls=[];
 function svShuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 function startSevenChallenge(){
+  svTalkKey = null; svName = "7-Eleven Challenge";
+  document.getElementById("svTitle").textContent = "🏪 7-Eleven Challenge";
   svQueue = svShuffle(SEVEN11_GAME_DATA);
   svIdx = 0; svMissedNext = []; svGoodCount = 0; svMissCount = 0; svCycleNum = 1;
   show("sevengame");
   renderSevenQ();
 }
 document.getElementById("svStartBtn").onclick = startSevenChallenge;
-document.getElementById("svAgainBtn").onclick = startSevenChallenge;
+document.getElementById("svAgainBtn").onclick = ()=>{ if(svTalkKey) startTalkBack(svTalkKey); else startSevenChallenge(); };
 
 function svClearTimers(){
   if(svTimerTimeout){ clearTimeout(svTimerTimeout); svTimerTimeout=null; }
@@ -3523,6 +3726,7 @@ function renderSevenQ(){
   const q = svQueue[svIdx];
   svUpdateProgress();
   if(q.type==="A") renderTypeA(q);
+  else if(q.type==="L" || q.type==="P") renderTypeTB(q);
   else if(q.type==="B") renderTypeB(q);
   else renderTypeC(q);
 }
@@ -3613,6 +3817,7 @@ function svAbPick(btnEl, opt, q){
   nextBtn.className = "sv-nextbtn";
   nextBtn.textContent = "Next →";
   nextBtn.onclick = svNext;
+  if(q.talk) svTbReveal(q);
   document.getElementById("svMount").appendChild(nextBtn);
 }
 
@@ -3625,7 +3830,7 @@ function renderTypeC(q){
 
   document.getElementById("svMount").innerHTML =
     '<div class="sv-icon" style="text-align:center;margin-bottom:6px;">'+q.icon+'</div>'+
-    '<div class="sv-en-prompt">'+q.en+'</div>'+
+    '<div class="sv-en-prompt">'+(q.promptHTML || q.en)+'</div>'+
     '<div class="sv-answerrow" id="svAnswerRow"></div>'+
     '<div class="sv-bank" id="svBank"></div>'+
     '<button class="sv-checkbtn" id="svCheckBtn">✓ CHECK</button>'+
@@ -3645,6 +3850,7 @@ function renderTypeC(q){
   });
 
   document.getElementById("svCheckBtn").onclick = ()=> svCCheck(q);
+  const sh = document.getElementById("svStaffHear"); if(sh) sh.onclick = ()=> speak(q.p.q.th, 0.85, true);
   document.getElementById("svHintBtn").onclick = ()=>{
     document.getElementById("svHintText").textContent = "💡 "+q.hint;
     document.getElementById("svHintText").style.display = "block";
@@ -3690,6 +3896,7 @@ function svCCheck(q){
     const full = q.chunks.map(c=>c.rom).join(" ");
     document.getElementById("svAnswerRow").insertAdjacentHTML("afterend",
       '<div class="sv-c-correct-line"><div class="sv-rom">'+full+'</div></div>');
+    if(q.talk) svTbReveal(q);
     const nextBtn = document.createElement("button");
     nextBtn.className = "sv-nextbtn";
     nextBtn.textContent = "Next →";
@@ -3717,7 +3924,8 @@ function svFinishCycle(){
 
   if(missedThisCycle === 0){
     show("sevencomplete");
-    scMount("sc_svc", ()=>({ game:"7-Eleven Challenge", score:"Completed", total:"", detail:"Finished with every question right (round "+svCycleNum+")" }));
+    document.getElementById("svcTitle").textContent = svName+" Complete!";
+    scMount("sc_svc", ()=>({ game:svName, score:"Completed", total:"", detail:"Finished with every question right (round "+svCycleNum+")" }));
     confetti(40, true);
     return;
   }
@@ -3728,7 +3936,7 @@ function svFinishCycle(){
       ? "1 question needs another try — let's get it!"
       : missedThisCycle+" questions need another try — let's get them!";
   show("sevenroundresult");
-  scMount("sc_svr", ()=>({ game:"7-Eleven Challenge · "+(svCycleNum===1 ? "Round 1" : "Review round "+(svCycleNum-1)), score:svQueue.length-missedThisCycle, total:svQueue.length }));
+  scMount("sc_svr", ()=>({ game:svName+" · "+(svCycleNum===1 ? "Round 1" : "Review round "+(svCycleNum-1)), score:svQueue.length-missedThisCycle, total:svQueue.length }));
 }
 
 document.getElementById("svrContinueBtn").onclick = ()=>{
@@ -3739,6 +3947,96 @@ document.getElementById("svrContinueBtn").onclick = ()=>{
   show("sevengame");
   renderSevenQ();
 };
+
+
+/* ==========================================================
+   TALK BACK — conversation game (staff line -> your reply).
+   Reuses the 7-Eleven screen + engine. Three question types, shuffled,
+   20 per round, wrong ones come back in a review round:
+     🔊 Listen  — hear the staff line only, then pick the reply
+     🎯 Pick    — read the staff line, pick the reply
+     🧩 Build   — read the staff line, build the reply from word tiles
+   Choices show Thai + Romanized and are numbered 1–4. No English
+   while answering; the English meaning is revealed after each answer.
+   ========================================================== */
+let svName = "7-Eleven Challenge", svTalkKey = null;
+function tbChoices(p){
+  const seen = new Set([p.a.th]);
+  const cands = svShuffle(CONV_ALL.filter(x=> x.q.th!==p.q.th && x.q.en!==p.q.en && !(p.yn && x.yn)));
+  const wrong = [];
+  for(const x of cands){ if(seen.has(x.a.th)) continue; seen.add(x.a.th); wrong.push({th:x.a.th, rom:x.a.rom, isCorrect:false}); if(wrong.length===3) break; }
+  return svShuffle([{th:p.a.th, rom:p.a.rom, isCorrect:true}].concat(wrong));
+}
+function tbReveal(p){
+  return '<div class="sv-reveal">'+
+    '<div class="sv-rv-row"><b>👤 Staff</b> '+p.q.en+'</div>'+
+    '<div class="sv-rv-row"><b>🙋 You</b> '+p.a.en+'</div>'+
+    '<button class="sv-hearbtn" id="svHearBtn">🔊 Hear the reply</button>'+
+  '</div>';
+}
+function tbMake(p, type){
+  const q = { talk:true, p, type, icon:p.icon };
+  if(type==="C"){
+    const ynBadge = p.yn==="y" ? '<div class="sv-yn">✅ Say yes</div>' : p.yn==="n" ? '<div class="sv-yn">🙅 Say no</div>' : '';
+    q.promptHTML = '<div style="font-size:12.5px;color:var(--soft);font-weight:800;margin-bottom:6px;">👤 Staff says · now build your reply</div>'+
+      '<div class="sv-rom">'+p.q.rom+'</div><div class="sv-thai">'+p.q.th+'</div>'+ynBadge+
+      '<button class="sv-hearbtn" id="svStaffHear">🔊 Hear it</button>';
+    q.chunks = p.a.chunks;
+    q.hint = 'Start with "'+p.a.chunks[0].rom+'..."';
+    q.reveal = tbReveal(p);
+  } else {
+    q.choices = tbChoices(p);
+    q.reveal = tbReveal(p);
+  }
+  return q;
+}
+function startTalkBack(key){
+  const pool = CONV_PAIRS[key] || [];
+  const picked = svShuffle(pool).slice(0, PG_MAX);
+  const kinds = ["L","P","C"];
+  svQueue = svShuffle(picked.map((p,i)=> tbMake(p, kinds[i%3])));
+  svTalkKey = key; svName = "Talk Back · "+(PG_LABEL[key]||"");
+  svIdx = 0; svMissedNext = []; svGoodCount = 0; svMissCount = 0; svCycleNum = 1;
+  show("sevengame");
+  document.getElementById("svTitle").textContent = "🗣️ "+svName;
+  renderSevenQ();
+}
+function renderTypeTB(q){
+  const p = q.p;
+  const listen = q.type==="L";
+  document.getElementById("svMount").innerHTML =
+    '<div class="sv-speaklabel">'+(listen ? '👂 Listen to the staff' : '👤 Staff says')+'</div>'+
+    '<div class="sv-card" id="svTbCard">'+
+      (listen
+        ? '<div class="sv-icon">'+p.icon+'</div><button class="sv-bigspk" id="svBigSpk">🔊</button><div class="sv-situation" style="font-size:14px;color:var(--soft);">Tap to listen again</div>'
+        : '<div class="sv-icon">'+p.icon+'</div><div class="sv-rom">'+p.q.rom+'</div><div class="sv-thai" style="font-size:16px;">'+p.q.th+'</div><button class="sv-hearbtn" id="svBigSpk">🔊 Hear it</button>')+
+    '</div>'+
+    '<div class="sv-speaklabel">💬 How do you answer?</div>'+
+    '<div class="sv-choices sv-tb4" id="svChoices"></div>'+
+    '<div class="sv-feedback" id="svFeedback"></div>';
+  const sp = document.getElementById("svBigSpk");
+  sp.onclick = ()=> speak(p.q.th, 0.85, true);
+  const host = document.getElementById("svChoices");
+  q.choices.forEach((opt,i)=>{
+    const b = document.createElement("button");
+    b.className = "sv-choice";
+    b.innerHTML = '<span class="sv-num">'+(i+1)+'</span><span class="sv-crom">'+opt.rom+'</span><span class="sv-cth">'+opt.th+'</span>';
+    b.onclick = ()=> svAbPick(b, opt, q);
+    host.appendChild(b);
+  });
+  if(listen) setTimeout(()=>{ try{ speak(p.q.th, 0.85, true); }catch(e){} }, 250);
+}
+// after an answer: show what was said in English, and let them hear the reply
+function svTbReveal(q){
+  const m = document.getElementById("svMount");
+  m.insertAdjacentHTML("beforeend", q.reveal);
+  const hb = document.getElementById("svHearBtn");
+  if(hb) hb.onclick = ()=> speak(q.p.a.th, 0.85, true);
+  if(q.type==="L"){
+    const card = document.getElementById("svTbCard");
+    if(card) card.innerHTML = '<div class="sv-icon">'+q.p.icon+'</div><div class="sv-rom">'+q.p.q.rom+'</div><div class="sv-thai" style="font-size:16px;">'+q.p.q.th+'</div>';
+  }
+}
 
 /* ==========================================================
    SENTENCE BUILDER — tap shuffled word chunks in order to
