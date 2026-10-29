@@ -2123,19 +2123,31 @@ Object.assign(PG_SETS, {
     {th:"คิวอาร์", rom:"khiu-aa", en:"QR code", pic:"📱"},
     {th:"จ่ายแยก", rom:"jàai yàek", en:"pay separately", pic:"👥"},
   ],
-  supermkt: [
+  shopprice: [
     {th:"ราคา", rom:"raa-khaa", en:"price", pic:"🏷️"},
     {th:"แพง", rom:"phaeng", en:"expensive", pic:"💸"},
     {th:"ถูก", rom:"thùuk", en:"cheap", pic:"🪙"},
     {th:"เท่าไหร่", rom:"thâo-rài", en:"how much?", pic:"💰"},
+    {th:"ซื้อ", rom:"súue", en:"buy", pic:"🛒"},
+    {th:"หา", rom:"hǎa", en:"look for", pic:"🔍"},
+  ],
+  shopcount: [
+    {th:"กิโล", rom:"gi-lo", en:"kilo", pic:"🏋️"},
+    {th:"ครึ่งกิโล", rom:"khrûng gi-lo", en:"half a kilo", pic:"⚖️"},
+    {th:"หนึ่งกิโล", rom:"nùng gi-lo", en:"one kilo", pic:"⚖️"},
+    {th:"กล่อง", rom:"glàorng", en:"carton / box", pic:"🥛"},
+    {th:"ขวด", rom:"khùat", en:"bottle", pic:"🧴"},
+    {th:"ฟอง", rom:"forng", en:"egg counter", pic:"🥚"},
+    {th:"ลูก", rom:"lûuk", en:"round fruits counter", pic:"🍊"},
+    {th:"ถุง", rom:"thǔng", en:"bag", pic:"🛍️"},
+  ],
+  shopcash: [
     {th:"สมาชิก", rom:"sà-maa-chík", en:"member", pic:"🪪"},
     {th:"สลิป", rom:"sà-lìp", en:"receipt (slip)", pic:"🧾"},
     {th:"ถุง", rom:"thǔng", en:"bag", pic:"🛍️"},
-    {th:"ครึ่งกิโล", rom:"khrûng gi-lo", en:"half a kilo", pic:"⚖️"},
-    {th:"หนึ่งกิโล", rom:"nùng gi-lo", en:"one kilo", pic:"⚖️"},
-    {th:"กิโล", rom:"gi-lo", en:"kilo", pic:"🏋️"},
-    {th:"ซื้อ", rom:"súue", en:"buy", pic:"🛒"},
-    {th:"หา", rom:"hǎa", en:"look for", pic:"🔍"},
+    {th:"เงินสด", rom:"ngern-sòt", en:"cash", pic:"💵"},
+    {th:"บัตร", rom:"bàt", en:"card", pic:"💳"},
+    {th:"คิวอาร์", rom:"khiu-aa", en:"QR code", pic:"📱"},
   ],
 });
 
@@ -2220,14 +2232,14 @@ const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, P
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers,
-                         PG_SETS.classifiers, PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.supermkt,
+                         PG_SETS.classifiers, PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.shopprice, PG_SETS.shopcount, PG_SETS.shopcash,
                          PG_SETS.sentences, PG_SETS.everyday);
 // vocabulary pool used only by "Word Games" Mixed Challenge (sentences/everyday/introduce live in their own section)
 const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
                          PG_SETS.position, PG_SETS.colors, PG_SETS.animals, PG_SETS.numbers, PG_SETS.classifiers,
-                         PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.supermkt);
+                         PG_SETS.foodmeat, PG_SETS.drinktable, PG_SETS.tastecook, PG_SETS.condiments, PG_SETS.desserts, PG_SETS.billpay, PG_SETS.shopprice, PG_SETS.shopcount, PG_SETS.shopcash);
 // sentence pool used only by "Sentences Practice" Mixed option
 const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.yaak, PG_SETS.classifiersent);
 
@@ -2449,7 +2461,9 @@ const PG_META_VOCAB = [
   {key:"condiments",  emo:"🧂", title:"Condiments",               sub:"น้ำตาล · พริก · น้ำปลา · พริกป่น",        cls:"mai"},
   {key:"desserts",    emo:"🍨", title:"Thai Desserts",            sub:"ข้าวเหนียวมะม่วง · บัวลอย · ฝอยทอง",   cls:"mix"},
   {key:"billpay",     emo:"💳", title:"Bill & Paying",            sub:"บิล · เงินสด · บัตร · ใบเสร็จ",          cls:"kha"},
-  {key:"supermkt",    emo:"🛒", title:"Supermarket Words",        sub:"ราคา · แพง · ถูก · ถุง · กิโล · ซื้อ",   cls:"paa"},
+  {key:"shopprice",   emo:"🏷️", title:"Shopping & Prices",        sub:"ราคา · แพง · ถูก · เท่าไหร่ · ซื้อ · หา",  cls:"paa"},
+  {key:"shopcount",   emo:"⚖️", title:"Weight & Counting",        sub:"กิโล · ครึ่งกิโล · กล่อง · ขวด · ฟอง",    cls:"mix"},
+  {key:"shopcash",    emo:"🪪", title:"At the Cashier (Words)",   sub:"สมาชิก · สลิป · ถุง · เงินสด · บัตร",     cls:"kha"},
   {key:"all",         emo:"🎯", title:"Mixed Challenge",          sub:"All "+PG_VOCAB_ALL.length+" words",    cls:"mix"},
 ];
 const PG_META_SENT = [
@@ -2490,7 +2504,7 @@ function savePgProgress(){
 const WORD_CATEGORY_MAP = {};
 const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","questwords","thisthat",
   "sea","destination","directions","sentences","everyday","classifiers","classifiersent",
-  "foodmeat","drinktable","tastecook","condiments","desserts","billpay","supermkt"];
+  "foodmeat","drinktable","tastecook","condiments","desserts","billpay","shopprice","shopcount","shopcash"];
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
@@ -2514,7 +2528,7 @@ const PG_CARD_COLOR = {
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
   directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F",
   foodmeat:"#FF7F6B", drinktable:"#3FB6C9", tastecook:"#E85D75", condiments:"#F0C05A", desserts:"#C983E0",
-  billpay:"#5DBB7A", supermkt:"#8DC63F", convfood:"#FF7F6B", convbill:"#5DBB7A", convshop:"#8DC63F", convcash:"#3FB6C9",
+  billpay:"#5DBB7A", shopprice:"#8DC63F", shopcount:"#F0C05A", shopcash:"#3FB6C9", convfood:"#FF7F6B", convbill:"#5DBB7A", convshop:"#8DC63F", convcash:"#3FB6C9",
   convchat:"#FF6B8B", convmix:"#E8663C",
   seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B", classifiersent:"#FF7F6B",
 };
@@ -2524,11 +2538,14 @@ const PG_GROUPS_VOCAB = [
   {label:"Core Basics",         keys:["classroom","greet","quest","action","things","feel","animals","numbers","classifiers"]},
   {label:"Grammar & Reference", keys:["questwords","thisthat","khong","position","colors"]},
   {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
-  {label:"Food & Shopping",     keys:["foodmeat","drinktable","tastecook","condiments","desserts","billpay","supermkt"]},
+  {label:"🍜 Ordering Food",     keys:["foodmeat","drinktable","tastecook","condiments","desserts","billpay"]},
+  {label:"🛒 Shopping at the Supermarket", keys:["shopprice","shopcount","shopcash"]},
 ];
 const PG_GROUPS_SENT = [
   {label:"Practice",   keys:["sentences","everyday","yaak","classifiersent"]},
-  {label:"Conversations · Talk Back", keys:["convfood","convbill","convshop","convcash","convchat","convmix"]},
+  {label:"🍜 Ordering Food · Talk Back", keys:["convfood","convbill"]},
+  {label:"🛒 Supermarket · Talk Back", keys:["convshop","convcash"]},
+  {label:"💬 Everyday & Mixed · Talk Back", keys:["convchat","convmix"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
