@@ -2158,6 +2158,102 @@ Object.assign(PG_SETS, {
   PG_SETS.shopping  = merge(["shopprice","shopcount","shopcash"]);
 })();
 
+
+// words from the two decks that also belong in the older categories (Things, Feelings, Actions, Animals, Classifiers)
+// and a few more deck words for the Ordering Food / Shopping cards
+function addWords(key, list){
+  const have = new Set((PG_SETS[key]||[]).map(w=>w.th));
+  list.forEach(w=>{ if(!have.has(w.th)){ have.add(w.th); PG_SETS[key].push(w); } });
+}
+addWords("foodorder", [
+  {th:"เมนู", rom:"manu", en:"menu", pic:"📖"},
+  {th:"ผักชี", rom:"phàk-chii", en:"coriander", pic:"🌿"},
+  {th:"เพิ่มหวาน", rom:"phôem wǎan", en:"more sweet", pic:"🍬"},
+  {th:"หวานน้อย", rom:"wǎan nói", en:"less sweet", pic:"🤏"},
+  {th:"สุกๆดิบๆ", rom:"sùk-sùk dìp-dìp", en:"half cooked, half raw", pic:"🥩"},
+  {th:"ของหวาน", rom:"khǒng-wǎan", en:"dessert", pic:"🍰"},
+  {th:"ทานที่นี่", rom:"thaan thîi-nîi", en:"eat here", pic:"🍽️"},
+  {th:"เก็บเงิน", rom:"gèp ngern", en:"collect money (the bill)", pic:"🧾"},
+  {th:"อิ่ม", rom:"ìm", en:"full (not hungry)", pic:"😌"},
+  {th:"ไม่ใส่", rom:"mâi sài", en:"don't put in / without", pic:"🚫"},
+  {th:"เติม", rom:"dterm", en:"refill", pic:"🫗"},
+]);
+addWords("shopping", [
+  {th:"นม", rom:"nom", en:"milk", pic:"🥛"},
+  {th:"ส้ม", rom:"sôm", en:"orange", pic:"🍊"},
+  {th:"ขนม", rom:"khà-nǒm", en:"snack", pic:"🍿"},
+  {th:"ทั้งหมด", rom:"tháng-mòt", en:"everything / total", pic:"🧮"},
+  {th:"ตลาดสด", rom:"dtà-làat sòt", en:"fresh market", pic:"🥬"},
+  {th:"สแกน", rom:"sà-gàen", en:"scan", pic:"📲"},
+]);
+addWords("things", [
+  {th:"เมนู", rom:"manu", en:"menu", pic:"📖"},
+  {th:"ส้อม", rom:"sâorm", en:"fork", pic:"🍴"},
+  {th:"ช้อน", rom:"cháorn", en:"spoon", pic:"🥄"},
+  {th:"แก้ว", rom:"gâew", en:"glass", pic:"🥛"},
+  {th:"ทิชชู่", rom:"chét-chûu", en:"tissue / napkin", pic:"🧻"},
+  {th:"บิล", rom:"bin", en:"bill", pic:"🧾"},
+  {th:"ใบเสร็จ", rom:"bai-sèt", en:"receipt", pic:"📄"},
+  {th:"สลิป", rom:"sà-lìp", en:"receipt (slip)", pic:"🧾"},
+  {th:"เงินสด", rom:"ngern-sòt", en:"cash", pic:"💵"},
+  {th:"เงินทอน", rom:"ngern thorn", en:"change (money back)", pic:"🪙"},
+  {th:"น้ำแข็ง", rom:"náam khǎeng", en:"ice", pic:"🧊"},
+  {th:"น้ำตาล", rom:"náam-dtaan", en:"sugar", pic:"🍬"},
+  {th:"พริก", rom:"phrík", en:"chili", pic:"🌶️"},
+  {th:"น้ำปลา", rom:"náam-bplaa", en:"fish sauce", pic:"🐟"},
+  {th:"ไข่", rom:"khài", en:"egg", pic:"🥚"},
+  {th:"นม", rom:"nom", en:"milk", pic:"🥛"},
+  {th:"ผัก", rom:"phàk", en:"vegetables", pic:"🥦"},
+  {th:"ผลไม้", rom:"phǒn-la-mái", en:"fruit", pic:"🍉"},
+  {th:"ส้ม", rom:"sôm", en:"orange", pic:"🍊"},
+  {th:"ขนม", rom:"khà-nǒm", en:"snack", pic:"🍿"},
+  {th:"เนื้อ", rom:"néua", en:"beef / meat", pic:"🥩"},
+  {th:"ไก่", rom:"gài", en:"chicken (meat)", pic:"🍗"},
+]);
+addWords("feel", [
+  {th:"เผ็ด", rom:"phèt", en:"spicy", pic:"🌶️"},
+  {th:"เผ็ดมาก", rom:"phèt mâak", en:"very spicy", pic:"🔥"},
+  {th:"ไม่เผ็ด", rom:"mâi phèt", en:"not spicy", pic:"🚫"},
+  {th:"หวาน", rom:"wǎan", en:"sweet", pic:"🍬"},
+  {th:"เปรี้ยว", rom:"bprîao", en:"sour", pic:"🍋"},
+  {th:"เค็ม", rom:"khem", en:"salty", pic:"🧂"},
+  {th:"ขม", rom:"khǎm", en:"bitter", pic:"🍵"},
+  {th:"จืด", rom:"jùut", en:"mild, not much flavour", pic:"🥣"},
+  {th:"มัน", rom:"man", en:"rich, oily", pic:"🧈"},
+  {th:"อิ่ม", rom:"ìm", en:"full (not hungry)", pic:"😌"},
+  {th:"แพง", rom:"phaeng", en:"expensive", pic:"💸"},
+  {th:"ถูก", rom:"thùuk", en:"cheap", pic:"🪙"},
+]);
+addWords("action", [
+  {th:"เอา", rom:"ao", en:"to take / to want", pic:"🙋"},
+  {th:"ซื้อ", rom:"súue", en:"to buy", pic:"🛒"},
+  {th:"หา", rom:"hǎa", en:"to look for", pic:"🔍"},
+  {th:"มี", rom:"mii", en:"to have", pic:"✅"},
+  {th:"สั่ง", rom:"sàng", en:"to order", pic:"📝"},
+  {th:"ทาน", rom:"thaan", en:"to eat (polite)", pic:"🍽️"},
+  {th:"จ่าย", rom:"jàai", en:"to pay", pic:"💳"},
+  {th:"เก็บ", rom:"gèp", en:"to collect / to keep", pic:"🤲"},
+  {th:"เติม", rom:"dterm", en:"to refill", pic:"🫗"},
+  {th:"เพิ่ม", rom:"phôem", en:"to add more", pic:"➕"},
+  {th:"ใส่", rom:"sài", en:"to put in", pic:"📥"},
+  {th:"รับ", rom:"ráp", en:"to receive / to accept", pic:"🤝"},
+  {th:"สแกน", rom:"sà-gàen", en:"to scan", pic:"📲"},
+]);
+addWords("animals", [
+  {th:"ไก่", rom:"gài", en:"chicken", pic:"🐔"},
+  {th:"หมู", rom:"mǔu", en:"pig", pic:"🐷"},
+  {th:"ปลา", rom:"bplaa", en:"fish", pic:"🐟"},
+  {th:"กุ้ง", rom:"gûng", en:"shrimp", pic:"🦐"},
+  {th:"ปู", rom:"bpuu", en:"crab", pic:"🦀"},
+]);
+addWords("classifiers", [
+  {th:"กล่อง", rom:"glàorng", en:"classifier: cartons / boxes", pic:"🥛"},
+  {th:"ฟอง", rom:"forng", en:"classifier: eggs", pic:"🥚"},
+  {th:"ลูก", rom:"lûuk", en:"classifier: round fruits", pic:"🍊"},
+  {th:"ถุง", rom:"thǔng", en:"classifier: bags (of snacks)", pic:"🛍️"},
+  {th:"กิโล", rom:"gi-lo", en:"classifier: kilos", pic:"⚖️"},
+]);
+
 // ---------- Conversation sets: staff line -> your reply (used by Talk Back, Practice and Build it) ----------
 // pair = [emoji, staff Thai, staff rom, staff English, "reply chunks th=rom|th=rom", reply English, yes/no flag]
 const CONV_RAW = {
@@ -2284,7 +2380,7 @@ function polWord(w, forced){        // w = {th, rom, en, say?}; forced = {th,rom
   only("destination", w=> /^the sunset is/i.test(w.en));
   only("colors", w=> /^(What color|This is|That is|The )/.test(w.en));
   only("thisthat", w=> ["นี่คืออะไร","นั่นคืออะไร"].includes(w.th));
-  only("classifiers", w=> w.th==="มีกี่คน");
+  only("classifiers", w=> w.th==="มีกี่คน" || /^เอา/.test(w.th));
   all("seven11").forEach(w=>{ if(/\?/.test(w.en)) polWord(w, STAFFQ); else polWord(w); });
 })();
 const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
@@ -2572,11 +2668,15 @@ const PG_TRACKED_KEYS = ["classroom","greet","quest","action","things","feel","q
 PG_TRACKED_KEYS.forEach(key=>{
   (PG_SETS[key]||[]).forEach(w=>{ WORD_CATEGORY_MAP[w.th] = key; });
 });
+const WORD_CATEGORIES = {};   // Thai text -> every tracked category that contains it
+PG_TRACKED_KEYS.forEach(key=>{ (PG_SETS[key]||[]).forEach(w=>{ (WORD_CATEGORIES[w.th] = WORD_CATEGORIES[w.th] || []).push(key); }); });
 function markWordCorrect(thaiText){
-  const catKey = WORD_CATEGORY_MAP[thaiText];
-  if(!catKey) return;
-  if(!PG_PROGRESS[catKey]) PG_PROGRESS[catKey] = {};
-  PG_PROGRESS[catKey][thaiText] = true;
+  const cats = WORD_CATEGORIES[thaiText];
+  if(!cats || !cats.length) return;
+  cats.forEach(catKey=>{
+    if(!PG_PROGRESS[catKey]) PG_PROGRESS[catKey] = {};
+    PG_PROGRESS[catKey][thaiText] = true;
+  });
   savePgProgress();
 }
 function getCategoryProgress(key){
@@ -2599,8 +2699,8 @@ const PG_CARD_COLOR = {
 const PG_GROUPS_VOCAB = [
   {label:"Core Basics",         keys:["classroom","greet","quest","action","things","feel","animals","numbers","classifiers"]},
   {label:"Grammar & Reference", keys:["questwords","thisthat","khong","position","colors"]},
-  {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
   {label:"Food & Shopping",     keys:["foodorder","shopping"]},
+  {label:"Travel & Adventure",  keys:["sea","destination","directions"]},
 ];
 const PG_GROUPS_SENT = [
   {label:"Practice",   keys:["sentences","everyday","yaak","classifiersent"]},
@@ -2934,6 +3034,11 @@ const CL_TOOL = [
   {k:"thaan", th:"ท่าน", rom:"thâan", en:"people (polite)"},
   {k:"an",    th:"อัน",  rom:"an",    en:"general objects"},
   {k:"chin",  th:"ชิ้น", rom:"chín",  en:"pieces / items"},
+  {k:"glaawng", th:"กล่อง", rom:"glàorng", en:"cartons / boxes"},
+  {k:"fong",  th:"ฟอง",  rom:"forng", en:"eggs"},
+  {k:"luuk",  th:"ลูก",  rom:"lûuk",  en:"round fruits"},
+  {k:"thung", th:"ถุง",  rom:"thǔng", en:"bags (of snacks)"},
+  {k:"gilo",  th:"กิโล", rom:"gi-lo", en:"kilos"},
 ];
 const CL_BY_KEY = {}; CL_TOOL.forEach(c=>CL_BY_KEY[c.k]=c);
 
@@ -2948,6 +3053,11 @@ const CL_MATCH = [
   {pic:"🍢", noun:"grilled skewers", k:"maai",  th:"เอาสามไม้",       rom:"Ao sǎam máai",          en:"I'll take three skewers"},
   {pic:"🛍️", noun:"shopping bag",    k:"bai",   th:"ถุงหนึ่งใบ",      rom:"Thǔng nùeng bai",       en:"one bag"},
   {pic:"🍛", noun:"fried rice",      k:"jaan",  th:"ข้าวผัดหนึ่งจาน",  rom:"Khâao phàt nùeng jaan", en:"one plate of fried rice"},
+  {pic:"🥚", noun:"eggs",            k:"fong",  th:"ไข่สามฟอง",       rom:"Khài sǎam forng",       en:"three eggs"},
+  {pic:"🍊", noun:"oranges",         k:"luuk",  th:"ส้มสามลูก",       rom:"Sôm sǎam lûuk",         en:"three oranges"},
+  {pic:"🥛", noun:"milk",            k:"glaawng", th:"นมสองกล่อง",    rom:"Nom sǎorng glàorng",    en:"two cartons of milk"},
+  {pic:"🍿", noun:"snacks",          k:"thung", th:"ขนมหนึ่งถุง",     rom:"Khà-nǒm nùng thǔng",    en:"one bag of snacks"},
+  {pic:"🥩", noun:"meat",            k:"gilo",  th:"เนื้อหนึ่งกิโล",   rom:"Néua nùng gi-lo",       en:"one kilo of meat"},
 ];
 // Wrong Classifier?!: phrase with the wrong classifier (wk) -> pick the one that fixes it (k)
 const CL_WRONG = [
@@ -2960,6 +3070,11 @@ const CL_WRONG = [
   {wk:"lem",   pic:"🐶", wth:"หมาสามเล่ม",      wrom:"Mǎa sǎam lêm",          k:"dtua",  th:"หมาสามตัว",      rom:"Mǎa sǎam dtua",         en:"Three dogs"},
   {wk:"khuat", pic:"🍢", wth:"เอาสามขวด",       wrom:"Ao sǎam khùat",         k:"maai",  th:"เอาสามไม้",      rom:"Ao sǎam máai",          en:"I'll take three skewers"},
   {wk:"bai",   pic:"🍛", wth:"ข้าวผัดสองใบ",    wrom:"Khâao phàt sǎawng bai", k:"jaan",  th:"ข้าวผัดสองจาน",  rom:"Khâao phàt sǎawng jaan", en:"Two plates of fried rice"},
+  {wk:"dtua",  pic:"🥚", wth:"ไข่สองตัว",       wrom:"Khài sǎorng dtua",      k:"fong",  th:"ไข่สองฟอง",      rom:"Khài sǎorng forng",     en:"Two eggs"},
+  {wk:"khuat", pic:"🍊", wth:"ส้มสามขวด",       wrom:"Sôm sǎam khùat",        k:"luuk",  th:"ส้มสามลูก",      rom:"Sôm sǎam lûuk",         en:"Three oranges"},
+  {wk:"khan",  pic:"🥛", wth:"นมสองคัน",        wrom:"Nom sǎorng khan",       k:"glaawng", th:"นมสองกล่อง",   rom:"Nom sǎorng glàorng",    en:"Two cartons of milk"},
+  {wk:"dtua",  pic:"🍿", wth:"ขนมหนึ่งตัว",      wrom:"Khà-nǒm nùng dtua",     k:"thung", th:"ขนมหนึ่งถุง",    rom:"Khà-nǒm nùng thǔng",    en:"One bag of snacks"},
+  {wk:"lem",   pic:"🥩", wth:"เนื้อหนึ่งเล่ม",    wrom:"Néua nùng lêm",         k:"gilo",  th:"เนื้อหนึ่งกิโล",  rom:"Néua nùng gi-lo",       en:"One kilo of meat"},
 ];
 // Fill in the Blank: whole sentence, classifier missing. pre/post = Thai around the blank (rpre/rpost = romanization). w = the 2 wrong choices.
 const CL_FILL = [
@@ -2977,7 +3092,22 @@ const CL_FILL = [
   {pic:"📦", pre:"ผมอยากได้กล่องสอง", post:"", rpre:"Phǒm yàak dâai glàawng sǎawng", rpost:"", k:"an",    w:["lem","khan"],   x:"dtua", en:"I want two boxes."},
   {pic:"🐶", pre:"มีหมากี่",        post:"",    rpre:"Mii mǎa gìi",               rpost:"?",   k:"dtua",  w:["khon","lem"],   x:"khan", en:"How many dogs are there?"},
   {pic:"👥", pre:"มีเพื่อนกี่",     post:"",    rpre:"Mii phûean gìi",            rpost:"?",   k:"khon",  w:["dtua","khuat"], x:"gaew", en:"How many friends are there?"},
+  {pic:"🥚", pre:"เอาไข่สาม",       post:"",    rpre:"Ao khài sǎam",              rpost:"",    k:"fong",  w:["khuat","lem"],  x:"khan", en:"I'll take three eggs."},
+  {pic:"🍊", pre:"เอาส้มสาม",       post:"",    rpre:"Ao sôm sǎam",               rpost:"",    k:"luuk",  w:["khan","lem"],   x:"dtua", en:"I'll take three oranges."},
+  {pic:"🥛", pre:"เอานมสอง",        post:"",    rpre:"Ao nom sǎorng",             rpost:"",    k:"glaawng", w:["dtua","khan"], x:"lem", en:"I'd like two cartons of milk."},
+  {pic:"🍿", pre:"เอาขนมหนึ่ง",     post:"",    rpre:"Ao khà-nǒm nùng",           rpost:"",    k:"thung", w:["khan","dtua"],  x:"lem", en:"I'd like one bag of snacks."},
+  {pic:"🥩", pre:"เอาเนื้อหนึ่ง",    post:"",    rpre:"Ao néua nùng",              rpost:"",    k:"gilo",  w:["khuat","lem"],  x:"dtua", en:"I'd like one kilo of meat."},
 ];
+// polite endings for the fill-in-the-blank sentences (after the blank)
+CL_FILL.forEach(f=>{ if(f.post) return;
+  const q = f.rpost==="?", fem = /^ฉัน/.test(f.pre), mal = /^ผม/.test(f.pre);
+  const e = mal ? {t:"ครับ",r:"khráp"} : fem ? {t:"ค่ะ",r:"khâ"} : q ? {t:"ครับ/คะ",r:"khráp/khá"} : {t:"ครับ/ค่ะ",r:"khráp/khâ"};
+  f.post = e.t; f.rpost = e.r + (q ? "?" : "");
+});
+// polite endings on the "เอา…" phrases in Matching / Wrong-Classifier
+function polAdd(o, thK, romK){ if(POL_DONE.test(o[thK])) return; o[thK] += "ครับ/ค่ะ"; o[romK] += " khráp/khâ"; }
+CL_MATCH.forEach(x=>{ if(/^เอา/.test(x.th)) polAdd(x,"th","rom"); });
+CL_WRONG.forEach(x=>{ if(/^เอา/.test(x.th)){ polAdd(x,"th","rom"); polAdd(x,"wth","wrom"); } });
 CL_FILL.forEach(f=>{
   f.th = f.pre + CL_BY_KEY[f.k].th + f.post;
   f.rom = f.rpre + " " + CL_BY_KEY[f.k].rom + (f.rpost==="?" ? "?" : f.rpost ? " "+f.rpost : "");
