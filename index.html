@@ -3935,81 +3935,142 @@ const IS_WEBKIT = (function(){
   try{ return navigator.vendor === "Apple Computer, Inc."; }catch(e){ return false; }
 })();
 
+
+/* ---------- text clean-up before speaking ----------
+   Thai "ๆ" (mai yamok = "repeat the word before me") is read badly by several voice
+   engines — it can come out as a stuttering "dii-dii-dii…". So we write the repeat
+   out ourselves (ดี ๆ → ดีดี) and never hand ๆ to a voice engine. */
+function expandMaiYamok(t){
+  if(t.indexOf("ๆ")<0) return t;
+  // 1) most common ones, exactly
+  t = t.replace(/ดี\s*ๆ/g,"ดีดี").replace(/เย็น\s*ๆ/g,"เย็นเย็น").replace(/สู้\s*ๆ/g,"สู้สู้")
+       .replace(/ช้า\s*ๆ/g,"ช้าช้า").replace(/เร็ว\s*ๆ/g,"เร็วเร็ว").replace(/นิด\s*ๆ/g,"นิดนิด");
+  if(t.indexOf("ๆ")<0) return t;
+  // 2) any other word: let the browser split Thai words and repeat the one before ๆ
+  try{
+    if(typeof Intl!=="undefined" && Intl.Segmenter){
+      const parts=[...new Intl.Segmenter("th",{granularity:"word"}).segment(t)].map(x=>x.segment), out=[];
+      for(const p of parts){
+        if(p==="ๆ"){ let j=out.length-1; while(j>=0 && /^\s+$/.test(out[j])) j--; if(j>=0){ const w=out[j]; out.length=j+1; out.push(w); } }
+        else if(p.length>1 && p.charAt(p.length-1)==="ๆ"){ const w=p.slice(0,-1); out.push(w+w); }
+        else out.push(p);
+      }
+      t = out.join("");
+    }
+  }catch(e){}
+  return t.replace(/\s*ๆ/g,"");            // 3) anything left: just drop the mark
+}
+function speechText(text){
+  let t = String(text||"");
+  t = t.replace(/[​‌‍﻿]/g,"");     // invisible characters
+  t = expandMaiYamok(t);
+  // "ครับ/ค่ะ" and "ผม/ฉัน" are two options on screen — the voice is female, so say the ค่ะ / ฉัน form once
+  t = t.replace(/(ครับ|ค่ะ|คะ)\s*[\/|]\s*(ครับ|ค่ะ|คะ)/g, (m,x,y)=> (x==="ครับ"?y:x)).replace(/(ผม|ฉัน|ดิฉัน)\s*[\/|]\s*(ผม|ฉัน|ดิฉัน)/g, (m,x,y)=> (x==="ผม"?y:x));
+  t = t.replace(/[“”"‘’]/g,"").replace(/\s*[\/|]\s*/g," ").replace(/\(.*?\)/g,"");   // quotes / slashes / ( notes ) are not for speaking
+  return t.replace(/\s+/g," ").trim();
+}
+
+/* ---------- one voice at a time + friendly message if a browser truly can't speak ---------- */
+function speechStopAll(){
+  try{ if("speechSynthesis" in window) window.speechSynthesis.cancel(); }catch(e){}
+  try{ if(_ttsAudio){ _ttsAudio.onerror=null; _ttsAudio.pause(); } }catch(e){}
+}
+let _soundNoticeAt = 0;
+function soundNotice(){
+  const now=Date.now(); if(now-_soundNoticeAt<60000) return; _soundNoticeAt=now;
+  let n=document.getElementById("soundNotice");
+  if(!n){ n=document.createElement("div"); n.id="soundNotice";
+    n.style.cssText="position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99999;background:#3a3340;color:#fff;border-radius:14px;padding:10px 14px;font:700 13.5px/1.35 Nunito,sans-serif;max-width:92vw;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.3);";
+    n.onclick=()=>{ n.style.display="none"; }; document.body.appendChild(n); }
+  n.innerHTML="🔇 No Thai sound on this browser right now.<br><span style='font-weight:600;opacity:.9'>Check the volume / silent switch, or try Chrome or Edge.</span>";
+  n.style.display="block"; clearTimeout(n._t); n._t=setTimeout(()=>{ n.style.display="none"; },7000);
+}
+// Phones/Safari only allow sound after a first tap. Quietly "unlock" audio on the very first touch
+// so the automatic voices later in the games work everywhere.
+(function(){
+  let done=false;
+  function unlock(){
+    if(done) return; done=true;
+    try{ if("speechSynthesis" in window){ const u=new SpeechSynthesisUtterance(" "); u.volume=0; window.speechSynthesis.speak(u); } }catch(e){}
+    try{
+      const a=initTTSAudio(), id=_speakCallId;
+      a.muted=true; a.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+      const p=a.play(); if(p&&p.then) p.then(()=>{ if(_speakCallId===id){ a.pause(); } a.muted=false; }).catch(()=>{ a.muted=false; });
+    }catch(e){}
+    ["pointerdown","touchstart","keydown","click"].forEach(ev=>document.removeEventListener(ev,unlock,true));
+  }
+  ["pointerdown","touchstart","keydown","click"].forEach(ev=>document.addEventListener(ev,unlock,true));
+})();
+
 function speak(text, rate, force){
+  text = speechText(text);
   if(!text) return;
   const isSlow = typeof rate === "number";
   const SPEED = isSlow ? rate : 0.78; // default: noticeably slower for learners; explicit rate used for the "Slow" button
-  // de-duplication guard: if this exact word was spoken recently (from any
-  // code path — a stray double-fire, a stale error handler, a browser
-  // trying to auto-restart the clip, etc.) skip it rather than let it
-  // overlap or re-trigger into an audible repeat. Window is generous
-  // (covers realistic slow-network fallback delays, observed up to ~2.5s)
-  // Manual replay buttons ("Hear it again", "Slow") always pass force=true
-  // to bypass this — the student explicitly asked to hear it again, so it
-  // must never be silently swallowed by the same guard that protects
-  // against accidental auto-repeats.
+  // de-duplication guard: the same phrase is not auto-spoken twice within 6 s (stray double-fires).
+  // Manual buttons ("Hear it again", "Slow") pass force=true so a student's own tap is never swallowed.
   const now = Date.now();
   if(!force && !isSlow && text===_lastSpeakText && (now-_lastSpeakTime)<6000) return;
   _lastSpeakText = text; _lastSpeakTime = now;
 
-  if(IS_WEBKIT){
-    // must fire with zero delay, in the exact same tick as the tap —
-    // this is the synchronous path speakLocalSync() below provides
-    speakLocalSync(text, SPEED);
-    return;
-  }
-
-  // On every other browser (Chrome included): if this device has a voice we
-  // can POSITIVELY confirm is female by name, use it directly — this is more
-  // reliable than assuming Google's remote voice is female, since that
-  // assumption is exactly what's been going wrong. Only fall back to
-  // Google's audio when no such confirmed voice exists on this device.
-  const confirmedFemale = pickConfirmedFemaleVoice();
-  if(confirmedFemale){
-    speakWithVoice(confirmedFemale, text, SPEED);
-    return;
-  }
-
-  const a = initTTSAudio();
-  const urlPrimary   = "https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=" + encodeURIComponent(text);
-  const urlSecondary = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=th&client=gtx&q=" + encodeURIComponent(text);
   const callId = ++_speakCallId;
-  // "commit once" flag: the first attempt (primary/secondary/local) that
-  // actually starts playing wins; if an earlier attempt was slow and only
-  // resolves AFTER a fallback already took over, it gets silenced instead
-  // of being allowed to play on top of the fallback — this is what was
-  // causing the same word to sound like it played twice
-  let committed = false;
+  speechStopAll();                              // never two voices on top of each other
+  let committed = false;                        // first method that really starts wins; late ones are silenced
 
+  // ---- 3rd choice: any Thai voice installed on the device
   function tryLocal(){
     if(callId!==_speakCallId || committed) return;
     committed = true;
-    speakLocal(text, SPEED);
+    if(!speakLocal(text, SPEED)) soundNotice();
   }
+  // ---- 2nd: Google audio, alternate address
   function trySecondary(){
     if(callId!==_speakCallId || committed) return;
+    const a=initTTSAudio();
     a.onerror = tryLocal;
-    a.pause(); a.src = urlSecondary; a.playbackRate = SPEED; a.volume = 1; a.muted = false;
+    a.loop=false; a.pause(); a.src = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=th&client=gtx&q=" + encodeURIComponent(text);
+    a.playbackRate = SPEED; a.volume = 1; a.muted = false;
     a.load();
     const p = a.play();
     if(p && p.then) p.then(()=>{
       if(callId!==_speakCallId) return;
-      if(committed){ a.pause(); return; } // a fallback already took over while this was loading — don't overlap
+      if(committed){ a.pause(); return; }
       committed = true; a.onerror = null;
-    });
+    }, ()=>{});
     if(p && p.catch) p.catch(tryLocal);
   }
+  // ---- 1st: Google audio (works in Chrome, Edge, Firefox, Android)
   function tryPrimary(){
+    if(callId!==_speakCallId || committed) return;
+    const a=initTTSAudio();
     a.onerror = trySecondary;
-    a.pause(); a.currentTime = 0; a.src = urlPrimary; a.playbackRate = SPEED; a.volume = 1; a.muted = false;
+    a.loop=false; a.pause(); try{ a.currentTime = 0; }catch(e){}
+    a.src = "https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=" + encodeURIComponent(text);
+    try{ a.preservesPitch = true; a.mozPreservesPitch = true; a.webkitPreservesPitch = true; }catch(e){}
+    a.playbackRate = SPEED; a.volume = 1; a.muted = false;
     a.load();
     const p = a.play();
     if(p && p.then) p.then(()=>{
       if(callId!==_speakCallId) return;
-      if(committed){ a.pause(); return; } // a fallback already took over while this was loading — don't overlap
+      if(committed){ a.pause(); return; }
       committed = true; a.onerror = null;
-    });
+    }, ()=>{});
     if(p && p.catch) p.catch(trySecondary);
+  }
+
+  if(IS_WEBKIT){
+    // Safari / every iPhone browser: must start in the same tick as the tap — device voice only
+    committed = true;
+    if(!speakLocalSync(text, SPEED)) soundNotice();
+    return;
+  }
+  // a device voice we can POSITIVELY confirm is female (e.g. Edge's Premwadee, Windows/Mac Kanya) is best;
+  // if it fails for any reason we fall back to Google audio, then to any Thai voice.
+  const confirmedFemale = pickConfirmedFemaleVoice();
+  if(confirmedFemale){
+    committed = true;
+    speakWithVoice(confirmedFemale, text, SPEED, ()=>{ committed=false; tryPrimary(); });
+    return;
   }
   try{ tryPrimary(); }catch(e){ trySecondary(); }
 }
@@ -4052,14 +4113,22 @@ function pickConfirmedFemaleVoice(){
   if(!th.length) return null;
   return th.find(v=>/natural|neural|premium|enhanced/i.test(v.name)) || th[0];
 }
-function speakWithVoice(voice, text, rate){
+function speakWithVoice(voice, text, rate, onFail){
   try{
     const synth=window.speechSynthesis;
-    synth.cancel();
-    const u=new SpeechSynthesisUtterance(text);
-    u.voice=voice; u.lang=voice.lang || "th-TH"; u.pitch=1; u.volume=1; u.rate=(typeof rate==="number"?rate:0.85);
-    synth.speak(u);
-  }catch(e){/* voice unavailable, fail silently */}
+    const go=()=>{
+      const u=new SpeechSynthesisUtterance(text);
+      u.voice=voice; u.lang=voice.lang || "th-TH"; u.pitch=1; u.volume=1; u.rate=(typeof rate==="number"?rate:0.85);
+      let started=false;
+      u.onstart=()=>{ started=true; };
+      u.onerror=(ev)=>{ if(ev && (ev.error==="canceled"||ev.error==="interrupted")) return; if(!started && onFail) onFail(); };
+      synth.speak(u);
+      // some browsers accept the utterance but never start it (voice offline etc.) → use the next method
+      if(onFail) setTimeout(()=>{ if(!started && !synth.speaking && !synth.pending) onFail(); }, 1800);
+    };
+    // Chrome/Edge sometimes ignore speak() fired right after cancel(): give it a moment
+    if(synth.speaking || synth.pending){ synth.cancel(); setTimeout(go, 70); } else go();
+  }catch(e){ if(onFail) onFail(); }
 }
 // Safari/WebKit path: fires speechSynthesis.speak() with ZERO delay, in the
 // exact same synchronous tick as the call to speak() — any setTimeout or
@@ -4067,7 +4136,7 @@ function speakWithVoice(voice, text, rate){
 // no longer looks like it's "directly in response to" the user's tap.
 function speakLocalSync(text, rate){
   try{
-    if(!("speechSynthesis" in window) || !text) return;
+    if(!("speechSynthesis" in window) || !text) return false;
     const synth = window.speechSynthesis;
     const v = pickThaiVoice();
     synth.cancel();
@@ -4075,21 +4144,23 @@ function speakLocalSync(text, rate){
     if(v){ u.voice = v; u.lang = v.lang || "th-TH"; } else { u.lang = "th-TH"; }
     u.pitch = 1; u.volume = 1; u.rate = (typeof rate==="number" ? rate : 0.82);
     synth.speak(u);
-  }catch(e){/* voice unavailable, fail silently */}
+    return true;
+  }catch(e){ return false; }
 }
 function speakLocal(text, rate){
   try{
-    if(!("speechSynthesis" in window) || !text) return;
+    if(!("speechSynthesis" in window) || !text) return false;
     const synth=window.speechSynthesis;
     const v=pickThaiVoice();
-    if(!v) return;
+    if(!v) return false;
     synth.cancel();
     setTimeout(()=>{
       const u=new SpeechSynthesisUtterance(text);
       u.voice=v; u.lang=v.lang || "th-TH"; u.pitch=1; u.volume=1; u.rate=(typeof rate==="number"?rate:0.85);
       synth.speak(u);
     }, 80);
-  }catch(e){/* voice unavailable, fail silently */}
+    return true;
+  }catch(e){ return false; }
 }
 
 // Practice mode: auto-play + manual replay button — now covers both Word Games and Sentences Practice
