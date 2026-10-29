@@ -2272,7 +2272,7 @@ const CONV_RAW = {
     ["🍰","รับของหวานไหมคะ","Ráp khǒng-wǎan mǎi khá?","Would you like dessert?","ขอ=Khǎor|เมนู=manu|ของหวาน=khǒng-wǎan|หน่อย=nòi|ครับ/ค่ะ=khráp/khâ","Can I have the dessert menu, please?","y"],
   ],
   convbill: [
-    ["🧾","รับอะไรเพิ่มไหมคะ","Ráp à-rai phôem mǎi khá?","Anything else?","เก็บ=Gèp|เงิน=ngern|ด้วย=dûai|ครับ/ค่ะ=khráp/khâ","The bill, please.","y"],
+    ["🧾","รับอะไรเพิ่มไหมคะ","Ráp à-rai phôem mǎi khá?","Anything else?","ไม่=Mâi|เอา=ao|ครับ/ค่ะ=khráp/khâ.|เก็บ=Gèp|เงิน=ngern|ด้วย=dûai","No, thank you. The bill, please.","n"],
     ["💳","ห้าร้อยบาทค่ะ","Hâa-rói bàat khâ.","That's 500 baht.","จ่าย=Jàai|ด้วย=dûai|บัตร=bàt|ครับ/ค่ะ=khráp/khâ","I'll pay with a card."],
     ["💵","จ่ายด้วยอะไรคะ","Jàai dûai à-rai khá?","How would you like to pay?","จ่าย=Jàai|ด้วย=dûai|เงินสด=ngern-sòt|ครับ/ค่ะ=khráp/khâ","I'll pay with cash."],
     ["👥","จ่ายแยกไหมคะ","Jàai yàek mǎi khá?","Pay separately?","จ่าย=Jàai|แยก=yàek|ครับ/ค่ะ=khráp/khâ","Yes, separately.","y"],
@@ -2318,7 +2318,7 @@ Object.keys(CONV_RAW).forEach(k=>{
     const chunks = a[4].split("|").map(x=>{ const j=x.indexOf("="); return {th:x.slice(0,j), rom:x.slice(j+1)}; });
     chunks[0].rom = chunks[0].rom.charAt(0).toUpperCase()+chunks[0].rom.slice(1);
     return { id:k+i, set:k, icon:a[0], q:{th:a[1], rom:a[2], en:a[3]},
-             a:{th:chunks.map(c=>c.th).join(""), rom:chunks.map(c=>c.rom).join(" ")+".", en:a[5], chunks}, yn:a[6]||"" };
+             a:{th:chunks.reduce((t,c,i)=> t + (i && /(ครับ\/ค่ะ|ครับ\/คะ)$/.test(chunks[i-1].th) ? " " : "") + c.th, ""), rom:chunks.map(c=>c.rom).join(" ")+".", en:a[5], chunks}, yn:a[6]||"" };
   });
   CONV_ALL.push(...CONV_PAIRS[k]);
 });
