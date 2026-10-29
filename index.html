@@ -4276,6 +4276,7 @@ function speechStopAll(){
 let _soundNoticeAt = 0;
 function soundNotice(){
   const now=Date.now(); if(now-_soundNoticeAt<60000) return; _soundNoticeAt=now;
+  if(window.hideSoundTip) window.hideSoundTip();
   let n=document.getElementById("soundNotice");
   if(!n){ n=document.createElement("div"); n.id="soundNotice";
     n.style.cssText="position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99999;background:#3a3340;color:#fff;border-radius:14px;padding:10px 14px;font:700 13.5px/1.35 Nunito,sans-serif;max-width:92vw;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.3);";
@@ -4283,6 +4284,29 @@ function soundNotice(){
   n.innerHTML="🔇 No Thai sound on this browser right now.<br><span style='font-weight:600;opacity:.95'>Please try again, or open this page in <b>Google Chrome</b> or <b>Microsoft Edge</b> (iPhone: <b>Safari</b>). Also check the volume and silent switch.</span>";
   n.style.display="block"; clearTimeout(n._t); n._t=setTimeout(()=>{ n.style.display="none"; },7000);
 }
+/* ---------- "best browser for sound" tip: shown on every device when the site opens, fades after 8 seconds ---------- */
+(function(){
+  const ua = navigator.userAgent || "", plat = navigator.platform || "";
+  const isIOS = /iPhone|iPad|iPod/.test(ua) || (plat==="MacIntel" && navigator.maxTouchPoints>1);
+  const isAndroid = /Android/.test(ua);
+  const isMac = !isIOS && /Mac/.test(plat);
+  let device, best;
+  if(isIOS){ device="iPhone / iPad"; best="<b>Safari</b>"; }
+  else if(isAndroid){ device="Android"; best="<b>Google Chrome</b>"; }
+  else if(isMac){ device="Mac"; best="<b>Google Chrome</b> or <b>Safari</b>"; }
+  else { device="laptop / computer"; best="<b>Google Chrome</b> or <b>Microsoft Edge</b>"; }
+  function show(){
+    if(document.getElementById("soundTip")) return;
+    const n=document.createElement("div"); n.id="soundTip";
+    n.style.cssText="position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99998;background:#3a3340;color:#fff;border-radius:14px;padding:11px 16px;font:700 13.5px/1.4 Nunito,sans-serif;max-width:92vw;width:340px;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.3);cursor:pointer;transition:opacity .5s;";
+    n.innerHTML="🔊 <b>For the best Thai sound</b><br><span style='font-weight:600'>on your "+device+", please open this site in "+best+".</span>";
+    n.onclick=()=>n.remove();
+    document.body.appendChild(n);
+    setTimeout(()=>{ n.style.opacity="0"; setTimeout(()=>n.remove(),600); },8000);
+  }
+  window.hideSoundTip=()=>{ const t=document.getElementById("soundTip"); if(t) t.remove(); };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(show,500)); else setTimeout(show,500);
+})();
 // Phones/Safari only allow sound after a first tap. Quietly "unlock" audio on the very first touch
 // so the automatic voices later in the games work everywhere.
 (function(){
