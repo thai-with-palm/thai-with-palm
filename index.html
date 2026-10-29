@@ -4474,8 +4474,8 @@ function speechText(text){
   let t = String(text||"");
   t = t.replace(/[​‌‍﻿]/g,"");     // invisible characters
   t = expandMaiYamok(t);
-  // "ครับ/ค่ะ" and "ผม/ฉัน" are two options on screen — the voice is female, so say the ค่ะ / ฉัน form once
-  t = t.replace(/(ครับ|ค่ะ|คะ)\s*[\/|]\s*(ครับ|ค่ะ|คะ)/g, (m,x,y)=> (x==="ครับ"?y:x)).replace(/(ผม|ฉัน|ดิฉัน)\s*[\/|]\s*(ผม|ฉัน|ดิฉัน)/g, (m,x,y)=> (x==="ผม"?y:x));
+  // "ครับ/ค่ะ" is spoken as BOTH words ("ครับ ค่ะ"); "ผม/ฉัน" are two options on screen — the voice is female, so say the ฉัน form once
+  t = t.replace(/(ครับ|ค่ะ|คะ)\s*[\/|]\s*(ครับ|ค่ะ|คะ)/g, "$1 , $2").replace(/(ผม|ฉัน|ดิฉัน)\s*[\/|]\s*(ผม|ฉัน|ดิฉัน)/g, (m,x,y)=> (x==="ผม"?y:x));
   t = t.replace(/[“”"‘’]/g,"").replace(/\s*[\/|]\s*/g," ").replace(/\(.*?\)/g,"");   // quotes / slashes / ( notes ) are not for speaking
   return t.replace(/\s+/g," ").trim();
 }
