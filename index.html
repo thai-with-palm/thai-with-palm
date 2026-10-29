@@ -2264,8 +2264,8 @@ const CONV_RAW = {
     ["💧","เอาเครื่องดื่มอะไรคะ","Ao khrûeang-dùem à-rai khá?","What drink would you like?","เอา=Ao|น้ำเปล่า=náam bplàao|ครับ/ค่ะ=khráp/khâ","I'll have plain water."],
     ["💧","เอาน้ำไหมคะ","Ao náam mǎi khá?","Do you want water?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, please.","y"],
     ["🌿","เอาผักชีไหมคะ","Ao phàk-chii mǎi khá?","Do you want coriander?","ไม่=Mâi|เอา=ao|ครับ/ค่ะ=khráp/khâ","No, thank you.","n"],
-    ["🍚","เอาข้าวไหมคะ","Ao khâao mǎi khá?","Do you want rice?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, please.","y"],
-    ["🧊","เอาน้ำแข็งไหมคะ","Ao náam-khǎeng mǎi khá?","Do you want ice?","ไม่=Mâi|เอา=ao|ครับ/ค่ะ=khráp/khâ","No, thank you.","n"],
+    ["🍚","เอาข้าวไหมคะ","Ao khâao mǎi khá?","Do you want rice?","เอา=Ao|ข้าว=khâao|ครับ/ค่ะ=khráp/khâ","Yes, rice please.","y"],
+    ["🧊","เอาน้ำแข็งไหมคะ","Ao náam-khǎeng mǎi khá?","Do you want ice?","ไม่=Mâi|เอา=ao|น้ำแข็ง=náam-khǎeng|ครับ/ค่ะ=khráp/khâ","No ice, thank you.","n"],
     ["🥩","เอาความสุกระดับไหนคะ","Ao khwaam-sùk ra-dàp nǎi khá?","How would you like it cooked?","สุกปานกลาง=Sùk bpaan-glaang|ครับ/ค่ะ=khráp/khâ","Medium, please."],
     ["🍽️","ทานที่นี่หรือกลับบ้านคะ","Thaan thîi-nîi rǔe glàp bâan khá?","Eat here or to go?","ทาน=Thaan|ที่นี่=thîi-nîi|ครับ/ค่ะ=khráp/khâ","Eat here, please."],
     ["🌶️","เผ็ดไหมคะ","Phèt mǎi khá?","Do you want it spicy?","ไม่=Mâi|เผ็ด=phèt|ครับ/ค่ะ=khráp/khâ","Not spicy, please.","n"],
@@ -2297,9 +2297,8 @@ const CONV_RAW = {
     ["🛍️","เอาถุงไหมคะ","Ao thǔng mǎi khá?","Do you want a bag?","เอา=Ao|ครับ/ค่ะ=khráp/khâ","Yes, I'll take one.","y"],
     ["🛍️","เอาถุงกี่ใบคะ","Ao thǔng gìi bai khá?","How many bags would you like?","เอา=Ao|ถุง=thǔng|สอง=sǎorng|ใบ=bai|ครับ/ค่ะ=khráp/khâ","I'll take two bags."],
     ["💳","จ่ายเงินสดหรือบัตรคะ","Jàai ngern-sòt rǔe bàt khá?","Cash or card?","จ่าย=Jàai|โดย=dooi|บัตร=bàt|ครับ/ค่ะ=khráp/khâ","I'll pay by card."],
-    ["💵","จ่ายเงินสดหรือบัตรคะ","Jàai ngern-sòt rǔe bàt khá?","Cash or card?","จ่าย=Jàai|โดย=dooi|เงินสด=ngern-sòt|ครับ/ค่ะ=khráp/khâ","I'll pay by cash."],
     ["🧾","รับสลิปไหมคะ","Ráp sà-lìp mǎi khá?","Would you like a receipt?","รับ=Ráp|สลิป=sà-lìp|ครับ/ค่ะ=khráp/khâ","Yes, I'd like a receipt.","y"],
-    ["🧾","รับสลิปไหมคะ","Ráp sà-lìp mǎi khá?","Would you like a receipt?","ไม่=Mâi|รับ=ráp|สลิป=sà-lìp|ครับ/ค่ะ=khráp/khâ","No receipt, thanks.","n"],
+    ["🧾","ต้องการสลิปไหมคะ","Dtông-gaan sà-lìp mǎi khá?","Do you need a receipt?","ไม่=Mâi|รับ=ráp|สลิป=sà-lìp|ครับ/ค่ะ=khráp/khâ","No receipt, thanks.","n"],
   ],
   convchat: [
     ["😊","สบายดีไหมคะ","Sà-baai dii mǎi khá?","How are you?","สบายดี=Sà-baai dii|ครับ/ค่ะ=khráp/khâ","I'm fine.","y"],
@@ -2397,6 +2396,10 @@ const PG_VOCAB_ALL = [].concat(PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_
                          PG_SETS.foodorder, PG_SETS.shopping);
 // sentence pool used only by "Sentences Practice" Mixed option
 const PG_SENT_ALL = [].concat(PG_SETS.sentences, PG_SETS.everyday, PG_SETS.yaak, PG_SETS.classifiersent);
+// never the same word or sentence twice: inside a set, or in the mixed pools
+function pgUniqInPlace(arr){ const seen=new Set(), keep=arr.filter(w=>{ if(seen.has(w.th)) return false; seen.add(w.th); return true; }); arr.length=0; keep.forEach(w=>arr.push(w)); }
+Object.keys(PG_SETS).forEach(k=>pgUniqInPlace(PG_SETS[k]));
+pgUniqInPlace(PG_VOCAB_ALL); pgUniqInPlace(PG_SENT_ALL);
 
 // ---------- Sentence Builder data ----------
 // Each sentence is broken into tappable word/phrase chunks in the correct
@@ -2602,6 +2605,11 @@ Object.keys(BUILDER_DATA_BY_KEY).forEach(k=>{
     if(pm) last.rom = last.rom.slice(0, -pm[0].length);      // the ? or . moves to the new last tile
     q.chunks.push({th:e.th, rom:e.rom+(pm?pm[0]:"")});
   });
+});
+// …and no sentence twice in a Build it set
+Object.keys(BUILDER_DATA_BY_KEY).forEach(k=>{
+  const seen = new Set();
+  BUILDER_DATA_BY_KEY[k] = BUILDER_DATA_BY_KEY[k].filter(q=>{ const t = q.chunks.map(c=>c.th).join(""); if(seen.has(t)) return false; seen.add(t); return true; });
 });
 
 
