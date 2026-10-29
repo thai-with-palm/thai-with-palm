@@ -2162,7 +2162,7 @@ Object.assign(PG_SETS, {
 // pair = [emoji, staff Thai, staff rom, staff English, "reply chunks th=rom|th=rom", reply English, yes/no flag]
 const CONV_RAW = {
   convfood: [
-    ["👥","กี่ท่านคะ","Gìi thâan khá?","How many people?","สอง=Sǎorng|ท่าน=thâan","Two people."],
+    ["👥","กี่ท่านคะ","Gìi thâan khá?","How many people?","สอง=Sǎorng|ท่าน=thâan|ครับ/ค่ะ=khráp/khâ","Two people."],
     ["🍗","รับอะไรดีคะ","Ráp à-rai dii khá?","What would you like?","เอา=Ao|ไก่=gài|ครับ/ค่ะ=khráp/khâ","I want chicken."],
     ["🍛","เอาอะไรดีคะ","Ao à-rai dii khá?","What would you like to order?","เอา=Ao|ผัดกะเพรา=phàt kà-phrao|ครับ/ค่ะ=khráp/khâ","I want basil stir-fry."],
     ["💧","เอาเครื่องดื่มอะไรคะ","Ao khrûeang-dùem à-rai khá?","What drink would you like?","เอา=Ao|น้ำเปล่า=náam bplàao|ครับ/ค่ะ=khráp/khâ","I'll have plain water."],
@@ -2186,7 +2186,7 @@ const CONV_RAW = {
   convshop: [
     ["🥛","หาอะไรอยู่คะ","Hǎa à-rai yùu khá?","What are you looking for?","กำลัง=Gam-lang|หา=hǎa|นม=nom|ครับ/ค่ะ=khráp/khâ","I'm looking for milk."],
     ["🥚","มีอะไรให้ช่วยไหมคะ","Mii à-rai hâi chûai mǎi khá?","Can I help you?","ไข่=Khài|อยู่=yùu|ที่ไหน=thîi nǎi|ครับ/คะ=khráp/khá","Where are the eggs?"],
-    ["👉","ตรงไปแล้วเลี้ยวขวาค่ะ","Dtrong bpai láew líao khwǎa khâ.","Go straight, then turn right.","ตรงไป=Dtrong bpai|แล้ว=láew|เลี้ยวขวา=líao khwǎa|ใช่ไหม=châi mǎi","Straight, then right, correct?"],
+    ["👉","ตรงไปแล้วเลี้ยวขวาค่ะ","Dtrong bpai láew líao khwǎa khâ.","Go straight, then turn right.","ตรงไป=Dtrong bpai|แล้ว=láew|เลี้ยวขวา=líao khwǎa|ใช่ไหม=châi mǎi|ครับ/คะ=khráp/khá","Straight, then right, correct?"],
     ["🙏","ใช่ค่ะ","Châi khâ.","Yes, that's right.","ขอบคุณ=Khòp-khun|ครับ/ค่ะ=khráp/khâ","Thank you."],
     ["🍊","เอาส้มกี่กิโลคะ","Ao sôm gìi gi-lo khá?","How many kilos of oranges?","เอา=Ao|ส้ม=sôm|ครึ่งกิโล=khrûng gi-lo|ครับ/ค่ะ=khráp/khâ","I'd like half a kilo."],
     ["🥛","เอานมกี่กล่องคะ","Ao nom gìi glàorng khá?","How many cartons of milk?","เอา=Ao|นม=nom|สอง=sǎorng|กล่อง=glàorng|ครับ/ค่ะ=khráp/khâ","I'd like two cartons."],
@@ -2226,7 +2226,6 @@ Object.keys(CONV_RAW).forEach(k=>{
   });
   CONV_ALL.push(...CONV_PAIRS[k]);
 });
-CONV_PAIRS.convmix = CONV_ALL.slice();
 // Practice mode shows both lines of every conversation (with the English meaning)
 Object.keys(CONV_PAIRS).forEach(k=>{
   PG_SETS[k] = [];
@@ -2237,6 +2236,57 @@ Object.keys(CONV_PAIRS).forEach(k=>{
 });
 // Sentences + Introductions are one card: merge the two lists (skip any repeated sentence)
 (function(){ const seen=new Set(PG_SETS.sentences.map(w=>w.th)); PG_SETS.sentences=PG_SETS.sentences.concat(PG_SETS.introduce.filter(w=>!seen.has(w.th))); delete PG_SETS.introduce; })();
+
+/* ==========================================================
+   POLITE ENDINGS — every full sentence a student says (or staff says) ends with ค่ะ / ครับ / คะ.
+   Statements: ครับ/ค่ะ · questions: ครับ/คะ · "ผม…" lines: ครับ · "ฉัน…" lines: ค่ะ.
+   Applied in one place so every game (words, sentences, Build it, Talk Back, 7-Eleven) stays consistent.
+   ========================================================== */
+const POL_DONE = /(ครับ|ค่ะ|คะ|จ้ะ|จ้า)$/;
+const POL_MAP = {};   // old Thai text -> new Thai text (used to keep students' saved progress)
+function polEndFor(th, en){
+  const q = /\?/.test(en||"");
+  const t = (th||"").trim();
+  const female = /^(ฉัน|ดิฉัน)/.test(t) || /female speaker/i.test(en||"");
+  const male = /^ผม(?!\/)/.test(t) || (/male speaker/i.test(en||"") && !/female/i.test(en||""));
+  if(male && !female) return {th:"ครับ", rom:"khráp"};
+  if(female && !male) return q ? {th:"คะ", rom:"khá"} : {th:"ค่ะ", rom:"khâ"};
+  return q ? {th:"ครับ/คะ", rom:"khráp/khá"} : {th:"ครับ/ค่ะ", rom:"khráp/khâ"};
+}
+function polRom(rom, endRom){
+  const m = String(rom||"").match(/^(.*?)(\.\.\.|[.?!]+)?\s*$/);
+  const base = m[1], pun = m[2]||"";
+  if(pun==="...") return base+"... "+endRom;
+  return base+" "+endRom+pun;
+}
+function polThai(th, endTh){ return String(th).replace(/\s+$/,"")+endTh; }
+function polWord(w, forced){        // w = {th, rom, en, say?}; forced = {th,rom} to override the automatic ending
+  if(!w || POL_DONE.test(String(w.th).replace(/[\s?.!]+$/,""))) return;
+  const e = forced || polEndFor(w.th, w.en);
+  const old = w.th;
+  w.th = polThai(w.th, e.th);
+  w.rom = polRom(w.rom, e.rom);
+  if(w.say) w.say = String(w.say).replace(/\s+$/,"")+" "+e.th;
+  POL_MAP[old] = w.th;
+}
+(function(){
+  const STAFFQ = {th:"คะ", rom:"khá"};
+  const all = k => PG_SETS[k] || [];
+  ["sentences","everyday","yaak","classifiersent"].forEach(k=> all(k).forEach(w=>{
+    if(["อยาก"].includes(w.th)) return;
+    if(/polite particle|softening/.test(w.en)) return;
+    polWord(w);
+  }));
+  const only = (k, test) => all(k).forEach(w=>{ if(test(w)) polWord(w); });
+  only("classroom", w=> ["จำได้ไหม","เข้าใจไหม","มีคำถามไหม","เห็นไหม","เห็นหน้าจอไหม"].includes(w.th));
+  only("directions", w=> ["ใกล้ไหม","ไกลไหม","ใกล้หรือไกล"].includes(w.th));
+  only("position", w=> /^The /.test(w.en));
+  only("destination", w=> /^the sunset is/i.test(w.en));
+  only("colors", w=> /^(What color|This is|That is|The )/.test(w.en));
+  only("thisthat", w=> ["นี่คืออะไร","นั่นคืออะไร"].includes(w.th));
+  only("classifiers", w=> w.th==="มีกี่คน");
+  all("seven11").forEach(w=>{ if(/\?/.test(w.en)) polWord(w, STAFFQ); else polWord(w); });
+})();
 const PG_ALL = [].concat(PG_SETS.classifiersent, PG_SETS.greet, PG_SETS.quest, PG_SETS.action, PG_SETS.things, PG_SETS.feel,
                          PG_SETS.classroom, PG_SETS.sea,
                          PG_SETS.destination, PG_SETS.directions, PG_SETS.questwords, PG_SETS.thisthat, PG_SETS.khong,
@@ -2444,6 +2494,19 @@ const BUILDER_DATA_BY_KEY = {
 Object.keys(CONV_PAIRS).forEach(k=>{
   BUILDER_DATA_BY_KEY[k] = CONV_PAIRS[k].map(p=>({ en:"Staff: “"+p.q.en+"”  →  You say: “"+p.a.en+"”", chunks:p.a.chunks.map(c=>({th:c.th, rom:c.rom})) }));
 });
+// Build it: add the polite ending as a last tile wherever a sentence has none
+Object.keys(BUILDER_DATA_BY_KEY).forEach(k=>{
+  if(CONV_PAIRS[k]) return;
+  BUILDER_DATA_BY_KEY[k].forEach(q=>{
+    if(q._pol) return; q._pol = true;
+    const joined = q.chunks.map(c=>c.th).join("").replace(/\s+/g,"");
+    if(POL_DONE.test(joined)) return;
+    const e = polEndFor(joined, q.en);
+    const last = q.chunks[q.chunks.length-1], pm = String(last.rom).match(/[.?!]+$/);
+    if(pm) last.rom = last.rom.slice(0, -pm[0].length);      // the ? or . moves to the new last tile
+    q.chunks.push({th:e.th, rom:e.rom+(pm?pm[0]:"")});
+  });
+});
 
 
 const PG_META_VOCAB = [
@@ -2476,7 +2539,6 @@ const PG_META_SENT = [
   {key:"convfood",    emo:"🍜", title:"Ordering Food",            sub:"รับอะไรดีคะ · เอาน้ำไหม · เก็บเงินด้วย",   cls:"paa", conv:true},
   {key:"convshop",    emo:"🛒", title:"At the Supermarket",       sub:"หาอะไรอยู่คะ · เอากี่กิโลคะ · มีสมาชิกไหม", cls:"kham", conv:true},
   {key:"convchat",    emo:"💬", title:"Everyday Chat",            sub:"สบายดีไหม · กินข้าวหรือยัง",              cls:"mix", conv:true},
-  {key:"convmix",     emo:"🗣️", title:"Mixed Conversation",       sub:"All "+CONV_ALL.length+" conversations", cls:"mix", conv:true},
   {key:"seven11",     emo:"🏪", title:"7-Eleven Challenge",       sub:"Recognize, choose, and build real Thai", cls:"kha", special:true},
   {key:"allsent",     emo:"🎯", title:"Mixed Sentences",          sub:"All "+PG_SENT_ALL.length+" sentences",  cls:"mix"},
 ];
@@ -2497,6 +2559,8 @@ let PG_PROGRESS = {};
 try{ PG_PROGRESS = JSON.parse(localStorage.getItem(PG_PROGRESS_KEY)) || {}; }catch(e){ PG_PROGRESS = {}; }
 function savePgProgress(){
   try{ localStorage.setItem(PG_PROGRESS_KEY, JSON.stringify(PG_PROGRESS)); }catch(e){/* storage unavailable, ignore */}
+// the sentences got polite endings: keep students' saved progress for them
+(function(){ let ch=false; for(const cat in PG_PROGRESS){ const m=PG_PROGRESS[cat]; if(!m) continue; for(const old in POL_MAP){ if(m[old]){ m[POL_MAP[old]]=true; delete m[old]; ch=true; } } } if(ch) savePgProgress(); })();
 }
 // build a lookup from every word's Thai text -> the real category key it
 // belongs to, so progress marks correctly even when answered inside a
@@ -2527,7 +2591,7 @@ const PG_CARD_COLOR = {
   classroom:"#F0C05A", greet:"#FF6B8B", quest:"#FFD24B", action:"#FF7F6B", things:"#8DC63F",
   feel:"#E85D75", questwords:"#C983E0", thisthat:"#5DBB7A", sea:"#3FB6C9", destination:"#6BAA6E",
   directions:"#E8663C", sentences:"#FF6B8B", everyday:"#8DC63F",
-  foodorder:"#FF7F6B", shopping:"#8DC63F", convfood:"#FF7F6B", convshop:"#8DC63F", convchat:"#FF6B8B", convmix:"#E8663C",
+  foodorder:"#FF7F6B", shopping:"#8DC63F", convfood:"#FF7F6B", convshop:"#8DC63F", convchat:"#FF6B8B",
   seven11:"#3FB6C9", all:"#E8663C", allsent:"#E8663C", classifiers:"#FF7F6B", classifiersent:"#FF7F6B",
 };
 
@@ -2540,7 +2604,7 @@ const PG_GROUPS_VOCAB = [
 ];
 const PG_GROUPS_SENT = [
   {label:"Practice",   keys:["sentences","everyday","yaak","classifiersent"]},
-  {label:"Conversations · Talk Back", keys:["convfood","convshop","convchat","convmix"]},
+  {label:"Conversations · Talk Back", keys:["convfood","convshop","convchat"]},
   {label:"Challenges", keys:["seven11","allsent"]},
 ];
 
@@ -3696,6 +3760,12 @@ const SEVEN11_GAME_DATA = [
     hint:"Start with \"Mâi...\"" },
 ];
 
+// 7-Eleven: the cashier's questions end in คะ, the customer's short replies end in ครับ/ค่ะ
+SEVEN11_GAME_DATA.forEach(q=>{
+  if(q.type!=="A") return;
+  q.th = polThai(q.th, "คะ"); q.rom = polRom(q.rom, "khá");
+  [q.correct, q.wrong].forEach(r=>{ if(!POL_DONE.test(r.th)){ r.th = polThai(r.th, "ครับ/ค่ะ"); r.rom = polRom(r.rom, "khráp/khâ"); } });
+});
 const SV_TYPE_BADGE = { A:"⚡", B:"🎯", C:"🧩", L:"🔊", P:"🎯" };
 
 let svQueue=[], svIdx=0, svMissedNext=[], svGoodCount=0, svMissCount=0, svCycleNum=1, svAnswered=false;
