@@ -314,9 +314,10 @@
     position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(120%);
     background:var(--ink);color:var(--bg);font-weight:800;font-size:.88rem;padding:.75rem 1.3rem;
     border-radius:999px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);z-index:100;
-    transition:transform .25s cubic-bezier(.3,.9,.4,1.2);display:flex;align-items:center;gap:.5rem;
+    transition:transform .25s cubic-bezier(.3,.9,.4,1.2),opacity .2s,visibility .2s;display:flex;align-items:center;gap:.5rem;
+    opacity:0;visibility:hidden;pointer-events:none;   /* fully hidden until a message shows (no dark tab peeking at the bottom) */
   }
-  #toast.show{transform:translateX(-50%) translateY(0);}
+  #toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible;}
 
   @media (max-width:560px){
     .word-row{grid-template-columns:1fr;gap:.15rem;padding:.7rem 0;}
@@ -388,6 +389,7 @@
           <div class="stage-nav" id="stage-nav">
             <button class="nav-arrow" id="prev-btn" aria-label="Previous word">‹</button>
             <button class="btn btn-gold next-btn" id="next-btn">Next word →</button>
+            <button class="nav-arrow" id="skip-btn" aria-label="Next word (skip the answer)" title="Next word — skip the answer">›</button>
             <button class="nav-arrow" id="restart-btn" aria-label="Restart topic" title="Restart topic">↺</button>
           </div>
         </div>
@@ -749,6 +751,9 @@
 
   function updateNextBtn(){
     var btn = document.getElementById('next-btn');
+    // Part 1 / Part 2: an arrow beside "Reveal" lets advanced students jump straight to the next word
+    var skip = document.getElementById('skip-btn');
+    if (skip) skip.style.display = (nav.mode === 'study') ? 'none' : '';
     if (nav.mode === 'study') {
       btn.textContent = 'Next word →';
       btn.onclick = function(){ nav.index++; renderCard(); renderSidebar(); };
@@ -761,6 +766,9 @@
     }
   }
 
+  document.getElementById('skip-btn').addEventListener('click', function(){
+    nav.index++; nav.revealed = false; renderCard(); renderSidebar();
+  });
   document.getElementById('prev-btn').addEventListener('click', function(){
     if (nav.index > 0) { nav.index--; nav.revealed = false; renderCard(); renderSidebar(); }
   });
