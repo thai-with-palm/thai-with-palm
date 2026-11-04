@@ -602,12 +602,14 @@
     padding:10px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin-bottom:16px; }
   .sb-answerrow:empty::before{ content:"Tap the words below in order →"; color:var(--soft); font-size:13.5px; font-weight:700; }
   .sb-chip-placed{ background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff; border-radius:12px;
-    padding:11px 16px; font-weight:800; font-size:17px; display:flex; align-items:center; justify-content:center; line-height:1.25; }
+    padding:8px 14px; font-weight:800; font-size:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.25; }
   .sb-bank{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:14px; }
   .sb-chip{ appearance:none; cursor:pointer; border:none; background:var(--white); box-shadow:var(--shadow-sm);
-    border-radius:14px; padding:13px 18px; font-family:var(--sans); display:flex; align-items:center;
+    border-radius:14px; padding:9px 16px; font-family:var(--sans); display:flex; flex-direction:column; align-items:center;
     justify-content:center; line-height:1.25; transition:transform .1s, opacity .15s; }
-  .sb-chip b{ font-size:18px; color:var(--kara); }
+  .sb-chip b{ font-size:14.5px; color:var(--soft); }
+  .sb-th{ font-family:var(--loop); font-weight:700; font-size:24px; line-height:1.3; }
+  .sb-chip .sb-th{ color:var(--kara); }
   .sb-chip:active{ transform:scale(.94); }
   .sb-chip.sb-used{ opacity:0; pointer-events:none; }
   .sb-actions{ text-align:center; margin-bottom:10px; }
@@ -750,6 +752,34 @@
   .al-opts.cls{ grid-template-columns:repeat(3,1fr); }
   .al-opt.clsopt{ font-family:var(--sans); font-size:17px; font-weight:900; min-height:54px; }
   .al-opt.clsopt.right{ outline:4px solid var(--teal); } .al-opt.clsopt.wrong{ opacity:.45; }
+  /* ===== THAI VOWELS (สระ) — reuses the alphabet look ===== */
+  .vw-hero{ background:linear-gradient(135deg,#3F7CC4,#6FB0E8); }
+  .hb5{ background:linear-gradient(135deg,#3F7CC4,#6FB0E8); }
+  .vw-tabs{ grid-template-columns:repeat(5,1fr); }
+  .vw-tabs .al-tab{ font-size:11.5px; }
+  .vw-tabs .al-tab.active{ background:linear-gradient(135deg,#3F7CC4,#6FB0E8); }
+  .vw-tile.sel{ border-color:#3F7CC4; background:#E6F1FC; }
+  .vw-tip{ font-size:13.5px; font-weight:700; color:var(--soft); margin-top:4px; }
+  .vw-exlist{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+  .vw-ex{ border:none; cursor:pointer; background:#F4F8FD; border-radius:13px; padding:6px 4px; display:flex; flex-direction:column; align-items:center; font-family:var(--sans); color:var(--ink); }
+  .vw-exlist .vw-ex:only-child{ grid-column:1/-1; }
+  .vw-ex .e{ font-size:28px; line-height:1.1; }
+  .vw-ex .t{ font-family:var(--loop); font-weight:700; font-size:24px; line-height:1.3; color:var(--kara); }
+  .vw-ex .r{ font-size:12.5px; font-weight:800; color:var(--soft); }
+  .vw-ex .m{ font-size:13px; font-weight:800; }
+  .vw-wr-h{ font-weight:900; font-size:13.5px; color:var(--soft); margin-top:10px; }
+  .vw-writes{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:5px; }
+  .vw-wr{ background:#FFF6EE; border-radius:12px; padding:5px 4px; display:flex; flex-direction:column; align-items:center; font-family:var(--sans); }
+  .vw-wr .f{ font-family:var(--loop); font-weight:700; font-size:16px; color:var(--soft); }
+  .vw-wr .t{ font-family:var(--loop); font-weight:700; font-size:30px; line-height:1.25; color:var(--kara); }
+  .vw-wr .r{ font-size:12px; font-weight:800; color:var(--soft); }
+  .vw-qword{ font-family:var(--loop); font-weight:700; font-size:54px; line-height:1.4; color:var(--kara); }
+  .vw-chartnote{ text-align:center; font-weight:700; font-size:13.5px; color:var(--soft); margin:2px 0 4px; }
+  .vw-chart{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+  .vw-cell{ border:3px solid; cursor:pointer; background:var(--white); border-radius:14px; padding:4px 2px 5px; display:flex; flex-direction:column; align-items:center; box-shadow:var(--shadow-sm); font-family:var(--sans); }
+  .vw-cell:active{ transform:scale(.96); }
+  .vw-cell .g{ font-family:var(--loop); font-weight:700; font-size:27px; line-height:1.35; color:var(--ink); }
+  .vw-cell .r{ font-size:12px; font-weight:800; color:var(--soft); }
 </style>
 </head>
 <body>
@@ -779,6 +809,10 @@
         <span class="emo">🔤</span>
         <span><b>Thai Alphabet</b><small>44 consonants — see it, hear it, pick it</small></span>
       </button>
+      <button class="hubbtn hb5" id="hbVowels" data-go="vowels">
+        <span class="emo">🅰️</span>
+        <span><b>Thai Vowels · สระ</b><small>32 vowels — short, long, hear it, write it</small></span>
+      </button>
     </div>
     <div class="foot">Practise a little every day 🌟<br>Thai with Palm 💬</div>
     <div class="teacher-link-wrap"><button class="teacher-link" data-go="teacherlogin">🔒 Teacher</button></div>
@@ -792,6 +826,16 @@
       <p id="alSub">44 consonants · see it, hear it, pick it</p>
     </div>
     <div id="alBody"></div>
+  </section>
+
+  <!-- ================= THAI VOWELS ================= -->
+  <section id="vowels" class="hidden">
+    <div class="al-hero vw-hero">
+      <button class="back" id="vwBackBtn">←</button>
+      <h1>Thai Vowels · สระ 🅰️</h1>
+      <p id="vwSub">32 vowels · see it, hear it, write it</p>
+    </div>
+    <div id="vwBody"></div>
   </section>
 
   <!-- ================= TEACHER · LOGIN ================= -->
@@ -1552,7 +1596,7 @@ function show(id){
   if(id!=="sevengame" && typeof svClearTimers==="function") svClearTimers();
   ["hub","home","quiz","practice","result","pghome","pgpractice","pgame","pgresult",
    "sevenintro","sevengame","sevenroundresult","sevencomplete",
-   "khonggame","alphabet",
+   "khonggame","alphabet","vowels",
    "sentbuilder","sentbuilderresult",
    "teacherlogin","teachersection"].forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id));
   window.scrollTo(0,0);
@@ -4311,7 +4355,7 @@ function renderBuilderQ(){
   shuffled.forEach(chunk=>{
     const b = document.createElement("button");
     b.className = "sb-chip";
-    b.innerHTML = '<b>'+chunk.rom+'</b>';
+    b.innerHTML = '<span class="sb-th">'+chunk.th+'</span><b>'+chunk.rom+'</b>';
     b.onclick = ()=> sbTapChunk(chunk, b);
     bank.appendChild(b);
     sbChipEls.push(b);
@@ -4327,7 +4371,7 @@ function sbTapChunk(chunk, btnEl){
   const row = document.getElementById("sbAnswerRow");
   const chip = document.createElement("div");
   chip.className = "sb-chip-placed";
-  chip.innerHTML = '<b>'+chunk.rom+'</b>';
+  chip.innerHTML = '<span class="sb-th">'+chunk.th+'</span><b>'+chunk.rom+'</b>';
   row.appendChild(chip);
 
   if(sbPlaced.length === sbQueue[sbIdx].chunks.length){
@@ -5060,6 +5104,239 @@ function alRenderResult(){
 }
 $al("alBackBtn").onclick = alBack;
 $al("hbAlphabet").onclick = alOpen;
+
+/* ===================== THAI VOWELS · สระ ===================== */
+// v = vowel written on อ, rom = sound, len = short/long, part = 1–4, pos = where it goes,
+// words = example words (th, rom, en, e), writes = [consonant, vowel mark, result, rom]
+const VW_DATA = [{"v":"อะ","rom":"a","len":"short","part":1,"pos":"after","where":"after อ (ะ goes after the consonant)","tip":"Short sound. Say it quickly.","words":[{"th":"จะ","rom":"Ja","en":null,"e":""},{"th":"กะ","rom":"Ga","en":null,"e":""},{"th":"ปะ","rom":"Bpa","en":null,"e":""},{"th":"อะ","rom":"A","en":null,"e":""}],"writes":[["จ","ะ","จะ","Ja"],["ก","ะ","กะ","Ga"],["ป","ะ","ปะ","Bpa"],["อ","ะ","อะ","A"]],"note":""},{"v":"อา","rom":"aa","len":"long","part":1,"pos":"after","where":"after อ","tip":"Long sound. Hold it, like “ah”.","words":[{"th":"กา","rom":"Gaa","en":"crow","e":"🐦‍⬛"},{"th":"มา","rom":"Maa","en":"come","e":"🚶"},{"th":"ตา","rom":"Dtaa","en":"eye","e":"👁️"},{"th":"ปลา","rom":"Bplaa","en":"fish","e":"🐟"}],"writes":[["ก","า","กา","Gaa"],["จ","า","จา","Jaa"],["ด","า","ดา","Daa"],["ป","า","ปา","Bpaa"]],"note":""},{"v":"อิ","rom":"i","len":"short","part":1,"pos":"above","where":"above the consonant","tip":"Short, like “i” in “it”.","words":[{"th":"กิน","rom":"Gin","en":"eat","e":"🍚"},{"th":"ปิด","rom":"Bpìt","en":"close","e":"🚪"},{"th":"ผิด","rom":"Phìt","en":"wrong","e":"❌"},{"th":"ชิม","rom":"Chim","en":"taste","e":"👅"}],"writes":[["ก","◌ิ","กิ","Gi"],["จ","◌ิ","จิ","Ji"],["ด","◌ิ","ดิ","Di"],["ป","◌ิ","ปิ","Bpi"]],"note":""},{"v":"อี","rom":"ii","len":"long","part":1,"pos":"above","where":"above the consonant","tip":"Long, like “ee” in “see”.","words":[{"th":"ดี","rom":"Dii","en":"good","e":"👍"},{"th":"มี","rom":"Mii","en":"have","e":"🎒"},{"th":"ปี","rom":"Bpii","en":"year","e":"🗓️"},{"th":"สี","rom":"Sǐi","en":"color","e":"🎨"}],"writes":[["ก","◌ี","กี","Gii"],["จ","◌ี","จี","Jii"],["ด","◌ี","ดี","Dii"],["ป","◌ี","ปี","Bpii"]],"note":""},{"v":"อุ","rom":"u","len":"short","part":1,"pos":"below","where":"below the consonant","tip":"Short. Round your lips, say it quickly.","words":[{"th":"ปุ่ม","rom":"Bpùm","en":"button","e":"🔘"},{"th":"ยุง","rom":"Yung","en":"mosquito","e":"🦟"},{"th":"คุณ","rom":"Khun","en":"you (polite)","e":"🙏"},{"th":"สุก","rom":"Sùk","en":"cooked","e":"🍳"}],"writes":[["ก","◌ุ","กุ","Gu"],["จ","◌ุ","จุ","Ju"],["ด","◌ุ","ดุ","Du"],["ป","◌ุ","ปุ","Bpu"]],"note":""},{"v":"อู","rom":"uu","len":"long","part":1,"pos":"below","where":"below the consonant","tip":"Long. Round your lips and hold it.","words":[{"th":"หมู","rom":"Mǔu","en":"pork","e":"🐷"},{"th":"ดู","rom":"Duu","en":"look / watch","e":"👀"},{"th":"ครู","rom":"Khruu","en":"teacher","e":"🧑‍🏫"},{"th":"หู","rom":"Hǔu","en":"ear","e":"👂"}],"writes":[["ก","◌ู","กู","Guu"],["จ","◌ู","จู","Juu"],["ด","◌ู","ดู","Duu"],["ป","◌ู","ปู","Bpuu"]],"note":""},{"v":"อึ","rom":"ue","len":"short","part":1,"pos":"above","where":"above the consonant","tip":"Short. Keep your lips relaxed.","words":[{"th":"ตึก","rom":"Dtùek","en":"building","e":"🏢"},{"th":"ศึก","rom":"Sùek","en":"war / battle","e":"⚔️"},{"th":"นึก","rom":"Núek","en":"think of / recall","e":"💭"},{"th":"ดึง","rom":"Dueng","en":"pull","e":"🪢"}],"writes":[["ก","◌ึ","กึ","Gue"],["จ","◌ึ","จึ","Jue"],["ด","◌ึ","ดึ","Due"],["ป","◌ึ","ปึ","Bpue"]],"note":""},{"v":"อือ","rom":"uue","len":"long","part":1,"pos":"above","where":"above the consonant","tip":"Long. Keep your lips relaxed and hold it.","words":[{"th":"มือ","rom":"Muue","en":"hand","e":"✋"},{"th":"ยืน","rom":"Yuuen","en":"stand","e":"🧍"},{"th":"ตื่น","rom":"Dtùuen","en":"wake up","e":"⏰"},{"th":"มืด","rom":"Mûuet","en":"dark","e":"🌑"}],"writes":[["ก","ือ","กือ","Guue"],["จ","ือ","จือ","Juue"],["ด","ือ","ดือ","Duue"],["ป","ือ","ปือ","Bpuue"]],"note":""},{"v":"เอะ","rom":"e","len":"short","part":2,"pos":"around","where":"before + after (เ-ะ)","tip":"Short, as in “men”.","words":[{"th":"เป็ด","rom":"Bpèt","en":"duck","e":"🦆"}],"writes":[["ก","เ-ะ","เกะ","Ge"],["จ","เ-ะ","เจะ","Je"],["ด","เ-ะ","เดะ","De"],["ป","เ-ะ","เปะ","Bpe"]],"note":"With a final consonant, เปะ becomes เป็ด: the ะ is dropped and ็ (mai taikhu) keeps the vowel short."},{"v":"เอ","rom":"ee","len":"long","part":2,"pos":"before","where":"before (เ-)","tip":"Long, as in “play”.","words":[{"th":"เจ","rom":"Jee","en":"vegetarian","e":"🥦"}],"writes":[["ก","เ-","เก","Gee"],["จ","เ-","เจ","Jee"],["ด","เ-","เด","Dee"],["ป","เ-","เป","Bpee"]],"note":""},{"v":"แอะ","rom":"ae","len":"short","part":2,"pos":"around","where":"before + after (แ-ะ)","tip":"Short, as in “at”.","words":[{"th":"แพะ","rom":"Phae","en":"goat","e":"🐐"}],"writes":[["ก","แ-ะ","แกะ","Gae"],["จ","แ-ะ","แจะ","Jae"],["ด","แ-ะ","แดะ","Dae"],["ป","แ-ะ","แปะ","Bpae"]],"note":""},{"v":"แอ","rom":"ae","len":"long","part":2,"pos":"before","where":"before (แ-)","tip":"Long, as in “fair” / “ham”.","words":[{"th":"แมว","rom":"Maeo","en":"cat","e":"🐱"}],"writes":[["ก","แ-","แก","Gae"],["จ","แ-","แจ","Jae"],["ด","แ-","แด","Dae"],["ป","แ-","แป","Bpae"]],"note":""},{"v":"โอะ","rom":"o","len":"short","part":2,"pos":"around","where":"before + after (โ-ะ)","tip":"Short, as in “boat”.","words":[{"th":"โปะ","rom":"Bpò","en":"patch on","e":"🩹"}],"writes":[["ก","โ-ะ","โกะ","Go"],["จ","โ-ะ","โจะ","Jo"],["ด","โ-ะ","โดะ","Do"],["ป","โ-ะ","โปะ","Bpo"]],"note":""},{"v":"โอ","rom":"oo","len":"long","part":2,"pos":"before","where":"before (โ-)","tip":"Long, as in “oh!” / “go”.","words":[{"th":"โต","rom":"Dtoo","en":"big","e":"🐘"}],"writes":[["ก","โ-","โก","Goo"],["จ","โ-","โจ","Joo"],["ด","โ-","โด","Doo"],["ป","โ-","โป","Bpoo"]],"note":""},{"v":"เอาะ","rom":"or","len":"short","part":2,"pos":"around","where":"before + after (เ-าะ)","tip":"Short, as in “not”.","words":[{"th":"เกาะ","rom":"Gò","en":"island","e":"🏝️"}],"writes":[["ก","เ-าะ","เกาะ","Gor"],["จ","เ-าะ","เจาะ","Jor"],["ด","เ-าะ","เดาะ","Dor"],["ป","เ-าะ","เปาะ","Bpor"]],"note":""},{"v":"ออ","rom":"or","len":"long","part":2,"pos":"after","where":"after (-อ)","tip":"Long, as in “more” / “saw”.","words":[{"th":"ตอ","rom":"Dtor","en":"tree stump","e":"🪵"}],"writes":[["ก","-อ","กอ","Gor"],["จ","-อ","จอ","Jor"],["ด","-อ","ดอ","Dor"],["ป","-อ","ปอ","Bpor"]],"note":""},{"v":"เออะ","rom":"er","len":"short","part":3,"pos":"around","where":"before + after (เ-อะ)","tip":"Short, as in “the”.","words":[],"writes":[["ก","เ-อะ","เกอะ","Ger"],["จ","เ-อะ","เจอะ","Jer"],["ด","เ-อะ","เดอะ","Der"],["ป","เ-อะ","เปอะ","Bper"]],"note":""},{"v":"เออ","rom":"er","len":"long","part":3,"pos":"around","where":"before + after (เ-อ)","tip":"Long, as in “her”.","words":[{"th":"เธอ","rom":"Ther","en":"you","e":"👉"}],"writes":[["ก","เ-อ","เกอ","Ger"],["จ","เ-อ","เจอ","Jer"],["ด","เ-อ","เดอ","Der"],["ป","เ-อ","เปอ","Bper"]],"note":""},{"v":"เอียะ","rom":"ia","len":"short","part":3,"pos":"around","where":"before + after (เ-ียะ)","tip":"No English match. Listen to a native speaker.","words":[],"writes":[["ก","เ-ียะ","เกียะ","Gia"],["จ","เ-ียะ","เจียะ","Jia"],["ด","เ-ียะ","เดียะ","Dia"],["ป","เ-ียะ","เปียะ","Bpia"]],"note":""},{"v":"เอีย","rom":"ia","len":"long","part":3,"pos":"around","where":"before + after (เ-ีย)","tip":"Long, as in “Asia” / “ear”.","words":[{"th":"เรียน","rom":"Rian","en":"study","e":"📚"}],"writes":[["ก","เ-ีย","เกีย","Gia"],["จ","เ-ีย","เจีย","Jia"],["ด","เ-ีย","เดีย","Dia"],["ป","เ-ีย","เปีย","Bpia"]],"note":""},{"v":"เอือะ","rom":"uea","len":"short","part":3,"pos":"around","where":"before + after (เ-ือะ)","tip":"No English match. Listen to a native speaker.","words":[],"writes":[["ก","เ-ือะ","เกือะ","Guea"],["จ","เ-ือะ","เจือะ","Juea"],["ด","เ-ือะ","เดือะ","Duea"],["ป","เ-ือะ","เปือะ","Bpuea"]],"note":""},{"v":"เอือ","rom":"uea","len":"long","part":3,"pos":"around","where":"before + after (เ-ือ)","tip":"No English match. Listen to a native speaker.","words":[{"th":"เรือ","rom":"Ruea","en":"boat","e":"🚣"}],"writes":[["ก","เ-ือ","เกือ","Guea"],["จ","เ-ือ","เจือ","Juea"],["ด","เ-ือ","เดือ","Duea"],["ป","เ-ือ","เปือ","Bpuea"]],"note":""},{"v":"อัวะ","rom":"ua","len":"short","part":3,"pos":"after","where":"after (ั above, วะ after)","tip":"No English match. Listen to a native speaker.","words":[],"writes":[["ก","-ัวะ","กัวะ","Gua"],["จ","-ัวะ","จัวะ","Jua"],["ด","-ัวะ","ดัวะ","Dua"],["ป","-ัวะ","ปัวะ","Bpua"]],"note":""},{"v":"อัว","rom":"ua","len":"long","part":3,"pos":"after","where":"after (ั above, ว after)","tip":"Long, as in “quantity”.","words":[{"th":"วัว","rom":"Wua","en":"cow","e":"🐄"}],"writes":[["ก","-ัว","กัว","Gua"],["จ","-ัว","จัว","Jua"],["ด","-ัว","ดัว","Dua"],["ป","-ัว","ปัว","Bpua"]],"note":""},{"v":"อำ","rom":"am","len":"long","part":4,"pos":"after","where":"after (ำ)","tip":"As in “rum”.","words":[{"th":"ดำ","rom":"Dam","en":"black","e":"⚫"}],"writes":[["ก","-ำ","กำ","Gam"],["จ","-ำ","จำ","Jam"],["ด","-ำ","ดำ","Dam"],["ป","-ำ","ปำ","Bpam"]],"note":""},{"v":"ไอ","rom":"ai","len":"long","part":4,"pos":"before","where":"before (ไ-)","tip":"Long, as in “Thai”.","words":[{"th":"ไฟ","rom":"Fai","en":"fire","e":"🔥"}],"writes":[["ก","ไ-","ไก","Gai"],["จ","ไ-","ไจ","Jai"],["ด","ไ-","ได","Dai"],["ป","ไ-","ไป","Bpai"]],"note":""},{"v":"ใอ","rom":"ai","len":"long","part":4,"pos":"before","where":"before (ใ-)","tip":"Long, as in “Thai”. Same sound as ไอ.","words":[{"th":"ใจ","rom":"Jai","en":"heart","e":"❤️"}],"writes":[["ก","ใ-","ใก","Gai"],["จ","ใ-","ใจ","Jai"],["ด","ใ-","ใด","Dai"],["ป","ใ-","ใป","Bpai"]],"note":""},{"v":"เอา","rom":"ao","len":"long","part":4,"pos":"around","where":"before + after (เ-า)","tip":"Long, as in “cacao”.","words":[{"th":"เอา","rom":"Ao","en":"want","e":"🙋"}],"writes":[["ก","เ-า","เกา","Gao"],["จ","เ-า","เจา","Jao"],["ด","เ-า","เดา","Dao"],["ป","เ-า","เปา","Bpao"]],"note":""},{"v":"ฤ","rom":"rue","len":"short","part":4,"pos":"alone","where":"on its own","tip":"Special symbol, not commonly used.","words":[],"writes":[],"note":""},{"v":"ฤๅ","rom":"ruue","len":"long","part":4,"pos":"alone","where":"on its own (with ๅ)","tip":"Special symbol, not commonly used.","words":[],"writes":[],"note":""},{"v":"ฦ","rom":"lue","len":"short","part":4,"pos":"alone","where":"on its own","tip":"No longer used.","words":[],"writes":[],"note":""},{"v":"ฦๅ","rom":"luue","len":"long","part":4,"pos":"alone","where":"on its own (with ๅ)","tip":"No longer used.","words":[],"writes":[],"note":""}];
+const VW_PARTS = [
+  {n:"Part 1", t:"Basic vowels",          c:"#E5567F"},
+  {n:"Part 2", t:"Vowels 9–16",           c:"#E0912A"},
+  {n:"Part 3", t:"Vowels 17–24",          c:"#0E877F"},
+  {n:"Part 4", t:"Vowels 25–32",          c:"#7C5CBF"}
+];
+const VW_LEN = {short:{n:"Short", c:"#E0912A"}, long:{n:"Long", c:"#0E877F"}};
+const VW_KEY = "twp_vowels_v1";
+// the voice says  สระ + vowel  (like the decks:  Sà-rà a). Rare letters are said with their reading.
+const VW_VOICE = {"ฤ":"รึ","ฤๅ":"รือ","ฦ":"ลึ","ฦๅ":"ลือ"};
+let vwProg = {};
+try{ vwProg = JSON.parse(localStorage.getItem(VW_KEY)||"{}") || {}; }catch(e){ vwProg = {}; }
+function vwSave(){ try{ localStorage.setItem(VW_KEY, JSON.stringify(vwProg)); }catch(e){} }
+let vwView="menu", vwLesson=0, vwIdx=0, vwQ=null;
+const $vw = id => document.getElementById(id);
+const VW_KINDS = {listen:"Listen & pick", word:"Word → vowel", sl:"Short or Long?", write:"Write it"};
+const vwPool = i => i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
+const vwName = x => "สระ"+x.v;
+const vwNameRom = x => "Sà-rà "+x.rom;
+function vwSay(x){ return "สระ"+(VW_VOICE[x.v]||x.v); }
+function vwHear(x){ speak(vwSay(x), undefined, true); }
+function vwSlow(x){ speakSlow(vwSay(x)); }
+function vwTag(x){ const k=VW_LEN[x.len]; return `<span class="al-tag" style="background:${k.c}">${k.n}</span>`; }
+function vwBig(s, base){ const n=[...s].length; return n>=5 ? Math.round(base*.74) : n===4 ? Math.round(base*.88) : base; }
+function vwLessonName(i){ return i<0 ? "All 32 vowels" : VW_PARTS[i].n; }
+
+function vwOpen(){ vwView="menu"; show("vowels"); vwRender(); }
+function vwBack(){
+  if(vwView==="menu"){ show("hub"); return; }
+  if(vwView==="quiz" || vwView==="result") vwView = vwQ && vwQ.fromMenu ? "menu" : "lesson";
+  else vwView="menu";
+  vwRender();
+}
+function vwRender(){
+  if(vwView==="menu") vwRenderMenu();
+  else if(vwView==="lesson") vwRenderLesson();
+  else if(vwView==="chart") vwRenderChart();
+  else if(vwView==="quiz") vwRenderQ();
+  else if(vwView==="result") vwRenderResult();
+  window.scrollTo(0,0);
+}
+function vwDone(i){   // how many of the 4 games were finished with a perfect score
+  return Object.keys(VW_KINDS).filter(k=>{ const r=vwProg["p"+i+"_"+k]; return r && r[0]===r[1]; }).length;
+}
+
+/* ---- menu ---- */
+function vwRenderMenu(){
+  $vw("vwSub").textContent = "32 vowels · see it, hear it, write it";
+  let h = '<div class="al-menu">';
+  VW_PARTS.forEach((p,i)=>{
+    const L = vwPool(i), d = vwDone(i);
+    h += `<button class="al-lesson" data-l="${i}"><span class="num" style="background:${p.c}22;color:${p.c}">${i+1}</span>
+      <span><b>${p.n} · ${p.t}</b><span class="letters" style="color:${p.c};font-size:19px;letter-spacing:1px">${L.map(x=>x.v).join(" ")}</span></span>
+      <span class="best">${d ? "⭐ "+d+"/4" : "8 vowels"}</span></button>`;
+  });
+  h += `<div class="al-sec">🗺️ See them all</div><div class="al-menu">
+    <button class="al-lesson all" id="vwChartBtn"><span class="num">🗺️</span>
+      <span><b>Vowel chart</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">All 32 forms · tap one to hear it</span></span></button></div>
+    <div class="al-sec">🎲 Review</div><div class="al-menu">
+    <button class="al-lesson all" data-l="-1"><span class="num">🎲</span>
+      <span><b>All 32 vowels</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">Mix all four parts · up to 20 questions</span></span>
+      <span class="best">${vwDone(-1) ? "⭐ "+vwDone(-1)+"/4" : ""}</span></button>
+    <button class="al-lesson all" id="vwSLBtn"><span class="num">⚖️</span>
+      <span><b>Short or Long? game</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">See a vowel · pick Short or Long</span></span></button></div>`;
+  h += `<div class="al-legend">${["short","long"].map(k=>`<span class="al-tag" style="background:${VW_LEN[k].c}">${VW_LEN[k].n}</span>`).join("")}</div>`;
+  $vw("vwBody").innerHTML = h;
+  $vw("vwChartBtn").onclick = ()=>{ vwView="chart"; vwRender(); };
+  $vw("vwSLBtn").onclick = ()=>{ vwLesson=-1; vwStartQuiz("sl", true); };
+  $vw("vwBody").querySelectorAll(".al-lesson[data-l]").forEach(b=> b.onclick=()=>{ vwLesson=+b.dataset.l; vwIdx=0; vwView="lesson"; vwRender(); vwHear(vwPool(vwLesson)[0]); });
+}
+
+/* ---- chart of all 32 ---- */
+function vwRenderChart(){
+  $vw("vwSub").textContent = "Vowel chart · tap to hear";
+  let h = '<div class="vw-chartnote">Every vowel is written on <b>อ</b> (อ is only a carrier here, not a word).</div>';
+  VW_PARTS.forEach((p,i)=>{
+    h += `<div class="al-sec" style="color:${p.c}">${p.n} · ${p.t}</div><div class="vw-chart">`;
+    vwPool(i).forEach(x=>{ h += `<button class="vw-cell" data-v="${x.v}" style="border-color:${VW_LEN[x.len].c}"><span class="g">${x.v}</span><span class="r">${x.rom}</span></button>`; });
+    h += '</div>';
+  });
+  h += `<div class="al-legend">${["short","long"].map(k=>`<span class="al-tag" style="background:${VW_LEN[k].c}">${VW_LEN[k].n}</span>`).join("")}</div>`;
+  $vw("vwBody").innerHTML = h;
+  $vw("vwBody").querySelectorAll(".vw-cell").forEach(b=> b.onclick=()=>vwHear(VW_DATA.find(x=>x.v===b.dataset.v)));
+}
+
+/* ---- lesson: learn + 4 games ---- */
+function vwRenderLesson(){
+  const L = vwPool(vwLesson);
+  $vw("vwSub").textContent = vwLesson<0 ? "All 32 vowels" : VW_PARTS[vwLesson].n+" · "+VW_PARTS[vwLesson].t;
+  if(vwIdx>=L.length) vwIdx=0;
+  const x = L[vwIdx], col = VW_PARTS[x.part-1].c;
+  let h = `<div class="al-tabs vw-tabs">
+    <button class="al-tab active" data-m="learn"><span>📖</span>Learn</button>
+    <button class="al-tab" data-m="listen"><span>👂</span>Listen</button>
+    <button class="al-tab" data-m="word"><span>🖼️</span>Word</button>
+    <button class="al-tab" data-m="sl"><span>⚖️</span>Length</button>
+    <button class="al-tab" data-m="write"><span>✍️</span>Write</button></div>`;
+  h += `<div class="al-grid">${L.map((y,i)=>`<button class="al-tile vw-tile ${i===vwIdx?"sel":""}" data-i="${i}" style="font-size:${[...y.v].length>=4?17:[...y.v].length===3?20:24}px">${y.v}</button>`).join("")}</div>`;
+  const ex = x.words;
+  h += `<div class="al-card">
+      <div class="al-top"><div class="al-bigletter" style="font-size:${vwBig(x.v,104)}px;color:${col}">${x.v}</div></div>
+      <div class="al-word">${vwName(x)}</div>
+      <div class="al-rom">${vwNameRom(x)} · sound “${x.rom}”</div>
+      <div class="al-meta">${vwTag(x)}<span>Goes <b>${x.where}</b></span><span>· ${vwIdx+1} / ${L.length}</span></div>
+      <div class="vw-tip">${x.tip}</div>
+      ${ex.length ? `<div class="vw-exlist">${ex.map(w=>`<button class="vw-ex" data-w="${w.th}"><span class="e">${w.e||"🔤"}</span><span class="t">${w.th}</span><span class="r">${w.rom}</span><span class="m">${w.en||""}</span></button>`).join("")}</div>` : ""}
+      ${x.note ? `<div class="al-note">${x.note}</div>` : ""}
+      ${x.writes.length ? `<div class="vw-wr-h">✍️ Write ${x.v} with each consonant</div><div class="vw-writes">${x.writes.map(w=>`<div class="vw-wr"><span class="f">${w[0]} + ${w[1]}</span><span class="t">${w[2]}</span><span class="r">${w[3]}</span></div>`).join("")}</div>` : ""}
+      <div class="al-nav"><button class="al-btn ghost" id="vwPrev">←</button><button class="al-btn" id="vwHearBtn">🔊 Hear it</button><button class="al-btn slow" id="vwSlowBtn">🐢 Slow</button><button class="al-btn ghost" id="vwNext">→</button></div>
+    </div>`;
+  $vw("vwBody").innerHTML = h;
+  const body = $vw("vwBody");
+  body.querySelectorAll(".al-tab").forEach(b=> b.onclick=()=>{ if(b.dataset.m!=="learn") vwStartQuiz(b.dataset.m); });
+  body.querySelectorAll(".vw-tile").forEach(b=> b.onclick=()=>{ vwIdx=+b.dataset.i; vwRender(); vwHear(vwPool(vwLesson)[vwIdx]); });
+  body.querySelectorAll(".vw-ex").forEach(b=> b.onclick=()=>speak(b.dataset.w));
+  const selT = body.querySelector(".al-tile.sel"), gridEl = body.querySelector(".al-grid");
+  if(selT && gridEl) gridEl.scrollLeft = selT.offsetLeft - gridEl.clientWidth/2 + selT.offsetWidth/2;
+  $vw("vwHearBtn").onclick=()=>vwHear(x);
+  $vw("vwSlowBtn").onclick=()=>vwSlow(x);
+  $vw("vwPrev").onclick=()=>{ vwIdx=(vwIdx-1+L.length)%L.length; vwRender(); vwHear(L[vwIdx]); };
+  $vw("vwNext").onclick=()=>{ vwIdx=(vwIdx+1)%L.length; vwRender(); vwHear(L[vwIdx]); };
+}
+
+/* ---- games (max 20 questions each) ---- */
+function vwStartQuiz(kind, fromMenu){
+  const pool = vwPool(vwLesson);
+  let qs;
+  if(kind==="word")       qs = pool.filter(x=>x.words.some(w=>w.en)).map(x=>({x, w:shuffle(x.words.filter(w=>w.en))[0]}));
+  else if(kind==="write") qs = pool.filter(x=>x.writes.length).map(x=>({x, c:shuffle(x.writes)[0]}));
+  else                    qs = pool.map(x=>({x}));
+  qs = shuffle(qs).slice(0,20);
+  vwQ = {kind, qs, i:0, score:0, done:false, opts:[], total:qs.length, missed:[], fixed:0, round:0, fromMenu:!!fromMenu};
+  vwView="quiz"; vwRender();
+}
+function vwOptionsFor(q){
+  const Q=vwQ, x=q.x;
+  if(Q.kind==="sl") return [{k:"short"},{k:"long"}];
+  if(Q.kind==="write"){
+    const pool = vwPool(vwLesson).filter(y=>y.writes.length && y.v!==x.v);
+    let others = shuffle(pool); if(others.length<3) others = others.concat(shuffle(VW_DATA.filter(y=>y.writes.length && y.v!==x.v && !others.includes(y))));
+    const seen = new Set([q.c[2]]), out=[{t:q.c[2], ok:true}];
+    for(const y of others){ const w = y.writes.find(w=>w[0]===q.c[0]); if(w && !seen.has(w[2])){ seen.add(w[2]); out.push({t:w[2]}); } if(out.length===4) break; }
+    return shuffle(out);
+  }
+  let pool = vwPool(vwLesson); if(Q.kind==="word") pool = pool.filter(y=>y.words.some(w=>w.en));
+  let others = shuffle(pool.filter(y=>y.v!==x.v));
+  if(others.length<3) others = others.concat(shuffle(VW_DATA.filter(y=>y.v!==x.v && (Q.kind!=="word" || y.words.some(w=>w.en)) && !others.includes(y))));
+  return shuffle([x].concat(others.slice(0,3))).map(y=>({v:y.v, ok:y.v===x.v}));
+}
+function vwRenderQ(){
+  const Q=vwQ, q=Q.qs[Q.i], x=q.x;
+  if(!Q.opts[Q.i]) Q.opts[Q.i] = vwOptionsFor(q);
+  const opts = Q.opts[Q.i];
+  $vw("vwSub").textContent = {listen:"Listen & pick the vowel",word:"Which vowel is in this word?",sl:"Short or Long?",write:"Write it: pick the right spelling"}[Q.kind];
+  let h = `<div class="al-progress"><i style="width:${(Q.i/Q.qs.length)*100}%"></i></div>`;
+  h += `<div class="al-count al-qcount">Question ${Q.i+1} / ${Q.qs.length}</div>`;
+  if(Q.kind==="listen"){
+    h += `<div class="al-prompt al-listen"><div class="hint">👂 Which vowel did you hear?</div><div class="al-row"><button class="al-btn" id="vwQHear"><span class="ic">🔊</span>Tap to hear</button><button class="al-btn slow" id="vwQSlow"><span class="ic">🐢</span>Slow</button></div></div>`;
+  } else if(Q.kind==="word"){
+    h += `<div class="al-prompt"><div class="hint">Which vowel is in this word?</div><div class="al-emoji">${q.w.e||""}</div><div class="vw-qword">${q.w.th}</div><div class="al-en">${q.w.en}</div></div>`;
+  } else if(Q.kind==="sl"){
+    h += `<div class="al-prompt"><div class="hint">Is this vowel Short or Long?</div><div class="al-bigletter" style="font-size:${vwBig(x.v,74)}px">${x.v}</div></div>`;
+  } else {
+    h += `<div class="al-prompt"><div class="hint">${q.c[0]} + ${q.c[1]} = ?</div><div class="vw-qword" style="font-size:${vwBig(q.c[0]+q.c[1],54)}px">${q.c[0]} + ${q.c[1]}</div><div class="al-en" style="font-size:15px;color:var(--soft)">Vowel ${x.v} · pick how it is written</div></div>`;
+  }
+  h += `<div class="al-opts ${Q.kind==="sl"?"cls":""}" ${Q.kind==="sl"?'style="grid-template-columns:1fr 1fr"':""}>${opts.map((o,i)=> Q.kind==="sl"
+      ? `<button class="al-opt clsopt" data-i="${i}" style="background:${VW_LEN[o.k].c};color:#fff"><i class="al-n">${i+1}</i>${VW_LEN[o.k].n}</button>`
+      : Q.kind==="write"
+      ? `<button class="al-opt" data-i="${i}" style="font-size:${vwBig(o.t,44)}px"><i class="al-n">${i+1}</i>${o.t}</button>`
+      : `<button class="al-opt" data-i="${i}" style="font-size:${vwBig(o.v,44)}px"><i class="al-n">${i+1}</i>${o.v}</button>`).join("")}</div>`;
+  h += `<div class="al-fb" id="vwFb"></div>`;
+  $vw("vwBody").innerHTML = h;
+  const body = $vw("vwBody");
+  if($vw("vwQHear")) $vw("vwQHear").onclick=()=>vwHear(x);
+  if($vw("vwQSlow")) $vw("vwQSlow").onclick=()=>vwSlow(x);
+  body.querySelectorAll(".al-opt").forEach(b=> b.onclick=()=>vwAnswer(+b.dataset.i));
+  if(Q.kind==="listen") setTimeout(()=>speak(vwSay(x)), 250);
+}
+function vwAnswer(i){
+  const Q=vwQ; if(Q.done) return;
+  Q.done = true;
+  const q=Q.qs[Q.i], x=q.x, opts=Q.opts[Q.i];
+  const same = o => Q.kind==="sl" ? o.k===x.len : o.ok, ok = same(opts[i]);
+  if(ok){ Q.score++; if(Q.round>0) Q.fixed++; } else Q.missed.push(q);
+  document.querySelectorAll("#vwBody .al-opt").forEach((b,k)=>{
+    b.disabled = true;
+    if(same(opts[k])) b.classList.add("right"); else if(k===i) b.classList.add("wrong");
+  });
+  const last = Q.i===Q.qs.length-1;
+  let line, sub, say;
+  if(Q.kind==="word"){ line = q.w.th; sub = `${q.w.rom} · ${q.w.en} ${q.w.e||""}<br>Vowel: ${x.v} · ${vwNameRom(x)}`; say = q.w.th; }
+  else if(Q.kind==="write"){ line = `${q.c[0]} + ${q.c[1]} = ${q.c[2]}`; sub = `${q.c[3]} · vowel ${x.v} · ${vwNameRom(x)}`; say = q.c[2]; }
+  else { line = `${x.v} · ${vwName(x)}`; sub = `${vwNameRom(x)} · sound “${x.rom}” · ${VW_LEN[x.len].n}`; say = vwSay(x); }
+  $vw("vwFb").innerHTML = `<div class="al-card">
+      <div class="verdict ${ok?"ok":"no"}">${ok?"✅ Correct!":"❌ Not quite — it's:"} ${Q.kind==="sl"?vwTag(x):""}</div>
+      <div class="line">${line}</div>
+      <div class="al-rom">${sub}</div>
+      <div class="al-row"><button class="al-btn" id="vwFbHear">🔊 Again</button><button class="al-btn slow" id="vwFbSlow">🐢 Slow</button><button class="al-btn next" id="vwFbNext" style="flex:2.2">${last?"See score ▶":"Next ▶"}</button></div></div>`;
+  $vw("vwFbHear").onclick=()=>speak(say, undefined, true);
+  $vw("vwFbSlow").onclick=()=>speakSlow(say);
+  $vw("vwFbNext").onclick=()=>{ if(last){ vwFinish(); } else { Q.i++; Q.done=false; vwRenderQ(); } };
+  if(Q.kind!=="listen") speak(say);
+}
+function vwFinish(){
+  const key = "p"+vwLesson+"_"+vwQ.kind, prev = vwProg[key];
+  if(!prev || vwQ.score/vwQ.total > prev[0]/prev[1]) vwProg[key]=[vwQ.score, vwQ.total];
+  vwSave();
+  vwView="result"; vwRender();
+}
+function vwRenderResult(){
+  const Q=vwQ, n=Q.total, great = Q.score===n, miss=Q.missed.length;
+  $vw("vwSub").textContent = "Result";
+  $vw("vwBody").innerHTML = `<div class="al-card">
+      <div class="al-emoji">${great?"🎉":Q.score>=n/2?"👏":"💪"}</div>
+      <div class="al-score">${Q.score} / ${n}</div>
+      <div class="al-en" style="font-size:19px">${great?"Perfect! All correct":Q.score>=n/2?"Nice work — keep going":"Keep practising, you will get it"}</div>
+      ${Q.round>0 ? `<div class="al-en" style="font-size:15px">✅ ${Q.score-Q.fixed} right first time + <b>${Q.fixed} fixed</b> by repeating${miss?` · ${miss} still to fix`:" — all done! 🎉"}</div>` : (miss ? `<div class="al-en" style="font-size:15px">Practise the ${miss} you missed again 💪</div>` : "")}
+      ${miss ? `<div class="al-row"><button class="al-btn next" id="vwRepeat">🔁 Repeat mistakes (${miss})</button></div>` : ""}
+      <div class="al-row"><button class="al-btn ${miss?"ghost":"next"}" id="vwAgain">🔁 Try again</button></div>
+      <div class="al-row"><button class="al-btn ghost" id="vwToLesson">${Q.fromMenu?"Back to menu":"Back to vowels"}</button><button class="al-btn ghost" id="vwToMenu">All parts</button></div></div>` + scCardHTML("sc_vw");
+  scMount("sc_vw", ()=>({ game:"Thai Vowels · "+VW_KINDS[Q.kind]+" · "+vwLessonName(vwLesson), score:Q.score, total:n, detail: Q.round>0 ? ("Repeated mistakes: "+(Q.score-Q.fixed)+" right first time + "+Q.fixed+" fixed on repeat") : "" }));
+  if($vw("vwRepeat")) $vw("vwRepeat").onclick=()=>{ Q.qs=shuffle(Q.missed); Q.missed=[]; Q.i=0; Q.opts=[]; Q.done=false; Q.round++; vwView="quiz"; vwRender(); };
+  $vw("vwAgain").onclick=()=>vwStartQuiz(Q.kind, Q.fromMenu);
+  $vw("vwToLesson").onclick=()=>{ vwView = Q.fromMenu ? "menu" : "lesson"; vwRender(); };
+  $vw("vwToMenu").onclick=()=>{ vwView="menu"; vwRender(); };
+}
+$vw("vwBackBtn").onclick = vwBack;
+$vw("hbVowels").onclick = vwOpen;
 </script>
 </body>
 </html>
