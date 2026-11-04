@@ -5125,7 +5125,7 @@ function vwSave(){ try{ localStorage.setItem(VW_KEY, JSON.stringify(vwProg)); }c
 let vwView="menu", vwLesson=0, vwIdx=0, vwQ=null;
 const $vw = id => document.getElementById(id);
 const VW_KINDS = {listen:"Listen & pick", word:"Word → vowel", sl:"Short or Long?", write:"Write it"};
-const vwPool = i => i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
+const vwPool = i => i===-2 ? VW_DATA.filter(x=>x.len==="short") : i===-3 ? VW_DATA.filter(x=>x.len==="long") : i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
 const vwName = x => "สระ"+x.v;
 const vwNameRom = x => "Sà-rà "+x.rom;
 function vwSay(x){ return "สระ"+(VW_VOICE[x.v]||x.v); }
@@ -5133,7 +5133,7 @@ function vwHear(x){ speak(vwSay(x), undefined, true); }
 function vwSlow(x){ speakSlow(vwSay(x)); }
 function vwTag(x){ const k=VW_LEN[x.len]; return `<span class="al-tag" style="background:${k.c}">${k.n}</span>`; }
 function vwBig(s, base){ const n=[...s].length; return n>=5 ? Math.round(base*.74) : n===4 ? Math.round(base*.88) : base; }
-function vwLessonName(i){ return i<0 ? "All 32 vowels" : VW_PARTS[i].n; }
+function vwLessonName(i){ return i===-2 ? "Short vowels" : i===-3 ? "Long vowels" : i<0 ? "All 32 vowels" : VW_PARTS[i].n; }
 
 function vwOpen(){ vwView="menu"; show("vowels"); vwRender(); }
 function vwBack(){
@@ -5164,7 +5164,14 @@ function vwRenderMenu(){
       <span><b>${p.n} · ${p.t}</b><span class="letters" style="color:${p.c};font-size:19px;letter-spacing:1px">${L.map(x=>x.v).join(" ")}</span></span>
       <span class="best">${d ? "⭐ "+d+"/4" : "8 vowels"}</span></button>`;
   });
-  h += `<div class="al-sec">🗺️ See them all</div><div class="al-menu">
+  h += `<div class="al-sec">⚖️ Short vowels · Long vowels</div><div class="al-menu">`;
+  [["-2","short","🟠"],["-3","long","🟢"]].forEach(([id,k,emo])=>{
+    const L = vwPool(+id), d = vwDone(+id), col = VW_LEN[k].c;
+    h += `<button class="al-lesson" data-l="${id}"><span class="num" style="background:${col}22;color:${col}">${emo}</span>
+      <span><b>${VW_LEN[k].n} vowels · ${L.length}</b><span class="letters" style="color:${col};font-size:17px;letter-spacing:1px">${L.map(x=>x.v).join(" ")}</span></span>
+      <span class="best">${d ? "⭐ "+d+"/4" : ""}</span></button>`;
+  });
+  h += `</div><div class="al-sec">🗺️ See them all</div><div class="al-menu">
     <button class="al-lesson all" id="vwChartBtn"><span class="num">🗺️</span>
       <span><b>Vowel chart</b><span class="letters" style="font-size:14px;letter-spacing:0;font-family:var(--sans);color:var(--soft)">All 32 forms · tap one to hear it</span></span></button></div>
     <div class="al-sec">🎲 Review</div><div class="al-menu">
@@ -5197,7 +5204,7 @@ function vwRenderChart(){
 /* ---- lesson: learn + 4 games ---- */
 function vwRenderLesson(){
   const L = vwPool(vwLesson);
-  $vw("vwSub").textContent = vwLesson<0 ? "All 32 vowels" : VW_PARTS[vwLesson].n+" · "+VW_PARTS[vwLesson].t;
+  $vw("vwSub").textContent = vwLesson<0 ? vwLessonName(vwLesson)+" · "+L.length+" vowels" : VW_PARTS[vwLesson].n+" · "+VW_PARTS[vwLesson].t;
   if(vwIdx>=L.length) vwIdx=0;
   const x = L[vwIdx], col = VW_PARTS[x.part-1].c;
   let h = `<div class="al-tabs vw-tabs">
@@ -5234,7 +5241,7 @@ function vwRenderLesson(){
 
 /* ---- games (max 20 questions each) ---- */
 function vwStartQuiz(kind, fromMenu){
-  const pool = vwPool(vwLesson);
+  const pool = kind==="sl" && vwLesson<-1 ? VW_DATA : vwPool(vwLesson);   // Short/Long game always mixes both
   let qs;
   if(kind==="word")       qs = pool.filter(x=>x.words.some(w=>w.en)).map(x=>({x, w:shuffle(x.words.filter(w=>w.en))[0]}));
   else if(kind==="write") qs = pool.filter(x=>x.writes.length).map(x=>({x, c:shuffle(x.writes)[0]}));
