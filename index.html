@@ -5125,7 +5125,7 @@ function vwSave(){ try{ localStorage.setItem(VW_KEY, JSON.stringify(vwProg)); }c
 let vwView="menu", vwLesson=0, vwIdx=0, vwQ=null;
 const $vw = id => document.getElementById(id);
 const VW_KINDS = {listen:"Listen & pick", word:"Word → vowel", sl:"Short or Long?", write:"Write it"};
-const vwPool = i => i===-2 ? VW_DATA.filter(x=>x.len==="short") : i===-3 ? VW_DATA.filter(x=>x.len==="long") : i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
+const vwPool = i => i===-2 ? VW_DATA.filter(x=>x.len==="short" && x.part>1) : i===-3 ? VW_DATA.filter(x=>x.len==="long" && x.part>1) : i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
 const vwName = x => "สระ"+x.v;
 const vwNameRom = x => "Sà-rà "+x.rom;
 function vwSay(x){ return "สระ"+(VW_VOICE[x.v]||x.v); }
@@ -5241,7 +5241,7 @@ function vwRenderLesson(){
 
 /* ---- games (max 20 questions each) ---- */
 function vwStartQuiz(kind, fromMenu){
-  const pool = kind==="sl" && vwLesson<-1 ? VW_DATA : vwPool(vwLesson);   // Short/Long game always mixes both
+  const pool = kind==="sl" && vwLesson<-1 ? vwPool(-2).concat(vwPool(-3)) : vwPool(vwLesson);   // Short/Long game always mixes both (basic vowels are not in these lessons)
   let qs;
   if(kind==="word")       qs = pool.filter(x=>x.words.some(w=>w.en)).map(x=>({x, w:shuffle(x.words.filter(w=>w.en))[0]}));
   else if(kind==="write") qs = pool.filter(x=>x.writes.length).map(x=>({x, c:shuffle(x.writes)[0]}));
