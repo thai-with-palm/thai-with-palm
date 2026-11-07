@@ -5216,7 +5216,7 @@ function vwRenderLesson(){
     <button class="al-tab" data-m="sl"><span>⚖️</span>Length</button>
     <button class="al-tab" data-m="write"><span>✍️</span>Write</button></div>`;
   h += `<div class="al-grid">${L.map((y,i)=>`<button class="al-tile vw-tile ${i===vwIdx?"sel":""}" data-i="${i}" style="font-size:${[...y.v].length>=4?17:[...y.v].length===3?20:24}px">${y.v}</button>`).join("")}</div>`;
-  const ex = x.words;
+  const ex = x.words.filter(w=>w.en);   // only real example words (no bare syllables)
   h += `<div class="al-card">
       <div class="al-top"><div class="al-bigletter" style="font-size:${vwBig(x.v,104)}px;color:${col}">${x.v}</div></div>
       <div class="al-rom">${vwNameRom(x)} · sound “${x.rom}”</div>
