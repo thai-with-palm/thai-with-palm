@@ -5128,9 +5128,11 @@ const VW_KINDS = {listen:"Listen & pick", word:"Word → vowel", sl:"Short or Lo
 const vwPool = i => i===-2 ? VW_DATA.filter(x=>x.len==="short" && x.part>1) : i===-3 ? VW_DATA.filter(x=>x.len==="long" && x.part>1) : i<0 ? VW_DATA : VW_DATA.filter(x=>x.part===i+1);
 const vwName = x => "สระ"+x.v;
 const vwNameRom = x => "Sà-rà "+x.rom;
-function vwSay(x){ return "สระ"+(VW_VOICE[x.v]||x.v); }
-function vwHear(x){ speak(vwSay(x), undefined, true); }
-function vwSlow(x){ speakSlow(vwSay(x)); }
+// "สระ" alone can be read as "sà" (pond), so the voice is given its reading  สะ-หระ  (Sà-rà), then a pause, then the vowel.
+// Vowel sounds are spoken slower than normal words so each one is clear.
+function vwSay(x){ return "สะ หระ , "+(VW_VOICE[x.v]||x.v); }
+function vwHear(x){ speak(vwSay(x), 0.55, true); }
+function vwSlow(x){ speak(vwSay(x), 0.4, true); }
 function vwTag(x){ const k=VW_LEN[x.len]; return `<span class="al-tag" style="background:${k.c}">${k.n}</span>`; }
 function vwBig(s, base){ const n=[...s].length; return n>=5 ? Math.round(base*.74) : n===4 ? Math.round(base*.88) : base; }
 function vwLessonName(i){ return i===-2 ? "Short vowels" : i===-3 ? "Long vowels" : i<0 ? "All 32 vowels" : VW_PARTS[i].n; }
@@ -5291,7 +5293,7 @@ function vwRenderQ(){
   if($vw("vwQHear")) $vw("vwQHear").onclick=()=>vwHear(x);
   if($vw("vwQSlow")) $vw("vwQSlow").onclick=()=>vwSlow(x);
   body.querySelectorAll(".al-opt").forEach(b=> b.onclick=()=>vwAnswer(+b.dataset.i));
-  if(Q.kind==="listen") setTimeout(()=>speak(vwSay(x)), 250);
+  if(Q.kind==="listen") setTimeout(()=>vwHear(x), 250);
 }
 function vwAnswer(i){
   const Q=vwQ; if(Q.done) return;
@@ -5313,10 +5315,11 @@ function vwAnswer(i){
       <div class="line">${line}</div>
       <div class="al-rom">${sub}</div>
       <div class="al-row"><button class="al-btn" id="vwFbHear">🔊 Again</button><button class="al-btn slow" id="vwFbSlow">🐢 Slow</button><button class="al-btn next" id="vwFbNext" style="flex:2.2">${last?"See score ▶":"Next ▶"}</button></div></div>`;
-  $vw("vwFbHear").onclick=()=>speak(say, undefined, true);
-  $vw("vwFbSlow").onclick=()=>speakSlow(say);
+  const sayIt = slow => Q.kind==="word"||Q.kind==="write" ? (slow?speakSlow(say):speak(say,undefined,true)) : (slow?vwSlow(x):vwHear(x));
+  $vw("vwFbHear").onclick=()=>sayIt(false);
+  $vw("vwFbSlow").onclick=()=>sayIt(true);
   $vw("vwFbNext").onclick=()=>{ if(last){ vwFinish(); } else { Q.i++; Q.done=false; vwRenderQ(); } };
-  if(Q.kind!=="listen") speak(say);
+  if(Q.kind==="sl") vwHear(x); else if(Q.kind!=="listen") speak(say);
 }
 function vwFinish(){
   const key = "p"+vwLesson+"_"+vwQ.kind, prev = vwProg[key];
