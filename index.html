@@ -811,7 +811,7 @@
       </button>
       <button class="hubbtn hb5" id="hbVowels" data-go="vowels">
         <span class="emo">🅰️</span>
-        <span><b>Thai Vowels · สระ</b><small>32 vowels — short, long, hear it, write it</small></span>
+        <span><b>Thai Vowels</b><small>32 vowels — short, long, hear it, write it</small></span>
       </button>
     </div>
     <div class="foot">Practise a little every day 🌟<br>Thai with Palm 💬</div>
@@ -832,7 +832,7 @@
   <section id="vowels" class="hidden">
     <div class="al-hero vw-hero">
       <button class="back" id="vwBackBtn">←</button>
-      <h1>Thai Vowels · สระ 🅰️</h1>
+      <h1>Thai Vowels 🅰️</h1>
       <p id="vwSub">32 vowels · see it, hear it, write it</p>
     </div>
     <div id="vwBody"></div>
@@ -5217,7 +5217,6 @@ function vwRenderLesson(){
   const ex = x.words;
   h += `<div class="al-card">
       <div class="al-top"><div class="al-bigletter" style="font-size:${vwBig(x.v,104)}px;color:${col}">${x.v}</div></div>
-      <div class="al-word">${vwName(x)}</div>
       <div class="al-rom">${vwNameRom(x)} · sound “${x.rom}”</div>
       <div class="al-meta">${vwTag(x)}<span>Goes <b>${x.where}</b></span><span>· ${vwIdx+1} / ${L.length}</span></div>
       <div class="vw-tip">${x.tip}</div>
@@ -5308,7 +5307,7 @@ function vwAnswer(i){
   let line, sub, say;
   if(Q.kind==="word"){ line = q.w.th; sub = `${q.w.rom} · ${q.w.en} ${q.w.e||""}<br>Vowel: ${x.v} · ${vwNameRom(x)}`; say = q.w.th; }
   else if(Q.kind==="write"){ line = `${q.c[0]} + ${q.c[1]} = ${q.c[2]}`; sub = `${q.c[3]} · vowel ${x.v} · ${vwNameRom(x)}`; say = q.c[2]; }
-  else { line = `${x.v} · ${vwName(x)}`; sub = `${vwNameRom(x)} · sound “${x.rom}” · ${VW_LEN[x.len].n}`; say = vwSay(x); }
+  else { line = x.v; sub = `${vwNameRom(x)} · sound “${x.rom}” · ${VW_LEN[x.len].n}`; say = vwSay(x); }
   $vw("vwFb").innerHTML = `<div class="al-card">
       <div class="verdict ${ok?"ok":"no"}">${ok?"✅ Correct!":"❌ Not quite — it's:"} ${Q.kind==="sl"?vwTag(x):""}</div>
       <div class="line">${line}</div>
